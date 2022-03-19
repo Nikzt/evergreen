@@ -1,0 +1,19 @@
+{
+  "name": "evergreen",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nikzt/evergreen.git"
+  },
+  "author": "Nikzt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nikzt/evergreen/issues"
+  },
+  "homepage": "https://github.com/Nikzt/evergreen#readme"
+}
