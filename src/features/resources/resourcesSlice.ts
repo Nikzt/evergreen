@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { chargeBattery } from '../../common/actions';
 import type { RootState } from '../../store';
 
 interface ResourcesState {
@@ -16,17 +17,21 @@ export const resourcesSlice = createSlice({
     // `createSlice` will infer the state type from the `initialState` argument
     initialState,
     reducers: {
-        chargeBatteries: (state, action: PayloadAction<number>) => {
-            if (state.chargedBatteries < state.batteries) state.chargedBatteries += action.payload;
-        },
         dischargeBatteries: (state, action: PayloadAction<number>) => {
             state.chargedBatteries -= action.payload;
         },
     },
+    extraReducers: (builder) => {
+        builder.addCase(chargeBattery.type, (state) => {
+            if (state.chargedBatteries <= state.batteries)
+                state.chargedBatteries++;
+        });
+    },
 });
 
-export const { chargeBatteries, dischargeBatteries } = resourcesSlice.actions;
+export const { dischargeBatteries } = resourcesSlice.actions;
 
 export const selectChargedBatteries = (state: RootState) => state.resources.chargedBatteries;
+export const selectAreBatteriesAllCharged = (state: RootState) => state.resources.chargedBatteries >= state.resources.batteries;
 
 export default resourcesSlice.reducer;

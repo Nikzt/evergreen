@@ -12,6 +12,7 @@ module.exports = {
             version: 'detect',
         },
     },
+    plugins: ["clean-timer"],
     extends: [
         'plugin:react/recommended',
         'plugin:react-hooks/recommended',
@@ -29,8 +30,10 @@ module.exports = {
         'react-hooks/rules-of-hooks': 'error',
         'react-hooks/exhaustive-deps': 'warn',
         'react/prop-types': 'off',
+        'clean-timer/assign-timer-id': 2,
         'react/jsx-uses-react': 'off',
         'react/react-in-jsx-scope': 'off',
+        'import/no-unresolved': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'off',
     },
 };

@@ -31,6 +31,7 @@
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^6.7.1",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-clean-timer": "^0.0.4",
     "eslint-plugin-prettier": "^4.0.0",
     "html-webpack-plugin": "^5.5.0",
     "prettier": "^2.6.0",
