@@ -3,10 +3,10 @@ import { chargeBattery } from '../../common/actions';
 import { crafting, CraftingCost, ItemType, itemTypeToLabel } from '../../common/items';
 import type { RootState } from '../../store';
 
-type ResourceMap = { [itemType: number]: number }
+type ResourceMap = { [itemType: number]: number };
 export type ResourcesState = {
-    resources: ResourceMap
-}
+    resources: ResourceMap;
+};
 
 const initialState = {
     resourceMap: {
@@ -16,16 +16,15 @@ const initialState = {
         [ItemType.JAVELIN]: 0,
         [ItemType.JAVELIN_LAUNCHER]: 0,
         [ItemType.MONEY]: 50,
-    }
+    },
 };
 
 const canCraftItem = (resourceMap: ResourceMap, costs: CraftingCost[]) => {
-    for (let cost of costs) {
-        if (resourceMap[cost.itemType] < cost.cost)
-            return false;
+    for (const cost of costs) {
+        if (resourceMap[cost.itemType] < cost.cost) return false;
     }
     return true;
-}
+};
 
 export const resourcesSlice = createSlice({
     name: 'resources',
@@ -34,7 +33,7 @@ export const resourcesSlice = createSlice({
         craftItem: (state, action: PayloadAction<ItemType>) => {
             const craftingCosts = crafting[action.payload];
             if (canCraftItem(state.resourceMap, craftingCosts)) {
-                craftingCosts.forEach(c => state.resourceMap[c.itemType] -= c.cost)
+                craftingCosts.forEach((c) => (state.resourceMap[c.itemType] -= c.cost));
                 state.resourceMap[action.payload]++;
             }
         },
@@ -49,17 +48,20 @@ export const resourcesSlice = createSlice({
 
 export const { craftItem } = resourcesSlice.actions;
 
-export const selectChargedBatteries = (state: RootState) => state.resources.resourceMap[ItemType.BATTERY]
+export const selectChargedBatteries = (state: RootState) => state.resources.resourceMap[ItemType.BATTERY];
 export const selectAreBatteriesAllCharged = (state: RootState) =>
-    state.resources.resourceMap[ItemType.CHARGE] >= state.resources.resourceMap[ItemType.BATTERY]
-export const selectResourcesList = (state: RootState) => Object.entries(state.resources.resourceMap).map((entry) => {
-    const itemType = parseInt(entry[0]) as ItemType;
-    const value = entry[1];
-    return {
-        itemType,
-        label: itemTypeToLabel[itemType].plural,
-        value
-    }
-})
+    state.resources.resourceMap[ItemType.CHARGE] >= state.resources.resourceMap[ItemType.BATTERY];
+export const selectResourcesList = (state: RootState) =>
+    Object.entries(state.resources.resourceMap).map((entry) => {
+        const itemType = parseInt(entry[0]) as ItemType;
+        const value = entry[1];
+        return {
+            itemType,
+            label: itemTypeToLabel[itemType].plural,
+            value,
+        };
+    });
+export const selectCanCraftItem = (itemType: ItemType) => (state: RootState) =>
+    canCraftItem(state.resources.resourceMap, crafting[itemType]);
 
 export default resourcesSlice.reducer;
