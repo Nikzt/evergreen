@@ -14,7 +14,6 @@ const CharactersContainer = () => {
 
     /**
      * Charge batteries using mp from a character
-     * @param characterName Name of character
      */
     const handleChargeBatteriesClick = (character: Character) => {
         if (canChargeBatteries(character)) dispatch(chargeBattery(character.name));

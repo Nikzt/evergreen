@@ -19,12 +19,22 @@ const App = () => {
 
     return (
         <>
-            <p>
-                Batteries: {chargedBatteries} / {batteries}
-            </p>
-            <p>Metal: {metal}</p>
-            <button onClick={craftBattery}>Craft Battery</button>
             <CharactersContainer />
+            <hr></hr>
+            <div>
+                <h3>Resources</h3>
+                <p>
+                    Batteries: {chargedBatteries} / {batteries}
+                </p>
+                <p>
+                    Metal: {metal}
+                </p>
+            </div>
+            <hr></hr>
+            <div>
+                <h3>Forge</h3>
+                <button onClick={craftBattery}>Battery</button>
+            </div>
         </>
     );
 };
