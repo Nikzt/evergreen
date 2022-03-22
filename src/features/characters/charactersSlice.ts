@@ -2,7 +2,7 @@ import { createEntityAdapter, createSlice, EntityState, PayloadAction } from '@r
 import { WritableDraft } from 'immer/dist/internal';
 import { chargeBattery, tick } from '../../common/actions';
 
-interface Character {
+export type Character = {
     name: string;
     hp: number;
     maxHp: number;
@@ -10,7 +10,7 @@ interface Character {
     maxMp: number;
     mpRegenCooldown: number;
     mpRegenCounter: number;
-}
+};
 
 interface CharactersState {
     characters: EntityState<Character>;

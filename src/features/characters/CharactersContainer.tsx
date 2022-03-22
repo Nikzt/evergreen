@@ -1,7 +1,7 @@
 import { chargeBattery } from '../../common/actions';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectAreBatteriesAllCharged } from '../resources/resourcesSlice';
-import { initCharacters, selectCharacters } from './charactersSlice';
+import { Character, initCharacters, selectCharacters } from './charactersSlice';
 
 const CharactersContainer = () => {
     const characters = useAppSelector((state) => selectCharacters(state.characters.characters));
@@ -10,13 +10,14 @@ const CharactersContainer = () => {
 
     dispatch(initCharacters());
 
+    const canChargeBatteries = (character: Character) => character.mp > 0 && !areBatteriesCharged;
+
     /**
-     * Charge batteries for given character
+     * Charge batteries using mp from a character
      * @param characterName Name of character
      */
-    const handleChargeBatteriesClick = (characterName: string) => {
-        const character = characters.find((c) => c.name === characterName);
-        if (character && character.mp > 0 && !areBatteriesCharged) dispatch(chargeBattery(characterName));
+    const handleChargeBatteriesClick = (character: Character) => {
+        if (canChargeBatteries(character)) dispatch(chargeBattery(character.name));
     };
 
     return (
@@ -25,10 +26,16 @@ const CharactersContainer = () => {
                 <div key={c.name}>
                     <h3>{c.name}</h3>
                     <ul>
-                        <li>HP: {c.hp} / {c.maxHp}</li>
-                        <li>MP: {c.mp} / {c.maxMp}</li>
+                        <li>
+                            HP: {c.hp} / {c.maxHp}
+                        </li>
+                        <li>
+                            MP: {c.mp} / {c.maxMp}
+                        </li>
                     </ul>
-                    <button onClick={() => handleChargeBatteriesClick(c.name)}>Charge</button>
+                    <button onClick={() => handleChargeBatteriesClick(c)} disabled={!canChargeBatteries(c)}>
+                        Charge
+                    </button>
                 </div>
             ))}
         </div>
