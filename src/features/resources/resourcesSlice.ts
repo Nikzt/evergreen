@@ -1,40 +1,65 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { chargeBattery } from '../../common/actions';
-import { crafting } from '../../common/crafting';
+import { crafting, CraftingCost, ItemType, itemTypeToLabel } from '../../common/items';
 import type { RootState } from '../../store';
 
+type ResourceMap = { [itemType: number]: number }
+export type ResourcesState = {
+    resources: ResourceMap
+}
+
 const initialState = {
-    batteries: 5,
-    chargedBatteries: 0,
-    metal: 500,
-    money: 50,
+    resourceMap: {
+        [ItemType.BATTERY]: 5,
+        [ItemType.CHARGE]: 0,
+        [ItemType.METAL]: 500,
+        [ItemType.JAVELIN]: 0,
+        [ItemType.JAVELIN_LAUNCHER]: 0,
+        [ItemType.MONEY]: 50,
+    }
 };
 
-export type ResourcesState = typeof initialState;
+const canCraftItem = (resourceMap: ResourceMap, costs: CraftingCost[]) => {
+    for (let cost of costs) {
+        if (resourceMap[cost.itemType] < cost.cost)
+            return false;
+    }
+    return true;
+}
 
 export const resourcesSlice = createSlice({
     name: 'resources',
     initialState,
     reducers: {
-        createBattery: (state) => {
-            if (state.chargedBatteries >= crafting.battery.charge && state.metal >= crafting.battery.metal) {
-                state.metal -= crafting.battery.metal;
-                state.chargedBatteries -= crafting.battery.charge;
-                state.batteries++;
+        craftItem: (state, action: PayloadAction<ItemType>) => {
+            const craftingCosts = crafting[action.payload];
+            if (canCraftItem(state.resourceMap, craftingCosts)) {
+                craftingCosts.forEach(c => state.resourceMap[c.itemType] -= c.cost)
+                state.resourceMap[action.payload]++;
             }
         },
     },
     extraReducers: (builder) => {
         builder.addCase(chargeBattery.type, (state) => {
-            if (state.chargedBatteries <= state.batteries) state.chargedBatteries++;
+            if (state.resourceMap[ItemType.CHARGE] <= state.resourceMap[ItemType.BATTERY])
+                state.resourceMap[ItemType.CHARGE]++;
         });
     },
 });
 
-export const { createBattery } = resourcesSlice.actions;
+export const { craftItem } = resourcesSlice.actions;
 
-export const selectChargedBatteries = (state: RootState) => state.resources.chargedBatteries;
+export const selectChargedBatteries = (state: RootState) => state.resources.resourceMap[ItemType.BATTERY]
 export const selectAreBatteriesAllCharged = (state: RootState) =>
-    state.resources.chargedBatteries >= state.resources.batteries;
+    state.resources.resourceMap[ItemType.CHARGE] >= state.resources.resourceMap[ItemType.BATTERY]
+export const selectResourcesList = (state: RootState) => Object.entries(state.resources.resourceMap).map((entry) => {
+    const itemType = parseInt(entry[0]) as ItemType;
+    const value = entry[1];
+    return {
+        itemType,
+        label: itemTypeToLabel[itemType].plural,
+        value
+    }
+})
 
 export default resourcesSlice.reducer;
