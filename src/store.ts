@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import resourcesReducer from './features/resources/resourcesSlice';
 import charactersReducer from './features/characters/charactersSlice';
+import combatReducer from './features/combat/combatSlice';
 
 export const store = configureStore({
     reducer: {
         resources: resourcesReducer,
         characters: charactersReducer,
+        combat: combatReducer,
     },
 });
 

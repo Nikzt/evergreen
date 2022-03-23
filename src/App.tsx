@@ -1,6 +1,7 @@
 import { crafting, ItemType, itemTypeToLabel } from './common/items';
 import CharactersContainer from './features/characters/CharactersContainer';
 import { initCharacters } from './features/characters/charactersSlice';
+import CombatContainer from './features/combat/CombatContainer';
 import TimerManager from './features/events/timerManager';
 import { craftItem, selectResourcesList } from './features/resources/resourcesSlice';
 import { useAppDispatch, useAppSelector, useCanCraftItem } from './hooks';
@@ -26,6 +27,8 @@ const App = () => {
 
     return (
         <>
+            <CombatContainer />
+            <hr></hr>
             <CharactersContainer />
             <hr></hr>
             <div>
