@@ -1,50 +1,26 @@
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { combatAction, selectEnemyUnits, selectFriendlyUnits } from './combatSlice';
+import { useAppSelector } from '../../hooks';
+import { selectEnemyUnitIds, selectFriendlyUnitIds } from './combatSlice';
+import CombatUnit from './CombatUnit';
 
 const CombatContainer = () => {
-    const dispatch = useAppDispatch();
-    const friendlyUnits = useAppSelector(selectFriendlyUnits);
-    const enemyUnits = useAppSelector(selectEnemyUnits);
+    const friendlyUnitIds = useAppSelector(selectFriendlyUnitIds);
+    const enemyUnitIds = useAppSelector(selectEnemyUnitIds);
 
-    const onUseAbility = (sourceUnitId: string, targetUnitId: string, abilityId: string) => {
-        dispatch(
-            combatAction({
-                abilityId,
-                sourceUnitId,
-                targetUnitId,
-            }),
-        );
-    };
     return (
         <div>
             {/* Enemy units */}
             <div>
-                <h2>Enemies</h2>
-                {enemyUnits.map((u) => (
-                    <span className="unit" key={u.id}>
-                        <h3>{u.id}</h3>
-                        <p>
-                            HP: {u.hp} / {u.maxHp}
-                        </p>
-                    </span>
+                {enemyUnitIds.map((unitId) => (
+                    <CombatUnit key={unitId} isFriendly={false} unitId={unitId} />
                 ))}
             </div>
 
+            <hr></hr>
+
             {/* Friendly units */}
             <div>
-                <h2>Party</h2>
-                {friendlyUnits.map((u) => (
-                    <span className="unit" key={u.id}>
-                        <h3>{u.id}</h3>
-                        <p>
-                            HP: {u.hp} / {u.maxHp}
-                        </p>
-                        {u.abilityIds.map((id) => (
-                            <button key={id} onClick={() => onUseAbility(u.id, 'monster', id)}>
-                                {id}
-                            </button>
-                        ))}
-                    </span>
+                {friendlyUnitIds.map((unitId) => (
+                    <CombatUnit key={unitId} isFriendly={true} unitId={unitId} />
                 ))}
             </div>
         </div>

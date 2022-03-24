@@ -30,7 +30,6 @@ module.exports = {
         'react-hooks/rules-of-hooks': 'error',
         'react-hooks/exhaustive-deps': 'warn',
         'react/prop-types': 'off',
-        'clean-timer/assign-timer-id': 2,
         'react/jsx-uses-react': 'off',
         'react/react-in-jsx-scope': 'off',
         'import/no-unresolved': 'off',
