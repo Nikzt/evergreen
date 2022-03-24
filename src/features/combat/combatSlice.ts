@@ -30,6 +30,7 @@ export type CombatUnit = {
     abilityIds: string[];
     isFriendly: boolean;
     isRecovering: boolean;
+    isCasting: boolean;
 };
 
 type CombatState = {
@@ -42,6 +43,23 @@ type CombatState = {
 
     abilities: CombatAbility[];
     units: CombatUnit[];
+};
+
+const createEnemyUnit = (partialUnit: Partial<CombatUnit>): CombatUnit => {
+    return {
+        ...(partialUnit as CombatUnit),
+        isCasting: false,
+        isFriendly: false,
+        isRecovering: false,
+        hp: partialUnit.maxHp as number,
+    };
+};
+
+const createFriendlyUnit = (partialUnit: Partial<CombatUnit>): CombatUnit => {
+    return {
+        ...createEnemyUnit(partialUnit),
+        isFriendly: true,
+    };
 };
 
 const initialState: CombatState = {
@@ -67,56 +85,32 @@ const initialState: CombatState = {
         },
     ],
     units: [
-        {
+        createEnemyUnit({
             id: 'monster-1',
             abilityIds: ['quick attack', 'strong attack'],
             maxHp: 50,
-            hp: 50,
-            isFriendly: false,
             name: 'Monster',
-            isRecovering: false,
-        },
-        {
+        }),
+        createEnemyUnit({
             id: 'monster-2',
             abilityIds: ['quick attack', 'strong attack'],
-            maxHp: 70,
-            hp: 70,
-            isFriendly: false,
+            maxHp: 50,
             name: 'Monster',
-            isRecovering: false,
-        },
-        {
+        }),
+        createFriendlyUnit({
             id: 'greg',
             abilityIds: ['quick attack', 'strong attack'],
-            hp: 100,
             maxHp: 100,
-            isFriendly: true,
             name: 'Greg',
-            isRecovering: false,
-        },
+        }),
+        createFriendlyUnit({
+            id: 'tal',
+            abilityIds: ['quick attack', 'strong attack'],
+            maxHp: 100,
+            name: 'Tal',
+        }),
     ],
 };
-export const targetAbility = createAsyncThunk('combat/targetAbility', async (targetUnitId: string, { getState }) => {
-    const state = getState() as RootState;
-    const ability = state.combat.abilities.find((a) => a.id === state.combat.targetingAbilityId);
-    const sourceUnit = state.combat.units.find((u) => u.id === state.combat.targetingSourceUnitId);
-
-    if (!ability || !sourceUnit) return;
-
-    // set casting state
-
-    const combatAction: CombatAction = {
-        sourceUnitId: sourceUnit.id,
-        abilityId: ability.id,
-        targetUnitId,
-    };
-    return new Promise<CombatAction>((resolve) => {
-        setTimeout(() => {
-            resolve(combatAction);
-        }, ability.castTimeInSec * 1000);
-    });
-});
-
 export const combatSlice = createSlice({
     name: 'combat',
     initialState,
@@ -125,6 +119,14 @@ export const combatSlice = createSlice({
             state.isTargeting = true;
             state.targetingAbilityId = action.payload.abilityId;
             state.targetingSourceUnitId = action.payload.sourceUnitId;
+        },
+        setUnitCasting: (state, action: PayloadAction<string>) => {
+            const unit = state.units.find((u) => u.id === action.payload);
+            if (unit) unit.isCasting = true;
+        },
+        setUnitNotCasting: (state, action: PayloadAction<string>) => {
+            const unit = state.units.find((u) => u.id === action.payload);
+            if (unit) unit.isCasting = false;
         },
     },
     extraReducers: (builder) => {
@@ -142,6 +144,7 @@ export const combatSlice = createSlice({
             const ability = state.abilities.find((a) => a.id === combatAction.abilityId);
             if (!target || !ability || !source) return;
 
+            source.isCasting = false;
             target.hp -= ability.damage;
 
             // TODO: Find a way to start recovery for the source
@@ -149,7 +152,32 @@ export const combatSlice = createSlice({
     },
 });
 
-export const { initTargetingAbility } = combatSlice.actions;
+export const { initTargetingAbility, setUnitCasting, setUnitNotCasting } = combatSlice.actions;
+
+export const targetAbility = createAsyncThunk(
+    'combat/targetAbility',
+    async (targetUnitId: string, { getState, dispatch }) => {
+        const state = getState() as RootState;
+        const ability = state.combat.abilities.find((a) => a.id === state.combat.targetingAbilityId);
+        const sourceUnit = state.combat.units.find((u) => u.id === state.combat.targetingSourceUnitId);
+
+        if (!ability || !sourceUnit) return;
+
+        // set casting state
+        dispatch(setUnitCasting(sourceUnit.id));
+
+        const combatAction: CombatAction = {
+            sourceUnitId: sourceUnit.id,
+            abilityId: ability.id,
+            targetUnitId,
+        };
+        return new Promise<CombatAction>((resolve) => {
+            setTimeout(() => {
+                resolve(combatAction);
+            }, ability.castTimeInSec * 1000);
+        });
+    },
+);
 
 export const selectFriendlyUnitIds = (state: RootState) =>
     state.combat.units.filter((u) => u.isFriendly).map((u) => u.id);

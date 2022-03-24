@@ -28,24 +28,32 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
     if (!unit) return <span>Unit with ID {unitId} not found</span>;
 
     return (
-        <span className="unit">
-            {/* Unit info */}
-            <h3>{unit.name}</h3>
-            <p>
-                HP: {unit.hp} / {unit.maxHp}
-            </p>
+        <div className="unit">
+            <div className="unit-container">
+                {/* Targeting overlay if enemy */}
+                {!isFriendly && isTargeting && (
+                    <button className="targeting-box" onClick={() => onTargetAbility(unit.id)}></button>
+                )}
 
-            {/* Abilities */}
-            {isFriendly &&
-                unit.abilityIds.map((abilityId) => (
-                    <button key={abilityId} onClick={() => onInitTargetAbility(unit.id, abilityId)}>
-                        {abilityId}
-                    </button>
-                ))}
+                {/* Unit info */}
+                <h3>{unit.name}</h3>
+                <p>
+                    HP: {unit.hp} / {unit.maxHp}
+                </p>
 
-            {/* Targeting button if enemy */}
-            {!isFriendly && isTargeting && <button onClick={() => onTargetAbility(unit.id)}>Target</button>}
-        </span>
+                {/* Abilities */}
+                {isFriendly &&
+                    unit.abilityIds.map((abilityId) => (
+                        <button
+                            disabled={unit.isCasting || isTargeting}
+                            key={abilityId}
+                            onClick={() => onInitTargetAbility(unit.id, abilityId)}
+                        >
+                            {abilityId}
+                        </button>
+                    ))}
+            </div>
+        </div>
     );
 };
 
