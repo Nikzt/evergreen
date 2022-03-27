@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap');
+
 .unit {
     display: inline-block;
     margin: 10px;
@@ -15,4 +17,62 @@
     height: 100%;
     background-color: rgba(177, 20, 20, 0.3);
     cursor: pointer;
+}
+
+.combat-numbers-container {
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.315);
+    font-size: 2em;
+    font-family: 'Fjalla One';
+    color:rgb(189, 18, 18);
+
+    position: relative;
+    pointer-events: none;
+}
+
+.combat-numbers {
+    display: grid;
+    align-items: center;
+    position: absolute;
+    width: 80px;
+    text-align: center;
+}
+
+.combat-number {
+    animation: fadeCombatNumber 3s;
+    opacity: 0;
+    height: 10px;
+}
+
+
+@keyframes fadeCombatNumber {
+    0% {
+        opacity: 0;
+        transform: scale(0.8)
+    }
+    5% {
+        opacity: 1;
+        transform: scale(1.2)
+    }
+    10% {
+        transform: scale(1)
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.cast-bars-container {
+    height: 40px;
+}
+
+.ability-button {
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    border-radius: 0;
+    margin: 3px;
+}
+
+.ability-button[disabled] {
+    border-color: white;
 }

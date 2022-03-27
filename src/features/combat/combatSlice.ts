@@ -6,6 +6,7 @@ import {
     PayloadAction,
     Update,
 } from '@reduxjs/toolkit';
+import { tick } from '../../common/actions';
 import combatAbilities, { CombatAbilityType } from '../../common/combatAbilities';
 import { timeout } from '../../common/timeout';
 import { RootState } from '../../store';
@@ -28,6 +29,7 @@ export type CombatUnit = {
     isCasting: boolean;
     castProgress: number;
     recoveryProgress: number;
+    combatNumbers: number[];
 };
 
 type CombatState = {
@@ -88,12 +90,14 @@ export const combatSlice = createSlice({
 
             // Damage ability
             target.hp -= ability.damage;
+            target.combatNumbers.push(ability.damage);
         },
     },
     extraReducers: (builder) => {
         builder.addCase(targetAbility.pending, (state) => {
             state.isTargeting = false;
         });
+        builder.addCase(tick.type, (state) => {});
     },
 });
 

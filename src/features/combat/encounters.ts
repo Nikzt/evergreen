@@ -14,6 +14,7 @@ const createEnemyUnit = (partialUnit: Partial<CombatUnit>): CombatUnit => {
         hp: partialUnit.maxHp as number,
         castProgress: 0,
         recoveryProgress: 0,
+        combatNumbers: [],
     };
 };
 

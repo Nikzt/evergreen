@@ -12,6 +12,7 @@ export enum CombatAbilityType {
 export type CombatAbility = {
     id: CombatAbilityType;
     name: string;
+    label: string;
     targetType: CombatTargetType;
     castTimeInSec: number;
     recoveryTimeInSec: number;
@@ -26,6 +27,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         targetType: CombatTargetType.ENEMY,
         castTimeInSec: 0.5,
         recoveryTimeInSec: 3,
+        label: 'Q',
     },
     [CombatAbilityType.STRONG_ATTACK]: {
         id: CombatAbilityType.STRONG_ATTACK,
@@ -34,6 +36,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         targetType: CombatTargetType.ENEMY,
         castTimeInSec: 1.5,
         recoveryTimeInSec: 5,
+        label: 'S',
     },
 };
 

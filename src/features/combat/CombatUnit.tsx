@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import combatAbilities, { CombatAbility, CombatAbilityType } from '../../common/combatAbilities';
 import { useAppDispatch, useAppSelector, useSelectCombatUnit } from '../../hooks';
 import CastBar from './CastBar';
+import CombatNumbers from './CombatNumbers';
 import { initTargetingAbility, targetAbility } from './combatSlice';
 import RecoveryBar from './RecoveryBar';
 
@@ -44,8 +45,13 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
                     <button className="targeting-box" onClick={() => onTargetAbility(unit.id)}></button>
                 )}
 
-                <CastBar unitId={unitId} />
-                <RecoveryBar unitId={unitId} />
+                {isFriendly && (
+                    <div className="cast-bars-container">
+                        <CastBar unitId={unitId} />
+                        <RecoveryBar unitId={unitId} />
+                    </div>
+                )}
+                <CombatNumbers unitId={unitId} />
 
                 {/* Unit info */}
                 <h3>{unit.name}</h3>
@@ -57,13 +63,21 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
                 {isFriendly &&
                     unitAbilities.map((ability) => (
                         <button
+                            className="ability-button"
                             disabled={unit.isCasting || unit.isRecovering || isTargeting}
                             key={ability.id}
                             onClick={() => onInitTargetAbility(unit.id, ability.id)}
                         >
-                            {ability.name}
+                            {ability.label}
                         </button>
                     ))}
+                {/* Enemy castbars at bottom of unit frame */}
+                {!isFriendly && (
+                    <div className="cast-bars-container">
+                        <CastBar unitId={unitId} />
+                        <RecoveryBar unitId={unitId} />
+                    </div>
+                )}
             </div>
         </div>
     );

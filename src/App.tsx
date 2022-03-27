@@ -32,6 +32,7 @@ const App = () => {
     return (
         <>
             <CombatContainer />
+            {/*
             <hr></hr>
             <CharactersContainer />
             <hr></hr>
@@ -56,6 +57,7 @@ const App = () => {
                     </button>
                 ))}
             </div>
+                */}
         </>
     );
 };
