@@ -2,13 +2,17 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { initCombatEncounter, selectEnemyUnitIds, selectFriendlyUnitIds } from './combatSlice';
 import CombatUnit from './CombatUnit';
 import { testEncounter1 } from './encounters';
+import EnemyController from './enemyController';
 
 const CombatContainer = () => {
     const dispatch = useAppDispatch();
     const friendlyUnitIds = useAppSelector(selectFriendlyUnitIds);
     const enemyUnitIds = useAppSelector(selectEnemyUnitIds);
 
-    const initCombat = () => dispatch(initCombatEncounter(testEncounter1));
+    const initCombat = () => {
+        dispatch(initCombatEncounter(testEncounter1));
+        EnemyController.initEnemies();
+    };
 
     return (
         <div>

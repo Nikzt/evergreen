@@ -5,6 +5,7 @@ import CombatContainer from './features/combat/CombatContainer';
 import TimerManager from './features/events/timerManager';
 import { craftItem, selectResourcesList } from './features/resources/resourcesSlice';
 import { useAppDispatch, useAppSelector, useCanCraftItem } from './hooks';
+import './reset.css';
 import './app.css';
 import KeyHandler from './features/combat/keyHandler';
 

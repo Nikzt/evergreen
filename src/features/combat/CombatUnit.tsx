@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
 import combatAbilities, { CombatAbility, CombatAbilityType } from '../../common/combatAbilities';
 import { useAppDispatch, useAppSelector, useSelectCombatUnit } from '../../hooks';
+import { store } from '../../store';
 import CastBar from './CastBar';
 import CombatNumbers from './CombatNumbers';
-import { initTargetingAbility, targetAbility } from './combatSlice';
+import { CombatAction, initTargetingAbility, targetAbility } from './combatSlice';
 import RecoveryBar from './RecoveryBar';
 
 type CombatUnitProps = {
@@ -27,7 +28,17 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
     };
 
     const onTargetAbility = (targetUnitId: string) => {
-        dispatch(targetAbility(targetUnitId));
+        const state = store.getState();
+        const sourceUnitId = state.combat.targetingSourceUnitId;
+        const abilityId = state.combat.targetingAbilityId;
+        if (!sourceUnitId || abilityId == null)
+            return;
+        const combatAction: CombatAction = {
+            sourceUnitId,
+            abilityId,
+            targetUnitId
+        }
+        dispatch(targetAbility(combatAction));
     };
 
     const unitAbilities = useMemo<CombatAbility[]>(() => {
