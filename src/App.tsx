@@ -6,6 +6,7 @@ import TimerManager from './features/events/timerManager';
 import { craftItem, selectResourcesList } from './features/resources/resourcesSlice';
 import { useAppDispatch, useAppSelector, useCanCraftItem } from './hooks';
 import './app.css';
+import KeyHandler from './features/combat/keyHandler';
 
 const App = () => {
     const dispatch = useAppDispatch();
@@ -17,6 +18,8 @@ const App = () => {
             itemType,
         };
     });
+
+    KeyHandler.init();
 
     dispatch(initCharacters());
     TimerManager.startTimer();

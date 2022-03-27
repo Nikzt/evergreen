@@ -1,3 +1,4 @@
+import { CombatAbilityType } from '../../common/combatAbilities';
 import { useAppDispatch, useAppSelector, useSelectCombatUnit } from '../../hooks';
 import { initTargetingAbility, targetAbility } from './combatSlice';
 
@@ -11,7 +12,7 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
     const unit = useSelectCombatUnit(unitId);
     const isTargeting = useAppSelector((state) => state.combat.isTargeting);
 
-    const onInitTargetAbility = (sourceUnitId: string, abilityId: string) => {
+    const onInitTargetAbility = (sourceUnitId: string, abilityId: CombatAbilityType) => {
         dispatch(
             initTargetingAbility({
                 sourceUnitId,
@@ -45,7 +46,7 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
                 {isFriendly &&
                     unit.abilityIds.map((abilityId) => (
                         <button
-                            disabled={unit.isCasting || isTargeting}
+                            disabled={unit.isCasting || unit.isRecovering || isTargeting}
                             key={abilityId}
                             onClick={() => onInitTargetAbility(unit.id, abilityId)}
                         >
