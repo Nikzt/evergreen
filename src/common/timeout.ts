@@ -1,3 +1,15 @@
-export const timeout = (ms: number) => {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+const TICK_INTERVAL_MS = 10;
+
+export const timeout = (tickCallback: (currTime: number, totalTime: number) => void, ms: number) => {
+    return new Promise((resolve) => {
+        let timeInMs = 0;
+        const interval = setInterval(() => {
+            tickCallback(timeInMs, ms);
+            timeInMs += TICK_INTERVAL_MS;
+            if (timeInMs >= ms) {
+                clearInterval(interval);
+                resolve(true);
+            }
+        }, TICK_INTERVAL_MS);
+    });
 };

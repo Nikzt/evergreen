@@ -29,7 +29,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
     },
     [CombatAbilityType.STRONG_ATTACK]: {
         id: CombatAbilityType.STRONG_ATTACK,
-        name: 'Quick Attack',
+        name: 'Strong Attack',
         damage: 10,
         targetType: CombatTargetType.ENEMY,
         castTimeInSec: 1.5,

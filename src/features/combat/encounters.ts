@@ -12,6 +12,8 @@ const createEnemyUnit = (partialUnit: Partial<CombatUnit>): CombatUnit => {
         isFriendly: false,
         isRecovering: false,
         hp: partialUnit.maxHp as number,
+        castProgress: 0,
+        recoveryProgress: 0,
     };
 };
 

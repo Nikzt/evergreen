@@ -1,6 +1,9 @@
-import { CombatAbilityType } from '../../common/combatAbilities';
+import { useMemo } from 'react';
+import combatAbilities, { CombatAbility, CombatAbilityType } from '../../common/combatAbilities';
 import { useAppDispatch, useAppSelector, useSelectCombatUnit } from '../../hooks';
+import CastBar from './CastBar';
 import { initTargetingAbility, targetAbility } from './combatSlice';
+import RecoveryBar from './RecoveryBar';
 
 type CombatUnitProps = {
     unitId: string;
@@ -26,6 +29,11 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
         dispatch(targetAbility(targetUnitId));
     };
 
+    const unitAbilities = useMemo<CombatAbility[]>(() => {
+        if (!unit?.abilityIds) return [];
+        return unit.abilityIds.map((id) => combatAbilities[id]);
+    }, [unit?.abilityIds]);
+
     if (!unit) return <span>Unit with ID {unitId} not found</span>;
 
     return (
@@ -36,6 +44,9 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
                     <button className="targeting-box" onClick={() => onTargetAbility(unit.id)}></button>
                 )}
 
+                <CastBar unitId={unitId} />
+                <RecoveryBar unitId={unitId} />
+
                 {/* Unit info */}
                 <h3>{unit.name}</h3>
                 <p>
@@ -44,13 +55,13 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
 
                 {/* Abilities */}
                 {isFriendly &&
-                    unit.abilityIds.map((abilityId) => (
+                    unitAbilities.map((ability) => (
                         <button
                             disabled={unit.isCasting || unit.isRecovering || isTargeting}
-                            key={abilityId}
-                            onClick={() => onInitTargetAbility(unit.id, abilityId)}
+                            key={ability.id}
+                            onClick={() => onInitTargetAbility(unit.id, ability.id)}
                         >
-                            {abilityId}
+                            {ability.name}
                         </button>
                     ))}
             </div>

@@ -26,6 +26,8 @@ export type CombatUnit = {
     isFriendly: boolean;
     isRecovering: boolean;
     isCasting: boolean;
+    castProgress: number;
+    recoveryProgress: number;
 };
 
 type CombatState = {
@@ -81,8 +83,10 @@ export const combatSlice = createSlice({
             const ability = combatAbilities[action.payload.abilityId];
             if (!target || !ability || !source) return;
 
-            // Damage ability
             source.isCasting = false;
+            source.castProgress = 0;
+
+            // Damage ability
             target.hp -= ability.damage;
         },
     },
@@ -107,6 +111,12 @@ export const targetAbility = createAsyncThunk(
 
         if (!ability || !sourceUnit) return;
 
+        const combatAction: CombatAction = {
+            sourceUnitId: sourceUnit.id,
+            abilityId: ability.id,
+            targetUnitId,
+        };
+
         // start casting ability
         dispatch(
             updateUnit({
@@ -117,17 +127,34 @@ export const targetAbility = createAsyncThunk(
             }),
         );
 
-        const combatAction: CombatAction = {
-            sourceUnitId: sourceUnit.id,
-            abilityId: ability.id,
-            targetUnitId,
+        const castTickCallback = (currTime: number, castTime: number) => {
+            const castProgress = Math.ceil((currTime / castTime) * 100);
+            dispatch(
+                updateUnit({
+                    id: sourceUnit.id,
+                    changes: {
+                        castProgress,
+                    },
+                }),
+            );
         };
 
-        await timeout(ability.castTimeInSec * 1000);
+        await timeout(castTickCallback, ability.castTimeInSec * 1000);
 
         dispatch(performCombatAction(combatAction));
 
         // recovery time after using ability
+        const recoveryTickCallback = (currTime: number, recoveryTime: number) => {
+            const recoveryProgress = Math.ceil((currTime / recoveryTime) * 100);
+            dispatch(
+                updateUnit({
+                    id: sourceUnit.id,
+                    changes: {
+                        recoveryProgress,
+                    },
+                }),
+            );
+        };
         dispatch(
             updateUnit({
                 id: sourceUnit.id,
@@ -136,13 +163,14 @@ export const targetAbility = createAsyncThunk(
                 },
             }),
         );
-        await timeout(ability.recoveryTimeInSec * 1000);
+        await timeout(recoveryTickCallback, ability.recoveryTimeInSec * 1000);
 
         dispatch(
             updateUnit({
                 id: sourceUnit.id,
                 changes: {
                     isRecovering: false,
+                    recoveryProgress: 0,
                 },
             }),
         );
@@ -162,5 +190,7 @@ export const selectEnemyUnitIds = (state: RootState) =>
         .map((u) => u.id);
 export const selectUnit = (unitId: string) => (state: RootState) =>
     unitsSelectors.selectById(state.combat.units, unitId);
+
+export const selectUnitCastProgress = (unitId: string) => (state: RootState) => selectUnit(unitId)(state)?.castProgress;
 
 export default combatSlice.reducer;
