@@ -7,6 +7,7 @@ export enum CombatTargetType {
 export enum CombatAbilityType {
     QUICK_ATTACK = 0,
     STRONG_ATTACK,
+    WHIRLWIND,
     BLOCK,
 }
 
@@ -31,7 +32,17 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         targetType: CombatTargetType.ENEMY,
         castTimeInSec: 0.5,
         recoveryTimeInSec: 1,
-        label: 'Q',
+        label: 'Quick Attack',
+    },
+    [CombatAbilityType.WHIRLWIND]: {
+        id: CombatAbilityType.WHIRLWIND,
+        castBarColor: "#dbb763",
+        name: 'Whirlwind',
+        damage: 2,
+        targetType: CombatTargetType.ENEMY,
+        castTimeInSec: 0.5,
+        recoveryTimeInSec: 1,
+        label: 'Whirlwind',
     },
     [CombatAbilityType.STRONG_ATTACK]: {
         id: CombatAbilityType.STRONG_ATTACK,
@@ -41,7 +52,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         targetType: CombatTargetType.ENEMY,
         castTimeInSec: 2.5,
         recoveryTimeInSec: 2,
-        label: 'S',
+        label: 'Strong Attack',
     },
     [CombatAbilityType.BLOCK]: {
         id: CombatAbilityType.BLOCK,
@@ -50,7 +61,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         targetType: CombatTargetType.ENEMY,
         castTimeInSec: 0,
         recoveryTimeInSec: 0,
-        label: 'B',
+        label: 'Block',
         blockValue: 7,
     },
 };

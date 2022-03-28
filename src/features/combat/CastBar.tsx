@@ -9,7 +9,6 @@ type CastBarProps = {
 const CastBar = ({ unitId }: CastBarProps) => {
     const unit = useSelectCombatUnit(unitId);
     const ability = unit?.castingAbility != null ? combatAbilities[unit.castingAbility] : null;
-    console.log(ability);
 
     if (!unit?.isCasting) return <></>;
 

@@ -1,17 +1,36 @@
 @import url('https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap');
 
+.combat-container {
+    max-width: 600px;
+}
+
+.units-row {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+}
+
 .unit {
     display: inline-block;
-    margin: 10px;
+    margin: 12px;
     border: 1px solid black;
-    width: 100px;
+    width: 150px;
     height: 200px;
     padding: 5px;
+}
+
+.unit.blocking {
+    margin: 10px;
+    border: 3px solid rgb(13, 169, 231);
 }
 
 .unit h3 {
     font-size: 1.3em;
     margin-bottom: 7px;
+}
+
+.dead .unit-name {
+    text-decoration: line-through;
 }
 
 .unit-container {
@@ -27,6 +46,7 @@
     background-color: rgba(177, 20, 20, 0.3);
     cursor: pointer;
     border: none;
+    z-index: 50;
 }
 
 .combat-numbers-container {
@@ -50,7 +70,7 @@
 .combat-number {
     animation: fadeCombatNumber 1s;
     opacity: 0;
-    height: 10px;
+    height: 20px;
 }
 
 
@@ -76,10 +96,17 @@
 
 .cast-bars-container {
     height: 40px;
+    width: 100%;
+}
+
+.cast-bars-container.enemy-castbars {
+    position: absolute;
+    bottom: 0;
+    z-index: 1;
 }
 
 .ability-button {
-    width: 30px;
+    width: 130px;
     height: 30px;
     border: 1px solid black;
     border-radius: 0;

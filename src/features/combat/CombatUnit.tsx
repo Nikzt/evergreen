@@ -49,7 +49,7 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
     if (!unit) return <span>Unit with ID {unitId} not found</span>;
 
     return (
-        <div className="unit">
+        <div className={'unit' + ((unit.blockedBy || unit.blocking) ? ' blocking' : '') + (unit.isDead ? ' dead' : '')}>
             <div className="unit-container">
                 {/* Targeting overlay if enemy */}
                 {!isFriendly && isTargeting && !unit.isDead && (
@@ -65,7 +65,7 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
                 <CombatNumbers unitId={unitId} />
 
                 {/* Unit info */}
-                <h3>{unit.name}</h3>
+                <h3 className='unit-name'>{unit.name}</h3>
                 <p>
                     HP: {unit.hp} / {unit.maxHp}
                 </p>
@@ -84,7 +84,7 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
                     ))}
                 {/* Enemy castbars at bottom of unit frame */}
                 {!isFriendly && (
-                    <div className="cast-bars-container">
+                    <div className="cast-bars-container enemy-castbars">
                         <CastBar unitId={unitId} />
                         <RecoveryBar unitId={unitId} />
                     </div>

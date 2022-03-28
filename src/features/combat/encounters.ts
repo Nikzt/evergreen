@@ -2,6 +2,7 @@ import { CombatAbilityType } from '../../common/combatAbilities';
 import { CombatUnit } from './combatSlice';
 
 export type CombatEncounter = {
+    name: string,
     units: CombatUnit[];
 };
 
@@ -29,7 +30,8 @@ const createFriendlyUnit = (partialUnit: Partial<CombatUnit>): CombatUnit => {
     };
 };
 
-export const testEncounter1: CombatEncounter = {
+const twoVsTwo: CombatEncounter = {
+    name: "2 v 2",
     units: [
         createFriendlyUnit({
             id: 'Greg',
@@ -57,3 +59,38 @@ export const testEncounter1: CombatEncounter = {
         }),
     ],
 };
+
+const oneVsThree: CombatEncounter = {
+    name: "1 v 3",
+    units: [
+        createFriendlyUnit({
+            id: 'Greg',
+            name: 'Greg',
+            maxHp: 100,
+            abilityIds: [CombatAbilityType.QUICK_ATTACK, CombatAbilityType.BLOCK],
+        }),
+        createEnemyUnit({
+            id: 'forest-fiend-1',
+            name: 'Forest Fiend',
+            maxHp: 30,
+            abilityIds: [CombatAbilityType.STRONG_ATTACK],
+        }),
+        createEnemyUnit({
+            id: 'monster-1',
+            name: 'Bark Dog',
+            maxHp: 50,
+            abilityIds: [CombatAbilityType.QUICK_ATTACK],
+        }),
+        createEnemyUnit({
+            id: 'monster-2',
+            name: 'Bark Dog',
+            maxHp: 50,
+            abilityIds: [CombatAbilityType.QUICK_ATTACK],
+        }),
+    ],
+};
+
+export const encounters = [
+    twoVsTwo,
+    oneVsThree
+]

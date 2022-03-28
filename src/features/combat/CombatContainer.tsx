@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { initCombatEncounter, selectEnemyUnitIds, selectFriendlyUnitIds } from './combatSlice';
 import CombatUnit from './CombatUnit';
-import { testEncounter1 } from './encounters';
+import { CombatEncounter, encounters } from './encounters';
 import EnemyController from './enemyController';
 
 const CombatContainer = () => {
@@ -9,16 +9,19 @@ const CombatContainer = () => {
     const friendlyUnitIds = useAppSelector(selectFriendlyUnitIds);
     const enemyUnitIds = useAppSelector(selectEnemyUnitIds);
 
-    const initCombat = () => {
-        dispatch(initCombatEncounter(testEncounter1));
+    const initCombat = (encounter: CombatEncounter) => {
+        dispatch(initCombatEncounter(encounter));
         EnemyController.initEnemies();
-    };
+    }
 
     return (
-        <div>
-            <button onClick={() => initCombat()}>Start Combat</button>
+        <div className="combat-container">
+            Select Encounter:
+            {encounters.map(e =>
+                <button key={e.name} onClick={() => initCombat(e)}>{e.name}</button>
+            )}
             {/* Enemy units */}
-            <div>
+            <div className="units-row">
                 {enemyUnitIds.map((unitId) => (
                     <CombatUnit key={unitId} isFriendly={false} unitId={unitId} />
                 ))}
@@ -27,7 +30,7 @@ const CombatContainer = () => {
             <hr></hr>
 
             {/* Friendly units */}
-            <div>
+            <div className="units-row">
                 {friendlyUnitIds.map((unitId) => (
                     <CombatUnit key={unitId} isFriendly={true} unitId={unitId} />
                 ))}
