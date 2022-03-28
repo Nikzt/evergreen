@@ -1,6 +1,7 @@
 import {
     createAsyncThunk,
     createEntityAdapter,
+    createSelector,
     createSlice,
     EntityState,
     PayloadAction,
@@ -21,9 +22,12 @@ export type CombatUnit = {
     // State
     hp: number;
     isFriendly: boolean;
+
     isRecovering: boolean;
     isCasting: boolean;
     castingAbility: CombatAbilityType | null;
+    targetUnitId: string | null;
+
     blockedBy: string | null;
     blocking: string | null;
     castProgress: number;
@@ -83,7 +87,7 @@ const checkDeadEnemies = (state: CombatState) => {
     });
 };
 
-const calculateAbilityDamage = (sourceUnit: CombatUnit, targetUnit: CombatUnit, ability: CombatAbility): number => {
+export const calculateAbilityDamage = (sourceUnit: CombatUnit, targetUnit: CombatUnit, ability: CombatAbility): number => {
     const damageBeforeBlock = Math.ceil(
         sourceUnit.weaponDamage * ability.weaponDamageMultiplier +
             sourceUnit.strength * ability.strengthMultiplier -
@@ -130,6 +134,7 @@ export const combatSlice = createSlice({
             source.isCasting = false;
             source.castingAbility = null;
             source.castProgress = 0;
+            source.targetUnitId = null;
 
             // Damage ability
             switch (ability.id) {
@@ -204,6 +209,7 @@ export const targetAbility = createAsyncThunk(
                     changes: {
                         isCasting: true,
                         castingAbility: combatAction.abilityId,
+                        targetUnitId: combatAction.targetUnitId
                     },
                 }),
             );
@@ -285,5 +291,23 @@ export const selectCanUseAbility = (unitId: string) => (state: RootState) => {
     const unit = selectUnit(unitId)(state);
     return unit && !unit.isCasting && !unit.isRecovering && !unit.blocking && !unit.isDead;
 };
+
+export const selectAbilityDamage = (unitId: string) => (state: RootState) => {
+    const units = state.combat.units.entities
+    const unit = units[unitId];
+    if (!unit || !unit.targetUnitId || unit.castingAbility === null)
+        return 0;
+    
+    let targetUnit: CombatUnit | undefined;
+    if (unit.blockedBy)
+        targetUnit = units[unit.blockedBy];
+    else
+        targetUnit = units[unit.targetUnitId];
+
+    const ability = combatAbilities[unit.castingAbility];
+    if (!targetUnit || !ability)
+        return 0;
+    return calculateAbilityDamage(unit, targetUnit, ability);
+}
 
 export default combatSlice.reducer;

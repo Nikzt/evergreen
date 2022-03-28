@@ -1,6 +1,6 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { ItemType } from './common/items';
-import { selectUnit } from './features/combat/combatSlice';
+import { selectAbilityDamage, selectUnit } from './features/combat/combatSlice';
 import { selectCanCraftItem } from './features/resources/resourcesSlice';
 import type { RootState, AppDispatch } from './store';
 
@@ -12,6 +12,12 @@ export const useCanCraftItem = (itemType: ItemType) => {
     return useAppSelector(selectCanCraftItem(itemType));
 };
 
-export const useSelectCombatUnit = (unitId: string) => {
+export const useSelectCombatUnit = (unitId: string | null) => {
+    if (!unitId)
+        return null;
     return useAppSelector(selectUnit(unitId));
 };
+
+export const useSelectAbilityDamage = (unitId: string) => {
+    return useAppSelector(selectAbilityDamage(unitId));
+}

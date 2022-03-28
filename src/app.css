@@ -127,3 +127,30 @@
     border-color: white;
     color: grey;
 }
+
+.cast-bar {
+    display: grid;
+    grid-template-columns: 30px auto;
+    height: 30px;
+}
+
+.effect-icon-container {
+    padding: 0px;
+    height: 30px;
+    width: 20px;
+    display: grid;
+    align-items: center;
+    align-content: center;
+    border: 1px solid black;
+}
+
+.effect-icon-container .effect-icon {
+    text-align: center;
+}
+
+.cast-bar-label {
+    position: absolute;
+    margin-left: 10px;
+    color: black;
+    font-size: 0.8em;
+}
