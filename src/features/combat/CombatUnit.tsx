@@ -82,6 +82,7 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
                             {ability.label}
                         </button>
                     ))}
+
                 {/* Enemy castbars at bottom of unit frame */}
                 {!isFriendly && (
                     <div className="cast-bars-container enemy-castbars">

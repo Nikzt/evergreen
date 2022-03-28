@@ -6,12 +6,10 @@ import {
     PayloadAction,
     Update,
 } from '@reduxjs/toolkit';
-import { tick } from '../../common/actions';
-import combatAbilities, { CombatAbilityType } from '../../common/combatAbilities';
+import combatAbilities, { CombatAbility, CombatAbilityType } from '../../common/combatAbilities';
 import { timeout } from '../../common/timeout';
 import { RootState } from '../../store';
 import { CombatEncounter } from './encounters';
-import EnemyController from './enemyController';
 
 export type CombatAction = {
     sourceUnitId: string;
@@ -20,11 +18,8 @@ export type CombatAction = {
 };
 
 export type CombatUnit = {
-    id: string;
-    name: string;
+    // State
     hp: number;
-    maxHp: number;
-    abilityIds: CombatAbilityType[];
     isFriendly: boolean;
     isRecovering: boolean;
     isCasting: boolean;
@@ -35,6 +30,19 @@ export type CombatUnit = {
     recoveryProgress: number;
     combatNumbers: number[];
     isDead: boolean;
+
+    // Config
+    id: string;
+    name: string;
+
+    //Stats / Loadout
+    abilityIds: CombatAbilityType[];
+    maxHp: number;
+    weaponDamage: number;
+    strength: number;
+    armor: number;
+    block: number;
+    
 };
 
 type CombatState = {
@@ -75,6 +83,13 @@ const checkDeadEnemies = (state: CombatState) => {
         }
     });
 };
+
+const calculateAbilityDamage = (sourceUnit: CombatUnit, targetUnit: CombatUnit, ability: CombatAbility): number => {
+    const damageBeforeBlock = Math.ceil((sourceUnit.weaponDamage * ability.weaponDamageMultiplier) + (sourceUnit.strength * ability.strengthMultiplier) - targetUnit.armor);
+    if (sourceUnit.blockedBy)
+        return Math.max(0, damageBeforeBlock - targetUnit.block);
+    return damageBeforeBlock;
+}
 
 const initialState: CombatState = {
     isTargeting: false,
@@ -121,16 +136,16 @@ export const combatSlice = createSlice({
                     target.blockedBy = source.id;
                     break;
                 default:
-                    const damage = source.blockedBy ? Math.max(0, ability.damage - 7) : ability.damage;
-                    console.log(source.blockedBy);
                     if (source.blockedBy) {
                         const newTarget = state.units.entities[source.blockedBy];
                         if (!newTarget) break;
+                        const damage = calculateAbilityDamage(source, newTarget, ability);
                         newTarget.hp -= damage;
                         source.blockedBy = null;
                         newTarget.blocking = null;
                         newTarget.combatNumbers.push(damage);
                     } else {
+                        const damage = calculateAbilityDamage(source, target, ability);
                         target.hp -= damage;
                         target.combatNumbers.push(damage);
                     }
@@ -142,10 +157,6 @@ export const combatSlice = createSlice({
             const unit = state.units.entities[unitId];
             if (unit && unit.combatNumbers.length > 3) unit?.combatNumbers.splice(0, 1);
         },
-    },
-    extraReducers: (builder) => {
-        builder.addCase(targetAbility.pending, (state) => {});
-        builder.addCase(tick.type, (state) => {});
     },
 });
 

@@ -19,7 +19,8 @@ export type CombatAbility = {
     targetType: CombatTargetType;
     castTimeInSec: number;
     recoveryTimeInSec: number;
-    damage: number;
+    weaponDamageMultiplier: number,
+    strengthMultiplier: number,
     blockValue?: number;
 };
 
@@ -28,7 +29,8 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         id: CombatAbilityType.QUICK_ATTACK,
         castBarColor: "#dbb763",
         name: 'Quick Attack',
-        damage: 2,
+        weaponDamageMultiplier: 0.5,
+        strengthMultiplier: 1,
         targetType: CombatTargetType.ENEMY,
         castTimeInSec: 0.5,
         recoveryTimeInSec: 1,
@@ -38,7 +40,8 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         id: CombatAbilityType.WHIRLWIND,
         castBarColor: "#dbb763",
         name: 'Whirlwind',
-        damage: 2,
+        weaponDamageMultiplier: 0.5,
+        strengthMultiplier: 1,
         targetType: CombatTargetType.ENEMY,
         castTimeInSec: 0.5,
         recoveryTimeInSec: 1,
@@ -48,7 +51,8 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         id: CombatAbilityType.STRONG_ATTACK,
         name: 'Strong Attack',
         castBarColor: "#a42334",
-        damage: 15,
+        weaponDamageMultiplier: 1.5,
+        strengthMultiplier: 2,
         targetType: CombatTargetType.ENEMY,
         castTimeInSec: 2.5,
         recoveryTimeInSec: 2,
@@ -57,7 +61,8 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
     [CombatAbilityType.BLOCK]: {
         id: CombatAbilityType.BLOCK,
         name: 'Block',
-        damage: 0,
+        weaponDamageMultiplier: 0.5,
+        strengthMultiplier: 1,
         targetType: CombatTargetType.ENEMY,
         castTimeInSec: 0,
         recoveryTimeInSec: 0,
