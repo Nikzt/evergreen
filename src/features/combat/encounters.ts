@@ -1,33 +1,11 @@
 import { CombatAbilityType } from '../../common/combatAbilities';
 import { CombatUnit } from './combatSlice';
+import { createEnemyUnit, createFriendlyUnit } from './combatUnitUtils';
+import { enemyTemplates } from './enemyGenerator';
 
 export type CombatEncounter = {
     name: string;
     units: CombatUnit[];
-};
-
-const createEnemyUnit = (partialUnit: Partial<CombatUnit>): CombatUnit => {
-    return {
-        ...(partialUnit as CombatUnit),
-        isCasting: false,
-        isFriendly: false,
-        isRecovering: false,
-        hp: partialUnit.maxHp as number,
-        castProgress: 0,
-        recoveryProgress: 0,
-        combatNumbers: [],
-        blockedBy: null,
-        blocking: null,
-        isDead: false,
-        castingAbility: null,
-    };
-};
-
-const createFriendlyUnit = (partialUnit: Partial<CombatUnit>): CombatUnit => {
-    return {
-        ...createEnemyUnit(partialUnit),
-        isFriendly: true,
-    };
 };
 
 const twoVsTwo: CombatEncounter = {
@@ -67,7 +45,7 @@ const twoVsTwo: CombatEncounter = {
             id: 'monster-2',
             name: 'Monster',
             maxHp: 30,
-            abilityIds: [CombatAbilityType.QUICK_ATTACK, CombatAbilityType.STRONG_ATTACK],
+            abilityIds: [CombatAbilityType.BLOCK],
             weaponDamage: 2,
             strength: 6,
             armor: 2,
@@ -123,3 +101,51 @@ const oneVsThree: CombatEncounter = {
 };
 
 export const encounters = [twoVsTwo, oneVsThree];
+
+const getPlayerCharacters = () => [
+    createFriendlyUnit({
+        id: 'Greg',
+        name: 'Greg',
+        abilityIds: [CombatAbilityType.QUICK_ATTACK, CombatAbilityType.BLOCK],
+        maxHp: 50,
+        weaponDamage: 2,
+        strength: 6,
+        armor: 3,
+        block: 50,
+    }),
+    createFriendlyUnit({
+        id: 'Tal',
+        name: 'Tal',
+        maxHp: 30,
+        abilityIds: [CombatAbilityType.STRONG_ATTACK],
+        weaponDamage: 3,
+        strength: 8,
+        armor: 0,
+        block: 0,
+    }),
+]
+
+
+const generateRandomEnemy = (difficulty: number): CombatUnit => {
+    const enemyTemplateList = Object.values(enemyTemplates);
+    const enemyIdx = Math.floor(Math.random() * enemyTemplateList.length);
+    const enemy = { ...enemyTemplateList[enemyIdx] };
+    enemy.id = 'enemy-' + enemyIdx;
+    enemy.weaponDamage += difficulty;
+    return enemy;
+}
+
+export const randomEncounterGenerator = (difficulty: number, friendlyUnits: CombatUnit[]): CombatEncounter => {
+    const numEnemies = Math.ceil(Math.random() * 3);
+    const enemies: CombatUnit[] = [];
+    for (let i = 0; i < numEnemies; i++) {
+        enemies.push(generateRandomEnemy(0));
+    }
+    return {
+        name: "Random Encounter",
+        units: [
+            ...enemies,
+            ...getPlayerCharacters()
+        ]
+    }
+}

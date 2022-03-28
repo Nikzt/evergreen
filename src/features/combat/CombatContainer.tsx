@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { initCombatEncounter, selectEnemyUnitIds, selectFriendlyUnitIds } from './combatSlice';
 import CombatUnit from './CombatUnit';
-import { CombatEncounter, encounters } from './encounters';
+import { CombatEncounter, encounters, randomEncounterGenerator } from './encounters';
 import EnemyController from './enemyController';
 
 const CombatContainer = () => {
@@ -14,6 +14,12 @@ const CombatContainer = () => {
         EnemyController.initEnemies();
     };
 
+    const initRandomEncounter = () => {
+        const encounter = randomEncounterGenerator(1, []);
+        dispatch(initCombatEncounter(encounter));
+        EnemyController.initEnemies();
+    }
+
     return (
         <div className="combat-container">
             Select Encounter:
@@ -22,6 +28,9 @@ const CombatContainer = () => {
                     {e.name}
                 </button>
             ))}
+                <button onClick={() => initRandomEncounter()}>
+                    Generate Random Encounter
+                </button>
             {/* Enemy units */}
             <div className="units-row enemy-units-row">
                 {enemyUnitIds.map((unitId) => (
