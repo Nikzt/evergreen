@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector, useSelectCombatUnit } from '../../hooks
 import { store } from '../../store';
 import CastBar from './CastBar';
 import CombatNumbers from './CombatNumbers';
-import { CombatAction, initTargetingAbility, targetAbility } from './combatSlice';
+import { CombatAction, initTargetingAbility, selectCanUseAbility, targetAbility } from './combatSlice';
 import RecoveryBar from './RecoveryBar';
 
 type CombatUnitProps = {
@@ -16,6 +16,7 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
     const dispatch = useAppDispatch();
     const unit = useSelectCombatUnit(unitId);
     const isTargeting = useAppSelector((state) => state.combat.isTargeting);
+    const canUseAbility = useAppSelector((state) => selectCanUseAbility(unitId)(state));
 
     const onInitTargetAbility = (sourceUnitId: string, abilityId: CombatAbilityType) => {
         dispatch(
@@ -31,13 +32,12 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
         const state = store.getState();
         const sourceUnitId = state.combat.targetingSourceUnitId;
         const abilityId = state.combat.targetingAbilityId;
-        if (!sourceUnitId || abilityId == null)
-            return;
+        if (!sourceUnitId || abilityId == null) return;
         const combatAction: CombatAction = {
             sourceUnitId,
             abilityId,
-            targetUnitId
-        }
+            targetUnitId,
+        };
         dispatch(targetAbility(combatAction));
     };
 
@@ -52,7 +52,7 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
         <div className="unit">
             <div className="unit-container">
                 {/* Targeting overlay if enemy */}
-                {!isFriendly && isTargeting && (
+                {!isFriendly && isTargeting && !unit.isDead && (
                     <button className="targeting-box" onClick={() => onTargetAbility(unit.id)}></button>
                 )}
 
@@ -75,7 +75,7 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
                     unitAbilities.map((ability) => (
                         <button
                             className="ability-button"
-                            disabled={unit.isCasting || unit.isRecovering || isTargeting}
+                            disabled={!canUseAbility}
                             key={ability.id}
                             onClick={() => onInitTargetAbility(unit.id, ability.id)}
                         >

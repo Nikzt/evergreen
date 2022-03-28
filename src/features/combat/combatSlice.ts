@@ -11,6 +11,7 @@ import combatAbilities, { CombatAbilityType } from '../../common/combatAbilities
 import { timeout } from '../../common/timeout';
 import { RootState } from '../../store';
 import { CombatEncounter } from './encounters';
+import EnemyController from './enemyController';
 
 export type CombatAction = {
     sourceUnitId: string;
@@ -27,9 +28,13 @@ export type CombatUnit = {
     isFriendly: boolean;
     isRecovering: boolean;
     isCasting: boolean;
+    castingAbility: CombatAbilityType | null;
+    blockedBy: string | null;
+    blocking: string | null;
     castProgress: number;
     recoveryProgress: number;
     combatNumbers: number[];
+    isDead: boolean;
 };
 
 type CombatState = {
@@ -51,6 +56,24 @@ const clearCombatState = (state: CombatState) => {
     state.isTargeting = false;
     state.targetingAbilityId = null;
     state.targetingSourceUnitId = null;
+};
+
+const checkDeadEnemies = (state: CombatState) => {
+    Object.values(state.units.entities).forEach((u) => {
+        if (u && u.hp <= 0) {
+            u.hp = 0;
+            u.isDead = true;
+            u.isCasting = false;
+
+            // If this unit was blocking another unit, that unit will no longer be blocked
+            if (u.blocking) {
+                const blockingUnit = state.units.entities[u.blocking];
+                if (blockingUnit) blockingUnit.blockedBy = null;
+            }
+            u.blockedBy = null;
+            u.blocking = null;
+        }
+    });
 };
 
 const initialState: CombatState = {
@@ -85,29 +108,55 @@ export const combatSlice = createSlice({
             const source = state.units.entities[action.payload.sourceUnitId];
             const target = state.units.entities[action.payload.targetUnitId];
             const ability = combatAbilities[action.payload.abilityId];
-            if (!target || !ability || !source) return;
+            if (!target || !ability || !source || source.isDead) return;
 
             source.isCasting = false;
+            source.castingAbility = null;
             source.castProgress = 0;
 
             // Damage ability
-            target.hp -= ability.damage;
-            target.combatNumbers.push(ability.damage);
+            switch (ability.id) {
+                case CombatAbilityType.BLOCK:
+                    source.blocking = target.id;
+                    target.blockedBy = source.id;
+                    break;
+                default:
+                    const damage = source.blockedBy ? Math.max(0, ability.damage - 7) : ability.damage;
+                    console.log(source.blockedBy);
+                    if (source.blockedBy) {
+                        const newTarget = state.units.entities[source.blockedBy];
+                        if (!newTarget) break;
+                        newTarget.hp -= damage;
+                        source.blockedBy = null;
+                        newTarget.blocking = null;
+                        newTarget.combatNumbers.push(damage);
+                    } else {
+                        target.hp -= damage;
+                        target.combatNumbers.push(damage);
+                    }
+            }
+            checkDeadEnemies(state);
         },
         clearOldestCombatNumber: (state, action: PayloadAction<string>) => {
             const unitId = action.payload;
             const unit = state.units.entities[unitId];
-            unit?.combatNumbers.splice(0, 1);
-        }
+            if (unit && unit.combatNumbers.length > 3) unit?.combatNumbers.splice(0, 1);
+        },
     },
     extraReducers: (builder) => {
-        builder.addCase(targetAbility.pending, (state) => {
-        });
+        builder.addCase(targetAbility.pending, (state) => {});
         builder.addCase(tick.type, (state) => {});
     },
 });
 
-export const { initTargetingAbility, updateUnit, performCombatAction, initCombatEncounter, setTargetingMode, clearOldestCombatNumber } = combatSlice.actions;
+export const {
+    initTargetingAbility,
+    updateUnit,
+    performCombatAction,
+    initCombatEncounter,
+    setTargetingMode,
+    clearOldestCombatNumber,
+} = combatSlice.actions;
 
 export const targetAbility = createAsyncThunk(
     'combat/targetAbility',
@@ -118,20 +167,9 @@ export const targetAbility = createAsyncThunk(
         const sourceUnit = state.combat.units.entities[combatAction.sourceUnitId];
         const targetUnit = state.combat.units.entities[combatAction.targetUnitId];
 
-        if (!ability || !sourceUnit || !targetUnit) return;
+        if (!ability || !sourceUnit || !targetUnit || !selectCanUseAbility(sourceUnit.id)(state)) return;
 
-        if (sourceUnit.isFriendly)
-            dispatch(setTargetingMode(false));
-
-        // start casting ability
-        dispatch(
-            updateUnit({
-                id: sourceUnit.id,
-                changes: {
-                    isCasting: true,
-                },
-            }),
-        );
+        if (sourceUnit.isFriendly) dispatch(setTargetingMode(false));
 
         const castTickCallback = (currTime: number, castTime: number) => {
             const castProgress = Math.ceil((currTime / castTime) * 100);
@@ -145,12 +183,25 @@ export const targetAbility = createAsyncThunk(
             );
         };
 
-        await timeout(castTickCallback, ability.castTimeInSec * 1000);
+        if (ability.castTimeInSec > 0) {
+            // start casting ability
+            dispatch(
+                updateUnit({
+                    id: sourceUnit.id,
+                    changes: {
+                        isCasting: true,
+                        castingAbility: combatAction.abilityId
+                    },
+                }),
+            );
+
+            await timeout(castTickCallback, ability.castTimeInSec * 1000);
+        }
 
         dispatch(performCombatAction(combatAction));
         setTimeout(() => {
-            dispatch(clearOldestCombatNumber(combatAction.targetUnitId))
-        }, 5000)
+            dispatch(clearOldestCombatNumber(combatAction.targetUnitId));
+        }, 5000);
 
         // recovery time after using ability
         const recoveryTickCallback = (currTime: number, recoveryTime: number) => {
@@ -164,42 +215,45 @@ export const targetAbility = createAsyncThunk(
                 }),
             );
         };
-        dispatch(
-            updateUnit({
-                id: sourceUnit.id,
-                changes: {
-                    isRecovering: true,
-                },
-            }),
-        );
-        await timeout(recoveryTickCallback, ability.recoveryTimeInSec * 1000);
 
-        dispatch(
-            updateUnit({
-                id: sourceUnit.id,
-                changes: {
-                    isRecovering: false,
-                    recoveryProgress: 0,
-                },
-            }),
-        );
+        if (ability.recoveryTimeInSec > 0) {
+            dispatch(
+                updateUnit({
+                    id: sourceUnit.id,
+                    changes: {
+                        isRecovering: true,
+                    },
+                }),
+            );
+            await timeout(recoveryTickCallback, ability.recoveryTimeInSec * 1000);
+            dispatch(
+                updateUnit({
+                    id: sourceUnit.id,
+                    changes: {
+                        isRecovering: false,
+                        recoveryProgress: 0,
+                    },
+                }),
+            );
+        }
     },
 );
 
 const unitsSelectors = unitsAdapter.getSelectors();
-export const selectEnemyUnits = (state: RootState) => unitsSelectors.selectAll(state.combat.units).filter(u => !u.isFriendly)
-export const selectFriendlyUnits = (state: RootState) => unitsSelectors.selectAll(state.combat.units).filter(u => u.isFriendly)
+export const selectEnemyUnits = (state: RootState) =>
+    unitsSelectors.selectAll(state.combat.units).filter((u) => !u.isFriendly);
+export const selectFriendlyUnits = (state: RootState) =>
+    unitsSelectors.selectAll(state.combat.units).filter((u) => u.isFriendly);
 export const selectRandomFriendlyUnit = (state: RootState) => {
-    const friendlyUnits = selectFriendlyUnits(state);
-    return friendlyUnits[Math.floor(Math.random()*friendlyUnits.length)];
-}
+    const friendlyUnits = selectFriendlyUnits(state).filter(u => !u.isDead);
+    return friendlyUnits[Math.floor(Math.random() * friendlyUnits.length)];
+};
 
 export const selectRandomAbilityId = (state: RootState, unitId: string) => {
     const abilities = selectUnit(unitId)(state)?.abilityIds;
-    if (abilities)
-        return abilities[Math.floor(Math.random()*abilities.length)];
+    if (abilities) return abilities[Math.floor(Math.random() * abilities.length)];
     return 0;
-}
+};
 export const selectFriendlyUnitIds = (state: RootState) =>
     unitsSelectors
         .selectAll(state.combat.units)
@@ -216,7 +270,7 @@ export const selectUnit = (unitId: string) => (state: RootState) =>
 export const selectUnitCastProgress = (unitId: string) => (state: RootState) => selectUnit(unitId)(state)?.castProgress;
 export const selectCanUseAbility = (unitId: string) => (state: RootState) => {
     const unit = selectUnit(unitId)(state);
-    return !unit?.isCasting && !unit?.isRecovering;
-}
+    return unit && !unit.isCasting && !unit.isRecovering && !unit.blocking && !unit.isDead;
+};
 
 export default combatSlice.reducer;

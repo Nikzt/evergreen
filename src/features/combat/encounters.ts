@@ -15,6 +15,10 @@ const createEnemyUnit = (partialUnit: Partial<CombatUnit>): CombatUnit => {
         castProgress: 0,
         recoveryProgress: 0,
         combatNumbers: [],
+        blockedBy: null,
+        blocking: null,
+        isDead: false,
+        castingAbility: null
     };
 };
 
@@ -30,14 +34,14 @@ export const testEncounter1: CombatEncounter = {
         createFriendlyUnit({
             id: 'Greg',
             name: 'Greg',
-            maxHp: 100,
-            abilityIds: [CombatAbilityType.QUICK_ATTACK, CombatAbilityType.STRONG_ATTACK],
+            maxHp: 50,
+            abilityIds: [CombatAbilityType.QUICK_ATTACK, CombatAbilityType.BLOCK],
         }),
         createFriendlyUnit({
             id: 'Tal',
             name: 'Tal',
-            maxHp: 70,
-            abilityIds: [CombatAbilityType.QUICK_ATTACK, CombatAbilityType.STRONG_ATTACK],
+            maxHp: 30,
+            abilityIds: [CombatAbilityType.STRONG_ATTACK],
         }),
         createEnemyUnit({
             id: 'monster-1',
@@ -48,7 +52,7 @@ export const testEncounter1: CombatEncounter = {
         createEnemyUnit({
             id: 'monster-2',
             name: 'Monster',
-            maxHp: 50,
+            maxHp: 30,
             abilityIds: [CombatAbilityType.QUICK_ATTACK, CombatAbilityType.STRONG_ATTACK],
         }),
     ],

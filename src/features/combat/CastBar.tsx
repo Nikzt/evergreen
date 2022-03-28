@@ -1,5 +1,6 @@
 import { useSelectCombatUnit } from '../../hooks';
 import ProgressBar from '@ramonak/react-progress-bar';
+import combatAbilities from '../../common/combatAbilities';
 
 type CastBarProps = {
     unitId: string;
@@ -7,13 +8,15 @@ type CastBarProps = {
 
 const CastBar = ({ unitId }: CastBarProps) => {
     const unit = useSelectCombatUnit(unitId);
+    const ability = unit?.castingAbility != null ? combatAbilities[unit.castingAbility] : null;
+    console.log(ability);
 
     if (!unit?.isCasting) return <></>;
 
     return (
         <>
             <ProgressBar
-                bgColor="#a42334"
+                bgColor={ability?.castBarColor}
                 transitionDuration={'0.01'}
                 transitionTimingFunction={'linear'}
                 borderRadius={'0'}
