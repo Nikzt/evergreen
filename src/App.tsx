@@ -1,34 +1,34 @@
-import { crafting, ItemType, itemTypeToLabel } from './common/items';
-import CharactersContainer from './features/characters/CharactersContainer';
-import { initCharacters } from './features/characters/charactersSlice';
+//import { crafting, ItemType, itemTypeToLabel } from './common/items';
+//import CharactersContainer from './features/characters/CharactersContainer';
+//import { initCharacters } from './features/characters/charactersSlice';
 import CombatContainer from './features/combat/CombatContainer';
-import TimerManager from './features/events/timerManager';
-import { craftItem, selectResourcesList } from './features/resources/resourcesSlice';
-import { useAppDispatch, useAppSelector, useCanCraftItem } from './hooks';
+//import TimerManager from './features/events/timerManager';
+//import { craftItem, selectResourcesList } from './features/resources/resourcesSlice';
+//import { useAppDispatch, useAppSelector, useCanCraftItem } from './hooks';
 import './reset.css';
 import './app.css';
-import KeyHandler from './features/combat/keyHandler';
+//import KeyHandler from './features/combat/keyHandler';
 
 const App = () => {
-    const dispatch = useAppDispatch();
-    const resourcesList = useAppSelector(selectResourcesList);
-    const craftingList = Object.keys(crafting).map((c) => {
-        const itemType = parseInt(c) as ItemType;
-        return {
-            label: itemTypeToLabel[itemType].singular,
-            itemType,
-        };
-    });
+    //const dispatch = useAppDispatch();
+    //const resourcesList = useAppSelector(selectResourcesList);
+    //const craftingList = Object.keys(crafting).map((c) => {
+    //    const itemType = parseInt(c) as ItemType;
+    //    return {
+    //        label: itemTypeToLabel[itemType].singular,
+    //        itemType,
+    //    };
+    //});
 
-    KeyHandler.init();
+    //KeyHandler.init();
 
-    dispatch(initCharacters());
-    TimerManager.startTimer();
+    //dispatch(initCharacters());
+    //TimerManager.startTimer();
 
-    const canCraftItem = useCanCraftItem;
-    const onCraftItemClick = (itemType: ItemType) => {
-        dispatch(craftItem(itemType));
-    };
+    //const canCraftItem = useCanCraftItem;
+    //const onCraftItemClick = (itemType: ItemType) => {
+    //    dispatch(craftItem(itemType));
+    //};
 
     return (
         <>

@@ -2,12 +2,21 @@
 
 .combat-container {
     max-width: 600px;
+    font-family: 'Fjalla One';
 }
 
 .units-row {
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-evenly;
+}
+
+.enemy-units-row {
+    margin-bottom: 50px;
+}
+
+.friendly-units-row {
+    margin-top: 50px;
 }
 
 .unit {
@@ -52,7 +61,6 @@
 .combat-numbers-container {
     text-shadow: 0 0 1px rgba(0, 0, 0, 0.315);
     font-size: 2em;
-    font-family: 'Fjalla One';
     color:rgb(189, 18, 18);
 
     position: relative;
@@ -107,12 +115,15 @@
 
 .ability-button {
     width: 130px;
-    height: 30px;
+    height: 42px;
     border: 1px solid black;
     border-radius: 0;
-    margin: 3px;
+    margin: 6px 3px 3px 3px;
+    font-family: 'Fjalla One';
+    font-size: 0.8em;
 }
 
 .ability-button[disabled] {
     border-color: white;
+    color: grey;
 }

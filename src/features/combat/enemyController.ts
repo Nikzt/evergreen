@@ -32,7 +32,7 @@ class EnemyController {
 
         // Check if unit is dead, so it doesn't take any more actions
         if (unit && unit.isDead) {
-            EnemyController.killEnemy(this.unitId) 
+            EnemyController.killEnemy(this.unitId);
             return;
         }
 

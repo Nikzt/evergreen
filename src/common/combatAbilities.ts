@@ -19,15 +19,15 @@ export type CombatAbility = {
     targetType: CombatTargetType;
     castTimeInSec: number;
     recoveryTimeInSec: number;
-    weaponDamageMultiplier: number,
-    strengthMultiplier: number,
+    weaponDamageMultiplier: number;
+    strengthMultiplier: number;
     blockValue?: number;
 };
 
 const combatAbilities: { [abilityType: number]: CombatAbility } = {
     [CombatAbilityType.QUICK_ATTACK]: {
         id: CombatAbilityType.QUICK_ATTACK,
-        castBarColor: "#dbb763",
+        castBarColor: '#dbb763',
         name: 'Quick Attack',
         weaponDamageMultiplier: 0.5,
         strengthMultiplier: 1,
@@ -38,7 +38,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
     },
     [CombatAbilityType.WHIRLWIND]: {
         id: CombatAbilityType.WHIRLWIND,
-        castBarColor: "#dbb763",
+        castBarColor: '#dbb763',
         name: 'Whirlwind',
         weaponDamageMultiplier: 0.5,
         strengthMultiplier: 1,
@@ -50,7 +50,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
     [CombatAbilityType.STRONG_ATTACK]: {
         id: CombatAbilityType.STRONG_ATTACK,
         name: 'Strong Attack',
-        castBarColor: "#a42334",
+        castBarColor: '#a42334',
         weaponDamageMultiplier: 1.5,
         strengthMultiplier: 2,
         targetType: CombatTargetType.ENEMY,

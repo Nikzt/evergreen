@@ -12,25 +12,25 @@ const CombatContainer = () => {
     const initCombat = (encounter: CombatEncounter) => {
         dispatch(initCombatEncounter(encounter));
         EnemyController.initEnemies();
-    }
+    };
 
     return (
         <div className="combat-container">
             Select Encounter:
-            {encounters.map(e =>
-                <button key={e.name} onClick={() => initCombat(e)}>{e.name}</button>
-            )}
+            {encounters.map((e) => (
+                <button key={e.name} onClick={() => initCombat(e)}>
+                    {e.name}
+                </button>
+            ))}
             {/* Enemy units */}
-            <div className="units-row">
+            <div className="units-row enemy-units-row">
                 {enemyUnitIds.map((unitId) => (
                     <CombatUnit key={unitId} isFriendly={false} unitId={unitId} />
                 ))}
             </div>
-
             <hr></hr>
-
             {/* Friendly units */}
-            <div className="units-row">
+            <div className="units-row friendly-units-row">
                 {friendlyUnitIds.map((unitId) => (
                     <CombatUnit key={unitId} isFriendly={true} unitId={unitId} />
                 ))}

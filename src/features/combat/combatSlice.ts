@@ -42,7 +42,6 @@ export type CombatUnit = {
     strength: number;
     armor: number;
     block: number;
-    
 };
 
 type CombatState = {
@@ -85,11 +84,14 @@ const checkDeadEnemies = (state: CombatState) => {
 };
 
 const calculateAbilityDamage = (sourceUnit: CombatUnit, targetUnit: CombatUnit, ability: CombatAbility): number => {
-    const damageBeforeBlock = Math.ceil((sourceUnit.weaponDamage * ability.weaponDamageMultiplier) + (sourceUnit.strength * ability.strengthMultiplier) - targetUnit.armor);
-    if (sourceUnit.blockedBy)
-        return Math.max(0, damageBeforeBlock - targetUnit.block);
+    const damageBeforeBlock = Math.ceil(
+        sourceUnit.weaponDamage * ability.weaponDamageMultiplier +
+            sourceUnit.strength * ability.strengthMultiplier -
+            targetUnit.armor,
+    );
+    if (sourceUnit.blockedBy) return Math.max(0, damageBeforeBlock - targetUnit.block);
     return damageBeforeBlock;
-}
+};
 
 const initialState: CombatState = {
     isTargeting: false,
@@ -201,7 +203,7 @@ export const targetAbility = createAsyncThunk(
                     id: sourceUnit.id,
                     changes: {
                         isCasting: true,
-                        castingAbility: combatAction.abilityId
+                        castingAbility: combatAction.abilityId,
                     },
                 }),
             );
@@ -256,7 +258,7 @@ export const selectEnemyUnits = (state: RootState) =>
 export const selectFriendlyUnits = (state: RootState) =>
     unitsSelectors.selectAll(state.combat.units).filter((u) => u.isFriendly);
 export const selectRandomFriendlyUnit = (state: RootState) => {
-    const friendlyUnits = selectFriendlyUnits(state).filter(u => !u.isDead);
+    const friendlyUnits = selectFriendlyUnits(state).filter((u) => !u.isDead);
     return friendlyUnits[Math.floor(Math.random() * friendlyUnits.length)];
 };
 

@@ -2,7 +2,7 @@ import { CombatAbilityType } from '../../common/combatAbilities';
 import { CombatUnit } from './combatSlice';
 
 export type CombatEncounter = {
-    name: string,
+    name: string;
     units: CombatUnit[];
 };
 
@@ -31,7 +31,7 @@ const createFriendlyUnit = (partialUnit: Partial<CombatUnit>): CombatUnit => {
 };
 
 const twoVsTwo: CombatEncounter = {
-    name: "2 v 2",
+    name: '2 v 2',
     units: [
         createFriendlyUnit({
             id: 'Greg',
@@ -41,7 +41,7 @@ const twoVsTwo: CombatEncounter = {
             weaponDamage: 2,
             strength: 6,
             armor: 3,
-            block: 7
+            block: 7,
         }),
         createFriendlyUnit({
             id: 'Tal',
@@ -51,7 +51,7 @@ const twoVsTwo: CombatEncounter = {
             weaponDamage: 3,
             strength: 8,
             armor: 0,
-            block: 0
+            block: 0,
         }),
         createEnemyUnit({
             id: 'monster-1',
@@ -61,7 +61,7 @@ const twoVsTwo: CombatEncounter = {
             weaponDamage: 2,
             strength: 6,
             armor: 2,
-            block: 7
+            block: 7,
         }),
         createEnemyUnit({
             id: 'monster-2',
@@ -71,13 +71,13 @@ const twoVsTwo: CombatEncounter = {
             weaponDamage: 2,
             strength: 6,
             armor: 2,
-            block: 7
+            block: 7,
         }),
     ],
 };
 
 const oneVsThree: CombatEncounter = {
-    name: "1 v 3",
+    name: '1 v 3',
     units: [
         createFriendlyUnit({
             id: 'Greg',
@@ -87,7 +87,7 @@ const oneVsThree: CombatEncounter = {
             weaponDamage: 5,
             strength: 8,
             armor: 4,
-            block: 25
+            block: 25,
         }),
         createEnemyUnit({
             id: 'monster-1',
@@ -97,7 +97,7 @@ const oneVsThree: CombatEncounter = {
             weaponDamage: 5,
             strength: 4,
             armor: -2,
-            block: 0
+            block: 0,
         }),
         createEnemyUnit({
             id: 'forest-fiend-1',
@@ -107,7 +107,7 @@ const oneVsThree: CombatEncounter = {
             weaponDamage: 8,
             strength: 12,
             armor: 4,
-            block: 10
+            block: 10,
         }),
         createEnemyUnit({
             id: 'monster-2',
@@ -117,12 +117,9 @@ const oneVsThree: CombatEncounter = {
             weaponDamage: 5,
             strength: 4,
             armor: -2,
-            block: 0
+            block: 0,
         }),
     ],
 };
 
-export const encounters = [
-    twoVsTwo,
-    oneVsThree
-]
+export const encounters = [twoVsTwo, oneVsThree];
