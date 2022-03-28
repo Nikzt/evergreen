@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector, useSelectCombatUnit } from '../../hooks
 import { store } from '../../store';
 import CastBar from './CastBar';
 import CombatNumbers from './CombatNumbers';
-import { CombatAction, initTargetingAbility, selectCanUseAbility, targetAbility } from './combatSlice';
+import { cancelBlock, CombatAction, initTargetingAbility, selectCanUseAbility, targetAbility } from './combatSlice';
 import RecoveryBar from './RecoveryBar';
 
 type CombatUnitProps = {
@@ -18,14 +18,17 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
     const isTargeting = useAppSelector((state) => state.combat.isTargeting);
     const canUseAbility = useAppSelector((state) => selectCanUseAbility(unitId)(state));
 
-    const onInitTargetAbility = (sourceUnitId: string, abilityId: CombatAbilityType) => {
-        dispatch(
-            initTargetingAbility({
-                sourceUnitId,
-                abilityId,
-                targetUnitId: '',
-            }),
-        );
+    const onAbilityButtonClick = (sourceUnitId: string, abilityId: CombatAbilityType) => {
+        if (abilityId === CombatAbilityType.BLOCK && unit?.blocking)
+            dispatch(cancelBlock(sourceUnitId))
+        else
+            dispatch(
+                initTargetingAbility({
+                    sourceUnitId,
+                    abilityId,
+                    targetUnitId: '',
+                }),
+            );
     };
 
     const onTargetAbility = (targetUnitId: string) => {
@@ -75,11 +78,11 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
                     unitAbilities.map((ability) => (
                         <button
                             className="ability-button"
-                            disabled={!canUseAbility}
+                            disabled={!canUseAbility && !(ability.id === CombatAbilityType.BLOCK && unit.blocking)}
                             key={ability.id}
-                            onClick={() => onInitTargetAbility(unit.id, ability.id)}
+                            onClick={() => onAbilityButtonClick(unit.id, ability.id)}
                         >
-                            {ability.label}
+                            {ability.id === CombatAbilityType.BLOCK && unit.blocking ? 'Cancel' : ability.label}
                         </button>
                     ))}
 

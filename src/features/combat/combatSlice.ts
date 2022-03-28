@@ -164,6 +164,15 @@ export const combatSlice = createSlice({
             const unit = state.units.entities[unitId];
             if (unit && unit.combatNumbers.length > 3) unit?.combatNumbers.splice(0, 1);
         },
+        cancelBlock: (state, action: PayloadAction<string>) => {
+            const unit = state.units.entities[action.payload];
+            if (!unit || !unit.blocking)
+                return;
+            const blockTarget = state.units.entities[unit.blocking];
+            unit.blocking = null;
+            if (blockTarget?.blockedBy)
+                blockTarget.blockedBy = null;
+        }
     },
 });
 
@@ -174,6 +183,7 @@ export const {
     initCombatEncounter,
     setTargetingMode,
     clearOldestCombatNumber,
+    cancelBlock
 } = combatSlice.actions;
 
 export const targetAbility = createAsyncThunk(
@@ -218,6 +228,7 @@ export const targetAbility = createAsyncThunk(
         }
 
         dispatch(performCombatAction(combatAction));
+        dispatch(cancelBlock(combatAction.targetUnitId));
         setTimeout(() => {
             dispatch(clearOldestCombatNumber(combatAction.targetUnitId));
         }, 5000);
