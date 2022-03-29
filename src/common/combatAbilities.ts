@@ -50,7 +50,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
     [CombatAbilityType.STRONG_ATTACK]: {
         id: CombatAbilityType.STRONG_ATTACK,
         name: 'Strong Attack',
-        castBarColor: '#eb4242',
+        castBarColor: '#dbb763',
         weaponDamageMultiplier: 1.5,
         strengthMultiplier: 2,
         targetType: CombatTargetType.ENEMY,

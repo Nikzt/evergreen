@@ -5,6 +5,7 @@ import { store } from '../../store';
 import CastBar from './CastBar';
 import CombatNumbers from './CombatNumbers';
 import { cancelBlock, CombatAction, initTargetingAbility, selectCanUseAbility, targetAbility } from './combatSlice';
+import HpBar from './HpBar';
 import RecoveryBar from './RecoveryBar';
 
 type CombatUnitProps = {
@@ -53,7 +54,7 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
     return (
         <div
             id={unit.id}
-            className={'unit' + (unit.blockedBy || unit.blocking ? ' blocking' : '') + (unit.isDead ? ' dead' : '')}
+            className={'unit' + (unit.blocking ? ' blocking' : '') + (unit.isDead ? ' dead' : '')}
         >
             <div className="unit-container">
                 {/* Targeting overlay if enemy */}
@@ -71,9 +72,7 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
 
                 {/* Unit info */}
                 <h3 className="unit-name">{unit.name}</h3>
-                <p>
-                    HP: {unit.hp} / {unit.maxHp}
-                </p>
+                <HpBar hp={unit.hp} maxHp={unit.maxHp} isFriendly={unit.isFriendly}/>
 
                 {/* Abilities */}
                 {isFriendly &&
