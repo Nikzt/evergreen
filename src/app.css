@@ -63,7 +63,7 @@
     font-size: 2em;
     color:rgb(189, 18, 18);
 
-    position: relative;
+    position: absolute;
     pointer-events: none;
 }
 
@@ -71,14 +71,14 @@
     display: grid;
     align-items: center;
     position: absolute;
-    width: 80px;
+    width: 100px;
     text-align: center;
 }
 
 .combat-number {
     animation: fadeCombatNumber 1s;
     opacity: 0;
-    height: 20px;
+    height: 0px;
 }
 
 

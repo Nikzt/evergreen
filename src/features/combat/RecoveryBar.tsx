@@ -13,7 +13,7 @@ const RecoveryBar = ({ unitId }: RecoveryBarProps) => {
 
     return (
         <div className="cast-bar">
-            <EffectIcon label={"R"} />
+            <EffectIcon label={'R'} />
             <ProgressBar
                 bgColor="#999999"
                 transitionDuration={'0.01'}

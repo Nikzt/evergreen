@@ -1,7 +1,6 @@
 import {
     createAsyncThunk,
     createEntityAdapter,
-    createSelector,
     createSlice,
     EntityState,
     PayloadAction,
@@ -87,7 +86,11 @@ const checkDeadEnemies = (state: CombatState) => {
     });
 };
 
-export const calculateAbilityDamage = (sourceUnit: CombatUnit, targetUnit: CombatUnit, ability: CombatAbility): number => {
+export const calculateAbilityDamage = (
+    sourceUnit: CombatUnit,
+    targetUnit: CombatUnit,
+    ability: CombatAbility,
+): number => {
     const damageBeforeBlock = Math.ceil(
         sourceUnit.weaponDamage * ability.weaponDamageMultiplier +
             sourceUnit.strength * ability.strengthMultiplier -
@@ -166,13 +169,11 @@ export const combatSlice = createSlice({
         },
         cancelBlock: (state, action: PayloadAction<string>) => {
             const unit = state.units.entities[action.payload];
-            if (!unit || !unit.blocking)
-                return;
+            if (!unit || !unit.blocking) return;
             const blockTarget = state.units.entities[unit.blocking];
             unit.blocking = null;
-            if (blockTarget?.blockedBy)
-                blockTarget.blockedBy = null;
-        }
+            if (blockTarget?.blockedBy) blockTarget.blockedBy = null;
+        },
     },
 });
 
@@ -183,7 +184,7 @@ export const {
     initCombatEncounter,
     setTargetingMode,
     clearOldestCombatNumber,
-    cancelBlock
+    cancelBlock,
 } = combatSlice.actions;
 
 export const targetAbility = createAsyncThunk(
@@ -219,7 +220,7 @@ export const targetAbility = createAsyncThunk(
                     changes: {
                         isCasting: true,
                         castingAbility: combatAction.abilityId,
-                        targetUnitId: combatAction.targetUnitId
+                        targetUnitId: combatAction.targetUnitId,
                     },
                 }),
             );
@@ -304,21 +305,32 @@ export const selectCanUseAbility = (unitId: string) => (state: RootState) => {
 };
 
 export const selectAbilityDamage = (unitId: string) => (state: RootState) => {
-    const units = state.combat.units.entities
+    const units = state.combat.units.entities;
     const unit = units[unitId];
-    if (!unit || !unit.targetUnitId || unit.castingAbility === null)
-        return 0;
-    
+    if (!unit || !unit.targetUnitId || unit.castingAbility === null) return 0;
+
     let targetUnit: CombatUnit | undefined;
-    if (unit.blockedBy)
-        targetUnit = units[unit.blockedBy];
-    else
-        targetUnit = units[unit.targetUnitId];
+    if (unit.blockedBy) targetUnit = units[unit.blockedBy];
+    else targetUnit = units[unit.targetUnitId];
 
     const ability = combatAbilities[unit.castingAbility];
-    if (!targetUnit || !ability)
-        return 0;
+    if (!targetUnit || !ability) return 0;
     return calculateAbilityDamage(unit, targetUnit, ability);
-}
+};
+
+export const selectTargetLines = (state: RootState) => {
+    const units = unitsSelectors.selectAll(state.combat.units);
+    const castingUnits = units.filter((u) => u.isCasting || u.blocking);
+    return castingUnits.map((u) => {
+        const target = u.blockedBy ?? u.targetUnitId;
+        return {
+            sourceUnitId: u.id,
+            targetUnitId: u.blocking ? u.blocking : target,
+            abilityId: u.castingAbility,
+            isFriendlySource: u.isFriendly,
+            isBlocking: !!u.blocking,
+        };
+    });
+};
 
 export default combatSlice.reducer;

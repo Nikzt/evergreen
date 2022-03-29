@@ -13,11 +13,9 @@ export const useCanCraftItem = (itemType: ItemType) => {
 };
 
 export const useSelectCombatUnit = (unitId: string | null) => {
-    if (!unitId)
-        return null;
-    return useAppSelector(selectUnit(unitId));
+    return useAppSelector(selectUnit(unitId ?? ''));
 };
 
 export const useSelectAbilityDamage = (unitId: string) => {
     return useAppSelector(selectAbilityDamage(unitId));
-}
+};

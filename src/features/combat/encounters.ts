@@ -123,8 +123,7 @@ const getPlayerCharacters = () => [
         armor: 0,
         block: 0,
     }),
-]
-
+];
 
 const generateRandomEnemy = (difficulty: number): CombatUnit => {
     const enemyTemplateList = Object.values(enemyTemplates);
@@ -133,7 +132,7 @@ const generateRandomEnemy = (difficulty: number): CombatUnit => {
     enemy.id = 'enemy-' + enemyIdx;
     enemy.weaponDamage += difficulty;
     return enemy;
-}
+};
 
 export const randomEncounterGenerator = (difficulty: number, friendlyUnits: CombatUnit[]): CombatEncounter => {
     const numEnemies = Math.ceil(Math.random() * 3);
@@ -142,10 +141,7 @@ export const randomEncounterGenerator = (difficulty: number, friendlyUnits: Comb
         enemies.push(generateRandomEnemy(0));
     }
     return {
-        name: "Random Encounter",
-        units: [
-            ...enemies,
-            ...getPlayerCharacters()
-        ]
-    }
-}
+        name: 'Random Encounter',
+        units: [...enemies, ...getPlayerCharacters()],
+    };
+};

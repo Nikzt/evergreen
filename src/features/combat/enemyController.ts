@@ -40,8 +40,7 @@ class EnemyController {
 
         const randomTarget = selectRandomFriendlyUnit(state);
 
-        if (!randomTarget)
-            return;
+        if (!randomTarget) return;
 
         const randomAbility = selectRandomAbilityId(state, this.unitId);
         store.dispatch(
@@ -63,10 +62,9 @@ class EnemyController {
 
     static killEnemy(unitId: string) {
         const deleteIdx = EnemyController.enemies.findIndex((e) => e.unitId === unitId);
-        if (deleteIdx > -1)  {
+        if (deleteIdx > -1) {
             const enemyCombatInterval = EnemyController.enemies[deleteIdx].combatInterval;
-            if (enemyCombatInterval)
-                clearInterval(enemyCombatInterval);
+            if (enemyCombatInterval) clearInterval(enemyCombatInterval);
         }
         EnemyController.enemies.splice(deleteIdx, 1);
     }

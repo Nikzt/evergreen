@@ -19,8 +19,7 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
     const canUseAbility = useAppSelector((state) => selectCanUseAbility(unitId)(state));
 
     const onAbilityButtonClick = (sourceUnitId: string, abilityId: CombatAbilityType) => {
-        if (abilityId === CombatAbilityType.BLOCK && unit?.blocking)
-            dispatch(cancelBlock(sourceUnitId))
+        if (abilityId === CombatAbilityType.BLOCK && unit?.blocking) dispatch(cancelBlock(sourceUnitId));
         else
             dispatch(
                 initTargetingAbility({
@@ -52,7 +51,10 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
     if (!unit) return <span>Unit with ID {unitId} not found</span>;
 
     return (
-        <div className={'unit' + (unit.blockedBy || unit.blocking ? ' blocking' : '') + (unit.isDead ? ' dead' : '')}>
+        <div
+            id={unit.id}
+            className={'unit' + (unit.blockedBy || unit.blocking ? ' blocking' : '') + (unit.isDead ? ' dead' : '')}
+        >
             <div className="unit-container">
                 {/* Targeting overlay if enemy */}
                 {!isFriendly && isTargeting && !unit.isDead && (

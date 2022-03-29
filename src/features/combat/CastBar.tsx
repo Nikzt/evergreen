@@ -1,6 +1,6 @@
 import { useSelectAbilityDamage, useSelectCombatUnit } from '../../hooks';
 import ProgressBar from '@ramonak/react-progress-bar';
-import combatAbilities, { CombatAbility } from '../../common/combatAbilities';
+import combatAbilities from '../../common/combatAbilities';
 import EffectIcon from './EffectIcon';
 
 type CastBarProps = {
@@ -11,9 +11,9 @@ const CastBar = ({ unitId }: CastBarProps) => {
     const unit = useSelectCombatUnit(unitId);
     const damage = useSelectAbilityDamage(unitId);
 
-    if (!unit || !unit.isCasting || unit.castingAbility === null) return <></>
+    if (!unit || !unit.isCasting || unit.castingAbility === null) return <></>;
 
-    const ability = combatAbilities[unit.castingAbility]
+    const ability = combatAbilities[unit.castingAbility];
 
     return (
         <div className="cast-bar">
@@ -25,12 +25,11 @@ const CastBar = ({ unitId }: CastBarProps) => {
                 borderRadius={'0'}
                 isLabelVisible={true}
                 labelAlignment="left"
-                labelClassName='cast-bar-label'
+                labelClassName="cast-bar-label"
                 completed={unit ? unit.castProgress : 0}
                 maxCompleted={100}
                 height="30px"
                 customLabel={ability?.name}
-                
             />
         </div>
     );

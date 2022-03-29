@@ -1,13 +1,15 @@
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { initCombatEncounter, selectEnemyUnitIds, selectFriendlyUnitIds } from './combatSlice';
+import { initCombatEncounter, selectEnemyUnitIds, selectFriendlyUnitIds, selectTargetLines } from './combatSlice';
 import CombatUnit from './CombatUnit';
 import { CombatEncounter, encounters, randomEncounterGenerator } from './encounters';
 import EnemyController from './enemyController';
+import TargetLine from './TargetLine';
 
 const CombatContainer = () => {
     const dispatch = useAppDispatch();
     const friendlyUnitIds = useAppSelector(selectFriendlyUnitIds);
     const enemyUnitIds = useAppSelector(selectEnemyUnitIds);
+    const targetLines = useAppSelector(selectTargetLines);
 
     const initCombat = (encounter: CombatEncounter) => {
         dispatch(initCombatEncounter(encounter));
@@ -18,7 +20,7 @@ const CombatContainer = () => {
         const encounter = randomEncounterGenerator(1, []);
         dispatch(initCombatEncounter(encounter));
         EnemyController.initEnemies();
-    }
+    };
 
     return (
         <div className="combat-container">
@@ -28,9 +30,17 @@ const CombatContainer = () => {
                     {e.name}
                 </button>
             ))}
-                <button onClick={() => initRandomEncounter()}>
-                    Generate Random Encounter
-                </button>
+            <button onClick={() => initRandomEncounter()}>Generate Random Encounter</button>
+            {targetLines.map((t) => (
+                <TargetLine
+                    key={t.sourceUnitId + t.targetUnitId}
+                    sourceUnitId={t.sourceUnitId}
+                    targetUnitId={t.targetUnitId}
+                    abilityId={t.abilityId}
+                    isFriendlySource={t.isFriendlySource}
+                    isBlocking={t.isBlocking}
+                />
+            ))}
             {/* Enemy units */}
             <div className="units-row enemy-units-row">
                 {enemyUnitIds.map((unitId) => (
