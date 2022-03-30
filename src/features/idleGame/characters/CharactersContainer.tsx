@@ -1,5 +1,5 @@
-import { chargeBattery } from '../../common/actions';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { chargeBattery } from '../../../common/actions';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { selectAreBatteriesAllCharged } from '../resources/resourcesSlice';
 import { Character, initCharacters, selectCharacters } from './charactersSlice';
 

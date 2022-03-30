@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { chargeBattery } from '../../common/actions';
-import { crafting, CraftingCost, ItemType, itemTypeToLabel } from '../../common/items';
-import type { RootState } from '../../store';
+import { chargeBattery } from '../../../common/actions';
+import { crafting, CraftingCost, ItemType, itemTypeToLabel } from '../../../common/items';
+import type { RootState } from '../../../store';
 
 type ResourceMap = { [itemType: number]: number };
 export type ResourcesState = {

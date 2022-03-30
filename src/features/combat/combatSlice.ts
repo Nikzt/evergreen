@@ -9,7 +9,9 @@ import {
 import combatAbilities, { CombatAbility, CombatAbilityType } from '../../common/combatAbilities';
 import { timeout } from '../../common/timeout';
 import { RootState } from '../../store';
-import { CombatEncounter } from './encounters';
+import { CombatEncounter } from '../encounterManager/encounters';
+import { getRandomRewards, Reward } from '../encounterManager/rewards';
+import { getScriptedRewards } from '../encounterManager/scriptedRewards';
 
 export type CombatAction = {
     sourceUnitId: string;
@@ -47,7 +49,17 @@ export type CombatUnit = {
     block: number;
 };
 
-type CombatState = {
+export type CombatState = {
+    isCombatInProgress: boolean;
+    difficulty: number;
+    isCombatVictorious: boolean;
+    isCombatFailed: boolean;
+
+    // Post-combat rewards
+    rewardCurrency: number;
+    availableRewards: Reward[];
+    scriptedText: string;
+
     // Targeting logic should only be used for friendly units!
     // Make sure to bypass this system when getting enemies to target, otherwise
     // player and enemy targets may conflict
@@ -58,16 +70,47 @@ type CombatState = {
     units: EntityState<CombatUnit>;
 };
 
-const unitsAdapter = createEntityAdapter<CombatUnit>({ selectId: (unit) => unit.id });
+export const unitsAdapter = createEntityAdapter<CombatUnit>({ selectId: (unit) => unit.id });
 
+/**
+ * Clears everything that shouldn't carry over to next combat
+ */
 const clearCombatState = (state: CombatState) => {
     state.units.entities = {};
     state.units.ids = [];
     state.isTargeting = false;
     state.targetingAbilityId = null;
     state.targetingSourceUnitId = null;
+    state.isCombatInProgress = false;
+    state.isCombatFailed = false;
+    state.isCombatVictorious = false;
 };
 
+enum CombatOutcome {
+    IN_PROGRESS = 0,
+    VICTORY,
+    DEFEAT,
+}
+
+/**
+ * End the game if all player characters are dead or all enemies are dead
+ */
+const checkEndCombat = (state: CombatState): CombatOutcome => {
+    const livingUnits = Object.values(state.units.entities).filter((u) => !u?.isDead);
+    const livingFriendlyUnits = livingUnits.filter((u) => u?.isFriendly);
+    const livingEnemyUnits = livingUnits.filter((u) => !u?.isFriendly);
+
+    if (livingFriendlyUnits.length <= 0) {
+        return CombatOutcome.DEFEAT;
+    } else if (livingEnemyUnits.length <= 0) {
+        return CombatOutcome.VICTORY;
+    }
+    return CombatOutcome.IN_PROGRESS;
+};
+
+/**
+ * Handle state changes for units that have died (ie. HP <= 0)
+ */
 const checkDeadEnemies = (state: CombatState) => {
     Object.values(state.units.entities).forEach((u) => {
         if (u && u.hp <= 0) {
@@ -91,13 +134,21 @@ export const calculateAbilityDamage = (
     targetUnit: CombatUnit,
     ability: CombatAbility,
 ): number => {
-    const damageBeforeBlock = Math.ceil(
-        sourceUnit.weaponDamage * ability.weaponDamageMultiplier +
-            sourceUnit.strength * ability.strengthMultiplier -
-            targetUnit.armor,
+    const damageBeforeBlock = Math.max(
+        Math.ceil(
+            sourceUnit.weaponDamage * ability.weaponDamageMultiplier +
+                sourceUnit.strength * ability.strengthMultiplier -
+                targetUnit.armor,
+        ),
+        0,
     );
     if (sourceUnit.blockedBy) return Math.max(0, damageBeforeBlock - targetUnit.block);
     return damageBeforeBlock;
+};
+
+type RewardUpdate = {
+    unitId: string;
+    reward: Reward;
 };
 
 const initialState: CombatState = {
@@ -105,6 +156,13 @@ const initialState: CombatState = {
     targetingAbilityId: null,
     targetingSourceUnitId: null,
     units: unitsAdapter.getInitialState(),
+    isCombatInProgress: false,
+    isCombatFailed: true,
+    isCombatVictorious: false,
+    difficulty: 0,
+    rewardCurrency: 0,
+    availableRewards: [],
+    scriptedText: '',
 };
 export const combatSlice = createSlice({
     name: 'combat',
@@ -118,14 +176,60 @@ export const combatSlice = createSlice({
         initCombatEncounter: (state, action: PayloadAction<CombatEncounter>) => {
             clearCombatState(state);
             unitsAdapter.addMany(state.units, action.payload.units);
+            state.isCombatInProgress = true;
+        },
+
+        /**  Combat Defeat: Anything that needs to be hard reset, do it here */
+        setDefeatState: (state) => {
+            state.isCombatVictorious = false;
+            state.isCombatFailed = true;
+            state.isCombatInProgress = false;
+            state.difficulty = 0;
+            state.rewardCurrency = 0;
+        },
+
+        /**  Combat Victory: Reset combat for next encounter, but don't reset things that continue through run */
+        setVictoryState: (state) => {
+            const livingFriendlyUnits = Object.values(state.units.entities).filter((u) => u?.isFriendly && !u.isDead);
+            state.isCombatVictorious = true;
+            state.isCombatFailed = false;
+            state.isCombatInProgress = false;
+            state.difficulty += 0.5;
+            livingFriendlyUnits.forEach((u) => {
+                if (u) u.combatNumbers = [];
+            });
+
+            // Post combat rewards
+            getScriptedRewards(state);
+            state.rewardCurrency += 1 + Math.floor(state.difficulty);
+            state.availableRewards = getRandomRewards(2);
         },
         updateUnit: (state, action: PayloadAction<Update<CombatUnit>>) => {
             unitsAdapter.updateOne(state.units, action.payload);
+        },
+        updateUnitWithReward: (state, action: PayloadAction<RewardUpdate>) => {
+            const reward = action.payload.reward;
+            const unit = state.units.entities[action.payload.unitId];
+            if (unit && state.rewardCurrency >= reward.cost) {
+                const changes: Partial<CombatUnit> = {};
+                for (const prop in reward.update) {
+                    // @ts-ignore
+                    changes[prop] = unit[prop] + reward.update[prop];
+                }
+                unitsAdapter.updateOne(state.units, {
+                    id: unit.id,
+                    changes,
+                });
+                state.rewardCurrency -= reward.cost;
+            }
         },
         setTargetingMode: (state, action: PayloadAction<boolean>) => {
             state.isTargeting = action.payload;
             state.targetingAbilityId = null;
             state.targetingSourceUnitId = null;
+        },
+        spendRewardCurrency: (state, action: PayloadAction<number>) => {
+            if (state.rewardCurrency >= action.payload) state.rewardCurrency -= action.payload;
         },
         performCombatAction: (state, action: PayloadAction<CombatAction>) => {
             if (!action?.payload) return;
@@ -185,6 +289,9 @@ export const {
     setTargetingMode,
     clearOldestCombatNumber,
     cancelBlock,
+    setDefeatState,
+    setVictoryState,
+    updateUnitWithReward,
 } = combatSlice.actions;
 
 export const targetAbility = createAsyncThunk(
@@ -230,9 +337,16 @@ export const targetAbility = createAsyncThunk(
 
         dispatch(performCombatAction(combatAction));
         dispatch(cancelBlock(combatAction.targetUnitId));
-        setTimeout(() => {
-            dispatch(clearOldestCombatNumber(combatAction.targetUnitId));
-        }, 5000);
+
+        // Check if combat has ended based on results of action
+        const stateAfterCombatAction = getState() as RootState;
+        const combatOutcome = checkEndCombat(stateAfterCombatAction.combat);
+        if (combatOutcome === CombatOutcome.DEFEAT) setTimeout(() => dispatch(setDefeatState()), 1000);
+        else if (combatOutcome === CombatOutcome.VICTORY) setTimeout(() => dispatch(setVictoryState()), 1000);
+
+        //setTimeout(() => {
+        //    dispatch(clearOldestCombatNumber(combatAction.targetUnitId));
+        //}, 5000);
 
         // recovery time after using ability
         const recoveryTickCallback = (currTime: number, recoveryTime: number) => {
@@ -332,5 +446,9 @@ export const selectTargetLines = (state: RootState) => {
         };
     });
 };
+
+export const selectRewardCurrency = (state: RootState) => state.combat.rewardCurrency;
+export const selectAvailableRewards = (state: RootState) => state.combat.availableRewards;
+export const selectScriptedText = (state: RootState) => state.combat.scriptedText;
 
 export default combatSlice.reducer;

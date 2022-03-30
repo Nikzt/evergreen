@@ -1,6 +1,6 @@
 import { createEntityAdapter, createSlice, EntityState, PayloadAction } from '@reduxjs/toolkit';
 import { WritableDraft } from 'immer/dist/internal';
-import { chargeBattery, tick } from '../../common/actions';
+import { chargeBattery, tick } from '../../../common/actions';
 
 export type Character = {
     name: string;

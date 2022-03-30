@@ -22,12 +22,11 @@ const lineThickness = 1;
 type TargetLineProps = {
     sourceUnitId: string;
     targetUnitId: string | null;
-    abilityId: number | null;
     isFriendlySource: boolean;
     isBlocking: boolean;
 };
 
-const TargetLine = ({ sourceUnitId, targetUnitId, abilityId, isFriendlySource, isBlocking }: TargetLineProps) => {
+const TargetLine = ({ sourceUnitId, targetUnitId, isFriendlySource, isBlocking }: TargetLineProps) => {
     const lineProps = useMemo(() => {
         console.log('recalculating line');
 

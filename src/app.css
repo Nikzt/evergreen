@@ -1,8 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@300;400&display=swap');
+
+html {
+    font-family: 'M PLUS 1';
+}
+
+button {
+    font-family: 'M PLUS 1';
+    border: 1px solid black;
+    border-radius: 0;
+    padding: 4px;
+}
 
 .combat-container {
     max-width: 600px;
-    font-family: 'Fjalla One';
 }
 
 .units-row {
@@ -21,11 +32,11 @@
 
 .unit {
     display: inline-block;
+    position: relative;
     margin: 12px;
     border: 1px solid black;
     width: 150px;
-    height: 200px;
-    padding: 5px;
+    min-height: 130px;
 }
 
 .unit.blocking {
@@ -34,8 +45,8 @@
 }
 
 .unit h3 {
-    font-size: 1.3em;
     margin-bottom: 7px;
+    margin-top: 0;
 }
 
 .dead .unit-name {
@@ -43,9 +54,8 @@
 }
 
 .unit-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
+    margin: 10px;
+    width: 130px;
 }
 
 .targeting-box {
@@ -53,15 +63,32 @@
     width: 100%;
     height: 100%;
     background-color: rgba(177, 20, 20, 0.3);
+    margin: 0;
+    padding: 0;
     cursor: pointer;
     border: none;
     z-index: 50;
+    border: 1px solid rgba(199, 8, 8, 0.5);
+    animation: targeting 0.4s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes targeting {
+    0% {
+        border-width: 1px;
+    }
+    50% {
+        border-width: 4px;
+    }
+    0% {
+        border-width: 1px;
+    }
 }
 
 .combat-numbers-container {
     text-shadow: 0 0 1px rgba(0, 0, 0, 0.315);
     font-size: 2em;
-    color:rgb(189, 18, 18);
+    color: rgb(189, 18, 18);
 
     position: absolute;
     pointer-events: none;
@@ -76,6 +103,7 @@
 }
 
 .combat-number {
+    font-family: 'Fjalla One';
     animation: fadeCombatNumber 1s;
     opacity: 0;
     height: 0px;
@@ -87,16 +115,20 @@
         opacity: 0;
         transform: scale(0.8)
     }
+
     10% {
         opacity: 1;
         transform: scale(1.2)
     }
+
     20% {
         transform: scale(1)
     }
+
     30% {
         opacity: 1;
     }
+
     100% {
         opacity: 0;
     }
@@ -109,21 +141,21 @@
 
 .cast-bars-container.enemy-castbars {
     position: absolute;
+    width: 130px;
     bottom: 0;
     z-index: 1;
 }
 
-.ability-button {
+button {
     width: 130px;
     height: 42px;
     border: 1px solid black;
     border-radius: 0;
     margin: 6px 3px 3px 3px;
-    font-family: 'Fjalla One';
     font-size: 0.8em;
 }
 
-.ability-button[disabled] {
+button[disabled] {
     border-color: white;
     color: grey;
 }
@@ -161,4 +193,57 @@
     margin-left: 10px;
     color: black;
     font-size: 0.8em;
+}
+
+h1 {
+    font-size: 2em;
+    line-height: 1.6;
+}
+
+h2 {
+    font-size: 1.6em;
+    line-height: 1.6;
+}
+
+h3 {
+    font-weight: 600;
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+ul {
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.character-info-container li, p {
+    line-height: 1.4;
+}
+
+.character-info-container {
+    max-width: 600px;
+    display: flex;
+    justify-content: center;
+    padding:10px;
+    text-align: left;
+}
+
+.character-info .hp-bar {
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.character-info {
+    max-width: 180px;
+    padding: 10px;
+    border: 1px solid black;
+}
+
+.unit-manager-screen {
+    text-align: center;
+}
+
+.game-start-screen {
+    padding-top: 50px;
+    text-align: center;
 }
