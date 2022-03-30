@@ -1,64 +1,21 @@
-//import { crafting, ItemType, itemTypeToLabel } from './common/items';
-//import CharactersContainer from './features/characters/CharactersContainer';
-//import { initCharacters } from './features/characters/charactersSlice';
 import CombatContainer from './features/combat/CombatContainer';
-//import TimerManager from './features/events/timerManager';
-//import { craftItem, selectResourcesList } from './features/resources/resourcesSlice';
-//import { useAppDispatch, useAppSelector, useCanCraftItem } from './hooks';
 import './reset.css';
 import './app.css';
-//import KeyHandler from './features/combat/keyHandler';
+import { RootState } from './store';
+import { useAppSelector } from './hooks';
+import GameStartScreen from './features/encounterManager/GameStartScreen';
+import UnitManagerScreen from './features/encounterManager/UnitManagerScreen';
 
 const App = () => {
-    //const dispatch = useAppDispatch();
-    //const resourcesList = useAppSelector(selectResourcesList);
-    //const craftingList = Object.keys(crafting).map((c) => {
-    //    const itemType = parseInt(c) as ItemType;
-    //    return {
-    //        label: itemTypeToLabel[itemType].singular,
-    //        itemType,
-    //    };
-    //});
-
-    //KeyHandler.init();
-
-    //dispatch(initCharacters());
-    //TimerManager.startTimer();
-
-    //const canCraftItem = useCanCraftItem;
-    //const onCraftItemClick = (itemType: ItemType) => {
-    //    dispatch(craftItem(itemType));
-    //};
+    const isCombatInProgress = useAppSelector((state: RootState) => state.combat.isCombatInProgress);
+    const isCombatVictorious = useAppSelector((state: RootState) => state.combat.isCombatVictorious);
+    const isCombatFailed = useAppSelector((state: RootState) => state.combat.isCombatFailed);
 
     return (
         <>
-            <CombatContainer />
-            {/*
-            <hr></hr>
-            <CharactersContainer />
-            <hr></hr>
-            <div>
-                <h3>Resources</h3>
-                {resourcesList.map((r) => (
-                    <p key={r.itemType}>
-                        {r.label}: {r.value}
-                    </p>
-                ))}
-            </div>
-            <hr></hr>
-            <div>
-                <h3>Forge</h3>
-                {craftingList.map((c) => (
-                    <button
-                        key={c.itemType}
-                        disabled={!canCraftItem(c.itemType)}
-                        onClick={() => onCraftItemClick(c.itemType)}
-                    >
-                        {c.label}
-                    </button>
-                ))}
-            </div>
-                */}
+            {!isCombatInProgress && isCombatFailed && <GameStartScreen />}
+            {!isCombatInProgress && isCombatVictorious && <UnitManagerScreen />}
+            {isCombatInProgress && <CombatContainer />}
         </>
     );
 };

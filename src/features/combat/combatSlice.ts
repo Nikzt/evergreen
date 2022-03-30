@@ -9,7 +9,7 @@ import {
 import combatAbilities, { CombatAbility, CombatAbilityType } from '../../common/combatAbilities';
 import { timeout } from '../../common/timeout';
 import { RootState } from '../../store';
-import { CombatEncounter } from './encounters';
+import { CombatEncounter } from '../encounterManager/encounters';
 
 export type CombatAction = {
     sourceUnitId: string;
@@ -48,6 +48,11 @@ export type CombatUnit = {
 };
 
 type CombatState = {
+    isCombatInProgress: boolean;
+    difficulty: number;
+    isCombatVictorious: boolean;
+    isCombatFailed: boolean;
+
     // Targeting logic should only be used for friendly units!
     // Make sure to bypass this system when getting enemies to target, otherwise
     // player and enemy targets may conflict
@@ -60,14 +65,46 @@ type CombatState = {
 
 const unitsAdapter = createEntityAdapter<CombatUnit>({ selectId: (unit) => unit.id });
 
+/**
+ * Clears everything but difficulty
+ */
 const clearCombatState = (state: CombatState) => {
     state.units.entities = {};
     state.units.ids = [];
     state.isTargeting = false;
     state.targetingAbilityId = null;
     state.targetingSourceUnitId = null;
+    state.isCombatInProgress = false;
+    state.isCombatFailed = false;
+    state.isCombatVictorious = false;
 };
 
+/**
+ * End the game if all player characters are dead or all enemies are dead
+ */
+const checkEndCombat = (state: CombatState) => {
+    const livingUnits = Object.values(state.units.entities).filter(u => !u?.isDead)
+    const livingFriendlyUnits = livingUnits.filter(u => u?.isFriendly);
+    const livingEnemyUnits = livingUnits.filter(u => !u?.isFriendly);
+
+    if (livingFriendlyUnits.length <= 0) {
+        state.isCombatVictorious = false;
+        state.isCombatFailed = true;
+        state.isCombatInProgress = false;
+    } else if (livingEnemyUnits.length <= 0) {
+        state.isCombatVictorious = true;
+        state.isCombatFailed = false;
+        state.isCombatInProgress = false;
+        state.difficulty += 0.5;
+        livingFriendlyUnits.forEach(u => {
+            if (u) u.combatNumbers = []
+        })
+    }
+}
+
+/**
+ * Handle state changes for units that have died (ie. HP <= 0)
+ */
 const checkDeadEnemies = (state: CombatState) => {
     Object.values(state.units.entities).forEach((u) => {
         if (u && u.hp <= 0) {
@@ -105,6 +142,10 @@ const initialState: CombatState = {
     targetingAbilityId: null,
     targetingSourceUnitId: null,
     units: unitsAdapter.getInitialState(),
+    isCombatInProgress: false,
+    isCombatFailed: true,
+    isCombatVictorious: false,
+    difficulty: 0
 };
 export const combatSlice = createSlice({
     name: 'combat',
@@ -118,6 +159,7 @@ export const combatSlice = createSlice({
         initCombatEncounter: (state, action: PayloadAction<CombatEncounter>) => {
             clearCombatState(state);
             unitsAdapter.addMany(state.units, action.payload.units);
+            state.isCombatInProgress = true;
         },
         updateUnit: (state, action: PayloadAction<Update<CombatUnit>>) => {
             unitsAdapter.updateOne(state.units, action.payload);
@@ -161,6 +203,7 @@ export const combatSlice = createSlice({
                     }
             }
             checkDeadEnemies(state);
+            checkEndCombat(state);
         },
         clearOldestCombatNumber: (state, action: PayloadAction<string>) => {
             const unitId = action.payload;

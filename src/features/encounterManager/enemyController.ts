@@ -6,7 +6,7 @@ import {
     selectRandomAbilityId,
     selectRandomFriendlyUnit,
     targetAbility,
-} from './combatSlice';
+} from '../combat/combatSlice';
 
 class EnemyController {
     static enemies: EnemyController[] = [];
