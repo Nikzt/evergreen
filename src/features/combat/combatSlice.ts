@@ -91,6 +91,7 @@ const checkEndCombat = (state: CombatState) => {
         state.isCombatVictorious = false;
         state.isCombatFailed = true;
         state.isCombatInProgress = false;
+        state.difficulty = 0;
     } else if (livingEnemyUnits.length <= 0) {
         state.isCombatVictorious = true;
         state.isCombatFailed = false;
