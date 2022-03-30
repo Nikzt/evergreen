@@ -181,6 +181,8 @@ export const combatSlice = createSlice({
 
         /**  Combat Defeat: Anything that needs to be hard reset, do it here */
         setDefeatState: (state) => {
+            if (!state.isCombatInProgress)
+                return;
             state.isCombatVictorious = false;
             state.isCombatFailed = true;
             state.isCombatInProgress = false;
@@ -190,6 +192,8 @@ export const combatSlice = createSlice({
 
         /**  Combat Victory: Reset combat for next encounter, but don't reset things that continue through run */
         setVictoryState: (state) => {
+            if (!state.isCombatInProgress)
+                return;
             const livingFriendlyUnits = Object.values(state.units.entities).filter((u) => u?.isFriendly && !u.isDead);
             state.isCombatVictorious = true;
             state.isCombatFailed = false;

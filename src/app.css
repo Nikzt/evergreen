@@ -5,15 +5,13 @@ html {
     font-family: 'M PLUS 1';
 }
 
-button {
-    font-family: 'M PLUS 1';
-    border: 1px solid black;
-    border-radius: 0;
-    padding: 4px;
-}
-
 .combat-container {
     max-width: 600px;
+    font-family: 'Fjalla One'
+}
+
+.combat-container h3 {
+    font-weight: 400;
 }
 
 .units-row {
@@ -33,10 +31,10 @@ button {
 .unit {
     display: inline-block;
     position: relative;
-    margin: 12px;
+    margin: 3px;
     border: 1px solid black;
-    width: 150px;
-    min-height: 130px;
+    width: 140px;
+    min-height: 150px;
 }
 
 .unit.blocking {
@@ -54,7 +52,7 @@ button {
 }
 
 .unit-container {
-    margin: 10px;
+    margin: 5px;
     width: 130px;
 }
 
@@ -147,7 +145,7 @@ button {
 }
 
 button {
-    width: 130px;
+    width: 125px;
     height: 42px;
     border: 1px solid black;
     border-radius: 0;
