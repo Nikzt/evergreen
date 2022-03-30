@@ -15,7 +15,6 @@ const CombatContainer = () => {
                     key={t.sourceUnitId + t.targetUnitId}
                     sourceUnitId={t.sourceUnitId}
                     targetUnitId={t.targetUnitId}
-                    abilityId={t.abilityId}
                     isFriendlySource={t.isFriendlySource}
                     isBlocking={t.isBlocking}
                 />

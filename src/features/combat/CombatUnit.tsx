@@ -52,16 +52,12 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
     if (!unit) return <span>Unit with ID {unitId} not found</span>;
 
     return (
-        <div
-            id={unit.id}
-            className={'unit' + (unit.blocking ? ' blocking' : '') + (unit.isDead ? ' dead' : '')}
-        >
+        <div id={unit.id} className={'unit' + (unit.blocking ? ' blocking' : '') + (unit.isDead ? ' dead' : '')}>
+            {/* Targeting overlay if enemy */}
+            {!isFriendly && isTargeting && !unit.isDead && (
+                <button className="targeting-box" onClick={() => onTargetAbility(unit.id)}></button>
+            )}
             <div className="unit-container">
-                {/* Targeting overlay if enemy */}
-                {!isFriendly && isTargeting && !unit.isDead && (
-                    <button className="targeting-box" onClick={() => onTargetAbility(unit.id)}></button>
-                )}
-
                 {isFriendly && (
                     <div className="cast-bars-container">
                         <CastBar unitId={unitId} />
@@ -72,7 +68,7 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
 
                 {/* Unit info */}
                 <h3 className="unit-name">{unit.name}</h3>
-                <HpBar hp={unit.hp} maxHp={unit.maxHp} isFriendly={unit.isFriendly}/>
+                <HpBar hp={unit.hp} maxHp={unit.maxHp} isFriendly={unit.isFriendly} />
 
                 {/* Abilities */}
                 {isFriendly &&

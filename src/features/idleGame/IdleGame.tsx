@@ -24,32 +24,34 @@ const IdleGame = () => {
         dispatch(craftItem(itemType));
     };
 
-    return <>
-        <hr></hr>
-        <CharactersContainer />
-        <hr></hr>
-        <div>
-            <h3>Resources</h3>
-            {resourcesList.map((r) => (
-                <p key={r.itemType}>
-                    {r.label}: {r.value}
-                </p>
-            ))}
-        </div>
-        <hr></hr>
-        <div>
-            <h3>Forge</h3>
-            {craftingList.map((c) => (
-                <button
-                    key={c.itemType}
-                    disabled={!canCraftItem(c.itemType)}
-                    onClick={() => onCraftItemClick(c.itemType)}
-                >
-                    {c.label}
-                </button>
-            ))}
-        </div>
-    </>
-}
+    return (
+        <>
+            <hr></hr>
+            <CharactersContainer />
+            <hr></hr>
+            <div>
+                <h3>Resources</h3>
+                {resourcesList.map((r) => (
+                    <p key={r.itemType}>
+                        {r.label}: {r.value}
+                    </p>
+                ))}
+            </div>
+            <hr></hr>
+            <div>
+                <h3>Forge</h3>
+                {craftingList.map((c) => (
+                    <button
+                        key={c.itemType}
+                        disabled={!canCraftItem(c.itemType)}
+                        onClick={() => onCraftItemClick(c.itemType)}
+                    >
+                        {c.label}
+                    </button>
+                ))}
+            </div>
+        </>
+    );
+};
 
 export default IdleGame;

@@ -1,7 +1,7 @@
 import { CombatAbilityType } from '../../common/combatAbilities';
 import { CombatUnit } from '../combat/combatSlice';
-import { createEnemyUnit, createFriendlyUnit } from './combatUnitUtils';
-import { EnemyTemplateEnum, enemyTemplates, getEnemy } from './enemyGenerator';
+import { createFriendlyUnit } from './combatUnitUtils';
+import { EnemyTemplateEnum, generateRandomEnemy, getEnemy } from './enemyGenerator';
 
 export type CombatEncounter = {
     name: string;
@@ -14,32 +14,30 @@ const getStarterCharacter = () => [
         name: 'Greg',
         maxHp: 30,
         abilityIds: [CombatAbilityType.QUICK_ATTACK],
-        weaponDamage: 20,
-        //weaponDamage: 1,
+        weaponDamage: 1,
         strength: 1,
-        armor: 0,
-        block: 4,
+        armor: 1,
+        block: 6,
     }),
 ];
+
+export const getSecondCharacter = () =>
+    createFriendlyUnit({
+        id: 'Tal',
+        name: 'Tal',
+        maxHp: 30,
+        abilityIds: [CombatAbilityType.STRONG_ATTACK],
+        weaponDamage: 2,
+        strength: 2,
+        armor: 0,
+        block: 4,
+    });
 
 export const getStarterEncounter = (): CombatEncounter => {
     return {
         name: 'First Combat',
-        units: [
-            ...getStarterCharacter(),
-            getEnemy(EnemyTemplateEnum.BARK_DOG, 0, "enemy-1")
-        ],
-    }
-};
-
-
-const generateRandomEnemy = (difficulty: number): CombatUnit => {
-    const enemyTemplateList = Object.values(enemyTemplates);
-    const enemyIdx = Math.floor(Math.random() * enemyTemplateList.length);
-    const enemy = { ...enemyTemplateList[enemyIdx] };
-    enemy.id = 'enemy-' + enemyIdx;
-    enemy.weaponDamage += difficulty;
-    return enemy;
+        units: [...getStarterCharacter(), getEnemy(EnemyTemplateEnum.BARK_DOG, 'enemy-1')],
+    };
 };
 
 export const randomEncounterGenerator = (difficulty: number, friendlyUnits: CombatUnit[]): CombatEncounter => {
@@ -48,7 +46,7 @@ export const randomEncounterGenerator = (difficulty: number, friendlyUnits: Comb
 
     const enemies: CombatUnit[] = [];
     for (let i = 0; i < numEnemies; i++) {
-        enemies.push(generateRandomEnemy(0));
+        enemies.push(generateRandomEnemy(difficulty));
     }
     return {
         name: 'Random Encounter',

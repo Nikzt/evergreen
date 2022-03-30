@@ -1,7 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@300;400&display=swap');
 
 html {
-    font-family: 'Fjalla One';
+    font-family: 'M PLUS 1';
+}
+
+button {
+    font-family: 'M PLUS 1';
+    border: 1px solid black;
+    border-radius: 0;
+    padding: 4px;
 }
 
 .combat-container {
@@ -24,11 +32,11 @@ html {
 
 .unit {
     display: inline-block;
+    position: relative;
     margin: 12px;
     border: 1px solid black;
     width: 150px;
-    height: 200px;
-    padding: 5px;
+    min-height: 130px;
 }
 
 .unit.blocking {
@@ -37,7 +45,6 @@ html {
 }
 
 .unit h3 {
-    font-size: 1.3em;
     margin-bottom: 7px;
     margin-top: 0;
 }
@@ -47,9 +54,8 @@ html {
 }
 
 .unit-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
+    margin: 10px;
+    width: 130px;
 }
 
 .targeting-box {
@@ -57,9 +63,26 @@ html {
     width: 100%;
     height: 100%;
     background-color: rgba(177, 20, 20, 0.3);
+    margin: 0;
+    padding: 0;
     cursor: pointer;
     border: none;
     z-index: 50;
+    border: 1px solid rgba(199, 8, 8, 0.5);
+    animation: targeting 0.4s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes targeting {
+    0% {
+        border-width: 1px;
+    }
+    50% {
+        border-width: 4px;
+    }
+    0% {
+        border-width: 1px;
+    }
 }
 
 .combat-numbers-container {
@@ -80,6 +103,7 @@ html {
 }
 
 .combat-number {
+    font-family: 'Fjalla One';
     animation: fadeCombatNumber 1s;
     opacity: 0;
     height: 0px;
@@ -117,21 +141,21 @@ html {
 
 .cast-bars-container.enemy-castbars {
     position: absolute;
+    width: 130px;
     bottom: 0;
     z-index: 1;
 }
 
-.ability-button {
+button {
     width: 130px;
     height: 42px;
     border: 1px solid black;
     border-radius: 0;
     margin: 6px 3px 3px 3px;
-    font-family: 'Fjalla One';
     font-size: 0.8em;
 }
 
-.ability-button[disabled] {
+button[disabled] {
     border-color: white;
     color: grey;
 }
@@ -182,7 +206,8 @@ h2 {
 }
 
 h3 {
-    font-size: 1.3em;
+    font-weight: 600;
+    font-size: 1.1em;
     line-height: 1.6;
 }
 
@@ -198,7 +223,9 @@ ul {
 .character-info-container {
     max-width: 600px;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
+    padding:10px;
+    text-align: left;
 }
 
 .character-info .hp-bar {
@@ -210,4 +237,13 @@ ul {
     max-width: 180px;
     padding: 10px;
     border: 1px solid black;
+}
+
+.unit-manager-screen {
+    text-align: center;
+}
+
+.game-start-screen {
+    padding-top: 50px;
+    text-align: center;
 }
