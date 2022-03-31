@@ -75,16 +75,19 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
 
                 {/* Abilities */}
                 {isFriendly &&
-                    unitAbilities.map((ability) => (
-                        <button
-                            className="ability-button"
-                            disabled={!canUseAbility && !(ability.id === CombatAbilityType.BLOCK && unit.blocking)}
-                            key={ability.id}
-                            onClick={() => onAbilityButtonClick(unit.id, ability.id)}
-                        >
-                            {ability.id === CombatAbilityType.BLOCK && unit.blocking ? 'Cancel' : ability.label}
-                        </button>
-                    ))}
+                    <div className="unit-abilities">
+                        {unitAbilities.map((ability) => (
+                            <button
+                                className="ability-button"
+                                disabled={!canUseAbility && !(ability.id === CombatAbilityType.BLOCK && unit.blocking)}
+                                key={ability.id}
+                                onClick={() => onAbilityButtonClick(unit.id, ability.id)}
+                            >
+                                {/*ability.id === CombatAbilityType.BLOCK && unit.blocking ? 'Cancel' : ability.label}*/}
+                                <img src={ability.icon}/>
+                            </button>
+                        ))}
+                    </div>}
 
                 {/* Enemy castbars at bottom of unit frame */}
                 {!isFriendly && (
