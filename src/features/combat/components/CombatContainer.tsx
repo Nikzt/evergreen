@@ -1,5 +1,5 @@
-import { useAppSelector } from '../../hooks';
-import { selectEnemyUnitIds, selectFriendlyUnitIds, selectTargetLines } from './combatSlice';
+import { useAppSelector } from '../../../hooks';
+import { selectEnemyUnitIds, selectFriendlyUnitIds, selectTargetLines } from '../state/combatSelectors';
 import CombatUnit from './CombatUnit';
 import TargetLine from './TargetLine';
 

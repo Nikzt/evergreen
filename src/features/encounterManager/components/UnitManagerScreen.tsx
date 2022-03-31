@@ -1,19 +1,18 @@
-import combatAbilities from '../../common/combatAbilities';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { store } from '../../store';
+import combatAbilities from '../../../common/combatAbilities';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { store } from '../../../store';
+import { initCombatEncounter, updateUnitWithReward } from '../../combat/state/combatSlice';
+import HpBar from '../../combat/components/HpBar';
+import { randomEncounterGenerator } from '../encounters';
+import EnemyController from '../enemyController';
+import { Reward } from '../rewards';
+import { CombatUnit } from '../../combat/state/combatModels';
 import {
-    CombatUnit,
-    initCombatEncounter,
     selectAvailableRewards,
     selectFriendlyUnits,
     selectRewardCurrency,
     selectScriptedText,
-    updateUnitWithReward,
-} from '../combat/combatSlice';
-import HpBar from '../combat/HpBar';
-import { randomEncounterGenerator } from './encounters';
-import EnemyController from './enemyController';
-import { Reward } from './rewards';
+} from '../../combat/state/combatSelectors';
 
 const UnitManagerScreen = () => {
     const dispatch = useAppDispatch();

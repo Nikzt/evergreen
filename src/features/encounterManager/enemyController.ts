@@ -1,12 +1,12 @@
 import { store } from '../../store';
+import { CombatUnit } from '../combat/state/combatModels';
 import {
-    CombatUnit,
     selectCanUseAbility,
     selectEnemyUnits,
     selectRandomAbilityId,
     selectRandomFriendlyUnit,
-    targetAbility,
-} from '../combat/combatSlice';
+} from '../combat/state/combatSelectors';
+import { targetAbility } from '../combat/state/targetAbility';
 
 class EnemyController {
     static enemies: EnemyController[] = [];

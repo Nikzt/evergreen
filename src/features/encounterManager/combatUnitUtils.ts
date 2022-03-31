@@ -1,4 +1,4 @@
-import { CombatUnit } from '../combat/combatSlice';
+import { CombatUnit } from '../combat/state/combatModels';
 
 export const createEnemyUnit = (partialUnit: Partial<CombatUnit>): CombatUnit => {
     return {

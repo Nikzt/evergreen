@@ -1,5 +1,5 @@
 import { CombatAbilityType } from '../../common/combatAbilities';
-import { CombatUnit } from '../combat/combatSlice';
+import { CombatUnit } from '../combat/state/combatModels';
 
 export enum RewardType {
     HEAL = 0,

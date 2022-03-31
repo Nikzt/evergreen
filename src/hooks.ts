@@ -1,6 +1,6 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { ItemType } from './common/items';
-import { selectAbilityDamage, selectUnit } from './features/combat/combatSlice';
+import { selectAbilityDamage, selectUnit } from './features/combat/state/combatSelectors';
 import { selectCanCraftItem } from './features/idleGame/resources/resourcesSlice';
 import type { RootState, AppDispatch } from './store';
 

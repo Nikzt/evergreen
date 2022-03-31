@@ -1,6 +1,6 @@
-import { useSelectAbilityDamage, useSelectCombatUnit } from '../../hooks';
+import { useSelectAbilityDamage, useSelectCombatUnit } from '../../../hooks';
 import ProgressBar from '@ramonak/react-progress-bar';
-import combatAbilities from '../../common/combatAbilities';
+import combatAbilities from '../../../common/combatAbilities';
 import EffectIcon from './EffectIcon';
 
 type CastBarProps = {

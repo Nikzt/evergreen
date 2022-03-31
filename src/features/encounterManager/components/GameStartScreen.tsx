@@ -1,7 +1,7 @@
-import { useAppDispatch } from '../../hooks';
-import { initCombatEncounter } from '../combat/combatSlice';
-import { getStarterEncounter } from './encounters';
-import EnemyController from './enemyController';
+import { useAppDispatch } from '../../../hooks';
+import { initCombatEncounter } from '../../combat/state/combatSlice';
+import { getStarterEncounter } from '../encounters';
+import EnemyController from '../enemyController';
 
 const GameStartScreen = () => {
     const dispatch = useAppDispatch();

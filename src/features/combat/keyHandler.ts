@@ -1,6 +1,6 @@
 import { CombatAbilityType } from '../../common/combatAbilities';
 import { store } from '../../store';
-import { initTargetingAbility } from './combatSlice';
+import { initTargetingAbility } from './state/combatSlice';
 
 class KeyHandler {
     private static isInitialized = false;

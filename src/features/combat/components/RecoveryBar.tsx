@@ -1,4 +1,4 @@
-import { useSelectCombatUnit } from '../../hooks';
+import { useSelectCombatUnit } from '../../../hooks';
 import ProgressBar from '@ramonak/react-progress-bar';
 import EffectIcon from './EffectIcon';
 

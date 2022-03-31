@@ -1,4 +1,4 @@
-import { useSelectCombatUnit } from '../../hooks';
+import { useSelectCombatUnit } from '../../../hooks';
 
 type CombatNumbersProps = {
     unitId: string;

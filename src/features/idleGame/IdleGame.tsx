@@ -1,7 +1,7 @@
 import { crafting, ItemType, itemTypeToLabel } from '../../common/items';
 import CharactersContainer from './characters/CharactersContainer';
 import { initCharacters } from './characters/charactersSlice';
-import TimerManager from '../events/timerManager';
+import TimerManager from './timerManager';
 import { craftItem, selectResourcesList } from './resources/resourcesSlice';
 import { useAppDispatch, useAppSelector, useCanCraftItem } from '../../hooks';
 

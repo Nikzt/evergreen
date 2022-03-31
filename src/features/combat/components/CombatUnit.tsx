@@ -1,12 +1,15 @@
 import { useMemo } from 'react';
-import combatAbilities, { CombatAbility, CombatAbilityType } from '../../common/combatAbilities';
-import { useAppDispatch, useAppSelector, useSelectCombatUnit } from '../../hooks';
-import { store } from '../../store';
+import combatAbilities, { CombatAbility, CombatAbilityType } from '../../../common/combatAbilities';
+import { useAppDispatch, useAppSelector, useSelectCombatUnit } from '../../../hooks';
+import { store } from '../../../store';
 import CastBar from './CastBar';
 import CombatNumbers from './CombatNumbers';
-import { cancelBlock, CombatAction, initTargetingAbility, selectCanUseAbility, targetAbility } from './combatSlice';
+import { cancelBlock, initTargetingAbility } from '../state/combatSlice';
 import HpBar from './HpBar';
 import RecoveryBar from './RecoveryBar';
+import { selectCanUseAbility } from '../state/combatSelectors';
+import { CombatAction } from '../state/combatModels';
+import { targetAbility } from '../state/targetAbility';
 
 type CombatUnitProps = {
     unitId: string;

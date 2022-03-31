@@ -1,5 +1,5 @@
 import { CombatAbilityType } from '../../common/combatAbilities';
-import { CombatState, unitsAdapter } from '../combat/combatSlice';
+import { CombatState, unitsAdapter } from '../combat/state/combatModels';
 import { getSecondCharacter } from './encounters';
 
 export const getScriptedRewards = (state: CombatState): void => {

@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 
 const getId = (id: string) => {
     const el = document.getElementById(id);
-    console.log({ id, el });
     if (!el) return null;
     return el;
 };
@@ -28,8 +27,6 @@ type TargetLineProps = {
 
 const TargetLine = ({ sourceUnitId, targetUnitId, isFriendlySource, isBlocking }: TargetLineProps) => {
     const lineProps = useMemo(() => {
-        console.log('recalculating line');
-
         if (!sourceUnitId || !targetUnitId) return;
 
         const div1 = getId(isFriendlySource ? sourceUnitId : targetUnitId);
@@ -41,20 +38,25 @@ const TargetLine = ({ sourceUnitId, targetUnitId, isFriendlySource, isBlocking }
 
         const staggerLinesOffset = isFriendlySource ? -5 : 5;
 
-        // bottom right
+        // bottom center of unit container
         const x1 = off1.left + off1.width / 2 + staggerLinesOffset;
         const y1 = off1.top;
-        // top right
+
+        // top center of unit container
         const x2 = off2.left + off2.width / 2 + staggerLinesOffset;
         const y2 = off2.top + off2.height;
+
         // distance
         const length = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+
         // center
         const cx = (x1 + x2) / 2 - length / 2;
         const cy = (y1 + y2) / 2 - lineThickness / 2;
+
         // angle
         const angle = Math.atan2(y1 - y2, x1 - x2) * (180 / Math.PI);
 
+        // set line color
         let lineColor = '#000';
         if (isBlocking) lineColor = '#0da9e7';
         else if (!isFriendlySource) lineColor = 'red';
