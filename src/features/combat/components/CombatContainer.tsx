@@ -1,4 +1,5 @@
 import { useAppSelector } from '../../../hooks';
+import KeyHandler from '../keyHandler';
 import { selectEnemyUnitIds, selectFriendlyUnitIds, selectTargetLines } from '../state/combatSelectors';
 import CombatUnit from './CombatUnit';
 import TargetLine from './TargetLine';
@@ -7,6 +8,8 @@ const CombatContainer = () => {
     const friendlyUnitIds = useAppSelector(selectFriendlyUnitIds);
     const enemyUnitIds = useAppSelector(selectEnemyUnitIds);
     const targetLines = useAppSelector(selectTargetLines);
+
+    KeyHandler.init();
 
     return (
         <div className="combat-container">

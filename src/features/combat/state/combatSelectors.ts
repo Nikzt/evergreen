@@ -70,3 +70,9 @@ export const selectTargetLines = (state: RootState) => {
 export const selectRewardCurrency = (state: RootState) => state.combat.rewardCurrency;
 export const selectAvailableRewards = (state: RootState) => state.combat.availableRewards;
 export const selectScriptedText = (state: RootState) => state.combat.scriptedText;
+
+export const selectFriendlyUnitByIdx = (idx: number) => (state: RootState) => {
+    const friendlyUnits = selectFriendlyUnits(state);
+    if (friendlyUnits.length > idx)
+        return friendlyUnits[idx];
+}
