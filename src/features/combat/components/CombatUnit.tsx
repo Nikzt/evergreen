@@ -1,15 +1,14 @@
 import { useMemo } from 'react';
 import combatAbilities, { CombatAbility, CombatAbilityType } from '../../../common/combatAbilities';
 import { useAppDispatch, useAppSelector, useSelectCombatUnit } from '../../../hooks';
-import { store } from '../../../store';
 import CastBar from './CastBar';
 import CombatNumbers from './CombatNumbers';
 import { cancelBlock, initTargetingAbility } from '../state/combatSlice';
-import HpBar from './HpBar';
 import RecoveryBar from './RecoveryBar';
 import { selectCanUseAbility } from '../state/combatSelectors';
-import { CombatAction } from '../state/combatModels';
-import { targetAbility } from '../state/targetAbility';
+import './combatUnit.scss';
+import TargetingBox from './TargetingBox';
+import UnitInfo from '../../../common/UnitInfo';
 
 type CombatUnitProps = {
     unitId: string;
@@ -35,19 +34,6 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
             );
     };
 
-    const onTargetAbility = (targetUnitId: string) => {
-        const state = store.getState();
-        const sourceUnitId = state.combat.targetingSourceUnitId;
-        const abilityId = state.combat.targetingAbilityId;
-        if (!sourceUnitId || abilityId == null) return;
-        const combatAction: CombatAction = {
-            sourceUnitId,
-            abilityId,
-            targetUnitId,
-        };
-        dispatch(targetAbility(combatAction));
-    };
-
     const unitAbilities = useMemo<CombatAbility[]>(() => {
         if (!unit?.abilityIds) return [];
         return unit.abilityIds.map((id) => combatAbilities[id]);
@@ -56,23 +42,23 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
     if (!unit) return <span>Unit with ID {unitId} not found</span>;
 
     return (
-        <div id={unit.id} className={'unit' + (unit.blocking ? ' blocking' : '') + (unit.isDead ? ' dead' : '')}>
+        <div id={unit.id} className={'unit' + (unit.blocking ? ' blocking' : '') + (unit.isDead ? ' dead' : '') + (unit.isFriendly ? ' friendly' : ' enemy')}>
             {/* Targeting overlay if enemy */}
-            {!isFriendly && isTargeting && !unit.isDead && (
-                <button className="targeting-box" onClick={() => onTargetAbility(unit.id)}></button>
-            )}
-            <div className="unit-container">
+            <TargetingBox unitId={unitId} />
+
+            {/* Damage or healing to this unit shows up here */}
+            <CombatNumbers unitId={unitId} />
+
+            <div className="unit--content">
                 {isFriendly && (
                     <div className="cast-bars-container">
                         <CastBar unitId={unitId} />
                         <RecoveryBar unitId={unitId} />
                     </div>
                 )}
-                <CombatNumbers unitId={unitId} />
 
                 {/* Unit info */}
-                <h3 className="unit-name">{unit.name}</h3>
-                <HpBar hp={unit.hp} maxHp={unit.maxHp} isFriendly={unit.isFriendly} />
+                <UnitInfo unitId={unitId} />
 
                 {/* Abilities */}
                 {isFriendly &&

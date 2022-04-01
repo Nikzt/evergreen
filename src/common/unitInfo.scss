@@ -1,0 +1,39 @@
+@import '../common/scss/variables.scss';
+
+.unit-info {
+    background-color: $color-secondary;
+    color: $color-text;
+    display: grid;
+    grid-template-columns: 40px auto;
+    padding: 5px;
+
+
+    .unit-info--portrait-container {
+        margin-left: 5px;
+        margin-right: 5px;
+        img {
+            margin-top: 6px;
+            width: 30px;
+            object-fit: fill;
+        }
+    }
+
+    .hp-bar-progress {
+        margin-bottom: 3px;
+        .cast-bar-label {
+            color: $color-primary;
+        }
+    }
+
+    .unit-info--details {
+        .unit-info--name {
+            margin: 0;
+        }
+    }
+}
+
+.enemy .unit-info {
+}
+
+.friendly .unit-info {
+}

@@ -20,7 +20,7 @@ const HpBar = ({ hp, maxHp, isFriendly }: HpBarProps) => {
                 labelClassName="cast-bar-label"
                 completed={(hp / maxHp) * 100}
                 maxCompleted={100}
-                height="20px"
+                height="10px"
                 className="hp-bar-progress"
                 customLabel={`${hp} / ${maxHp}`}
             />

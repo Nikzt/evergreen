@@ -1,13 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz&display=swap');
+@import './common/scss/variables.scss';
 
 html {
     font-family: 'M PLUS 1';
+    color: $color-text;
+    background-color: $color-primary;
 }
 
 .combat-container {
+    //transform: scale(1.2) translateY(30px);
+    margin-left: auto;
+    margin-top: auto;
+    margin-right: auto;
     max-width: 600px;
-    font-family: 'Fjalla One'
+    min-width: 375px;
+    font-family: 'Yanone Kaffeesatz';
 }
 
 .combat-container h3 {
@@ -26,49 +35,6 @@ html {
 
 .friendly-units-row {
     margin-top: 50px;
-}
-
-.unit {
-    display: inline-block;
-    position: relative;
-    margin: 3px;
-    border: 1px solid black;
-    width: 140px;
-    min-height: 150px;
-}
-
-.unit.blocking {
-    margin: 1px;
-    border: 3px solid rgb(13, 169, 231);
-}
-
-.unit h3 {
-    margin-bottom: 7px;
-    margin-top: 0;
-}
-
-.dead .unit-name {
-    text-decoration: line-through;
-}
-
-.unit-container {
-    margin: 5px;
-    width: 130px;
-}
-
-.targeting-box {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(177, 20, 20, 0.3);
-    margin: 0;
-    padding: 0;
-    cursor: pointer;
-    border: none;
-    z-index: 50;
-    border: 1px solid rgba(199, 8, 8, 0.5);
-    animation: targeting 0.4s;
-    animation-iteration-count: infinite;
 }
 
 @keyframes targeting {
@@ -140,7 +106,7 @@ html {
 .cast-bars-container.enemy-castbars {
     position: absolute;
     width: 130px;
-    bottom: 0;
+    bottom: -40px;
     z-index: 1;
 }
 
@@ -166,10 +132,10 @@ button[disabled] {
 
 .hp-bar {
     display: grid;
-    grid-template-columns: 30px auto;
+    grid-template-columns: 20px auto;
     align-content: center;
     align-items: center;
-    text-align: center;
+    text-align: left;
 }
 
 .effect-icon-container {
