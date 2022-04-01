@@ -2,6 +2,8 @@
 
 .unit-info {
     background-color: $color-secondary;
+    border: 1px solid $color-secondary-v1;
+    border-radius: 3px;
     color: $color-text;
     display: grid;
     grid-template-columns: 40px auto;
@@ -22,6 +24,9 @@
         margin-bottom: 3px;
         .cast-bar-label {
             color: $color-primary;
+        }
+        .hp-bar-progress {
+            background-color: $color-friendly;
         }
     }
 
