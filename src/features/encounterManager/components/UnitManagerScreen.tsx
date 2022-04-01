@@ -13,6 +13,7 @@ import {
     selectRewardCurrency,
     selectScriptedText,
 } from '../../combat/state/combatSelectors';
+import UnitInfo from '../../../common/UnitInfo';
 
 const UnitManagerScreen = () => {
     const dispatch = useAppDispatch();
@@ -53,8 +54,7 @@ const UnitManagerScreen = () => {
             <div className="character-info-container">
                 {friendlyUnits.map((u) => (
                     <div key={u.id} className="character-info">
-                        <h3>{u.name}</h3>
-                        <HpBar hp={u.hp} maxHp={u.maxHp} isFriendly={true} />
+                        <UnitInfo unitId={u.id}/>
 
                         <h3>Stats</h3>
                         <ul>

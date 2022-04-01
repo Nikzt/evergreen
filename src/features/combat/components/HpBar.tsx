@@ -11,16 +11,15 @@ const HpBar = ({ hp, maxHp, isFriendly }: HpBarProps) => {
         <div className="hp-bar">
             <div className="hp-bar-label">HP:</div>
             <ProgressBar
-                bgColor={isFriendly ? '#32a852' : '#eb4242'}
+                bgColor={isFriendly ? '#87e4b1' : '#e66d64'}
                 transitionDuration={'0.3s'}
                 transitionTimingFunction={'ease-out'}
-                borderRadius={'0'}
+                borderRadius={'3px'}
                 isLabelVisible={true}
                 labelAlignment="left"
                 labelClassName="cast-bar-label"
                 completed={(hp / maxHp) * 100}
                 maxCompleted={100}
-                height="20px"
                 className="hp-bar-progress"
                 customLabel={`${hp} / ${maxHp}`}
             />

@@ -1,0 +1,18 @@
+@import "../../../common/scss/variables.scss";
+
+.unit {
+    display: inline-block;
+    position: relative;
+    width: 140px;
+
+    &.blocking {
+    }
+
+    &.dead .unit-name {
+        text-decoration: line-through;
+    }
+
+    .unit--content {
+        height: 100%;
+    }
+}

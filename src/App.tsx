@@ -1,6 +1,6 @@
 import CombatContainer from './features/combat/components/CombatContainer';
 import './reset.css';
-import './app.css';
+import './app.scss';
 import { RootState } from './store';
 import { useAppSelector } from './hooks';
 import GameStartScreen from './features/encounterManager/components/GameStartScreen';

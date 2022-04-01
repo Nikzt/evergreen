@@ -13,16 +13,18 @@ const RecoveryBar = ({ unitId }: RecoveryBarProps) => {
 
     return (
         <div className="cast-bar">
-            <EffectIcon label={'R'} />
+            <EffectIcon label={require('../../../assets/abilityIcons/sands-of-time.svg')} />
             <ProgressBar
                 bgColor="#999999"
+                baseBgColor={'#222'}
                 transitionDuration={'0.01'}
                 transitionTimingFunction={'linear'}
-                borderRadius={'0'}
+                borderRadius={'3px'}
                 isLabelVisible={false}
                 completed={100 - unit.recoveryProgress}
                 maxCompleted={100}
-                height="30px"
+                height="25px"
+                className='progress-bar'
             />
         </div>
     );

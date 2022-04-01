@@ -4,6 +4,8 @@ import { selectEnemyUnitIds, selectFriendlyUnitIds, selectTargetLines } from '..
 import CombatUnit from './CombatUnit';
 import TargetLine from './TargetLine';
 
+import './combatContainer.scss';
+
 const CombatContainer = () => {
     const friendlyUnitIds = useAppSelector(selectFriendlyUnitIds);
     const enemyUnitIds = useAppSelector(selectEnemyUnitIds);
@@ -28,7 +30,6 @@ const CombatContainer = () => {
                     <CombatUnit key={unitId} isFriendly={false} unitId={unitId} />
                 ))}
             </div>
-            <hr></hr>
             {/* Friendly units */}
             <div className="units-row friendly-units-row">
                 {friendlyUnitIds.map((unitId) => (
