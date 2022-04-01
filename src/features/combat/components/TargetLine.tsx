@@ -57,9 +57,9 @@ const TargetLine = ({ sourceUnitId, targetUnitId, isFriendlySource, isBlocking }
         const angle = Math.atan2(y1 - y2, x1 - x2) * (180 / Math.PI);
 
         // set line color
-        let lineColor = '#000';
-        if (isBlocking) lineColor = '#0da9e7';
-        else if (!isFriendlySource) lineColor = 'red';
+        let lineColor = '#f8ca65aa';
+        if (isBlocking) lineColor = '#0da9e7aa';
+        else if (!isFriendlySource) lineColor = '#e66d64aa';
 
         return {
             cx,

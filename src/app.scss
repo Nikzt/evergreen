@@ -4,55 +4,17 @@
 @import './common/scss/variables.scss';
 
 html {
-    font-family: 'M PLUS 1';
     color: $color-text;
     background-color: $color-primary;
-}
-
-.combat-container {
-    //transform: scale(1.2) translateY(30px);
-    margin-left: auto;
-    margin-top: auto;
-    margin-right: auto;
-    max-width: 600px;
-    min-width: 375px;
+    user-select: none;
+    touch-action: manipulation;
     font-family: 'Yanone Kaffeesatz';
-}
-
-.combat-container h3 {
-    font-weight: 400;
-}
-
-.units-row {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-evenly;
-}
-
-.enemy-units-row {
-    margin-bottom: 50px;
-}
-
-.friendly-units-row {
-    margin-top: 50px;
-}
-
-@keyframes targeting {
-    0% {
-        border-width: 1px;
-    }
-    50% {
-        border-width: 4px;
-    }
-    0% {
-        border-width: 1px;
-    }
 }
 
 .combat-numbers-container {
     text-shadow: 0 0 1px rgba(0, 0, 0, 0.315);
     font-size: 2em;
-    color: rgb(189, 18, 18);
+    color: $color-damage-physical;
 
     position: absolute;
     pointer-events: none;
@@ -62,8 +24,10 @@ html {
     display: grid;
     align-items: center;
     position: absolute;
-    width: 100px;
     text-align: center;
+    z-index: 50;
+    top: -34px;
+    left: 4px;
 }
 
 .combat-number {
@@ -71,6 +35,8 @@ html {
     animation: fadeCombatNumber 1s;
     opacity: 0;
     height: 0px;
+    -webkit-text-stroke: 1px black;
+    font-size: 1.6em;
 }
 
 
@@ -99,14 +65,18 @@ html {
 }
 
 .cast-bars-container {
+    position: absolute;
     height: 40px;
     width: 100%;
 }
 
 .cast-bars-container.enemy-castbars {
-    position: absolute;
-    width: 130px;
-    bottom: -40px;
+    bottom: -50px;
+    z-index: 1;
+}
+
+.cast-bars-container.friendly-castbars {
+    top: -40px;
     z-index: 1;
 }
 
@@ -126,8 +96,15 @@ button[disabled] {
 
 .cast-bar {
     display: grid;
-    grid-template-columns: 30px auto;
+    grid-template-columns: 35px auto;
     height: 30px;
+
+    .progress-bar {
+        //margin-top: 2px;
+        div {
+            border: 1px solid $color-secondary-v1;
+        }
+    }
 }
 
 .hp-bar {
@@ -141,15 +118,14 @@ button[disabled] {
 .effect-icon-container {
     padding: 0px;
     height: 30px;
-    width: 20px;
-    display: grid;
-    align-items: center;
-    align-content: center;
-    border: 1px solid black;
+    width: 30px;
+    margin-right: 5px;
 }
 
 .effect-icon-container .effect-icon {
-    text-align: center;
+    border: 1px solid $color-secondary-v1;
+    border-radius: 6px;
+    
 }
 
 .cast-bar-label {
@@ -210,36 +186,4 @@ ul {
 .game-start-screen {
     padding-top: 50px;
     text-align: center;
-}
-
-.unit-abilities {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    width: 100%;
-}
-
-.unit-abilities button {
-    width: 50px;
-    height: 50px;
-    padding: 0;
-    border: 2px solid rgb(248, 219, 54);
-}
-
-.unit-abilities button:hover {
-    opacity: 0.8;
-}
-
-.unit-abilities button.targeting {
-    border: 2px solid red;
-}
-
-.unit-abilities button[disabled] {
-    opacity: 0.3;
-    border: 2px solid transparent
-}
-
-button svg {
-    width: 100%;
-    height: 100%;
 }

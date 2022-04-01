@@ -17,19 +17,18 @@ const CastBar = ({ unitId }: CastBarProps) => {
 
     return (
         <div className="cast-bar">
-            <EffectIcon label={damage.toString()} />
+            <EffectIcon label={ability.icon} />
             <ProgressBar
-                bgColor={ability?.castBarColor}
+                bgColor={'#f8ca65'}
+                baseBgColor={'#222'}
                 transitionDuration={'0.01'}
                 transitionTimingFunction={'linear'}
-                borderRadius={'0'}
-                isLabelVisible={true}
-                labelAlignment="left"
-                labelClassName="cast-bar-label"
+                borderRadius={'3px'}
+                isLabelVisible={false}
                 completed={unit ? unit.castProgress : 0}
                 maxCompleted={100}
-                height="30px"
-                customLabel={ability?.name}
+                height="25px"
+                className='progress-bar'
             />
         </div>
     );

@@ -5,7 +5,7 @@ type EffectIconProps = {
 const EffectIcon = ({ label }: EffectIconProps) => {
     return (
         <div className="effect-icon-container">
-            <div className="effect-icon">{label}</div>
+            <img className="effect-icon" src={label} />
         </div>
     );
 };

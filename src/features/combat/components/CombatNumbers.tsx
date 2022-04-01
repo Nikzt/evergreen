@@ -10,10 +10,6 @@ const CombatNumbers = ({ unitId }: CombatNumbersProps) => {
     return (
         <div
             className="combat-numbers-container"
-            style={{
-                bottom: unit?.isFriendly ? 'none' : '-20px',
-                top: !unit?.isFriendly ? 'none' : '-40px',
-            }}
         >
             <div className="combat-numbers">
                 {unit?.combatNumbers.map((c, idx) => (

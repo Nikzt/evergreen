@@ -1,6 +1,6 @@
 $color-primary: #010705;
-$color-secondary: #1c1d1c;
-$color-secondary-v1: #1f2525;
+$color-secondary: #202222;
+$color-secondary-v1: #2c3030;
 
 $color-highlight: #92e487;
 $color-text: #dfdfdf;
@@ -8,4 +8,10 @@ $color-enemy: #e66d64;
 
 $color-friendly: #87e4b1;
 
-$color-ability-default: #f0e372;
+$color-ability-default: #f8ca65;
+
+$color-targeting: #c7080880;
+
+$color-damage-physical: $color-enemy;
+
+$color-blocking: #0da9e7;
