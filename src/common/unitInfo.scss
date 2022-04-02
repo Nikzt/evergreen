@@ -21,10 +21,12 @@
 
     .hp-bar {
         text-align: left;
+
     }
 
     .hp-bar-progress {
         margin-bottom: 3px;
+        border-color: lighten($color-secondary-v1, 8%);
         .cast-bar-label {
             color: $color-primary;
         }

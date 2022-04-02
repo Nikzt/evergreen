@@ -1,14 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@300;400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz&display=swap');
-@import './common/scss/variables.scss';
+@import url("https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@300;400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz&display=swap");
+@import "./common/scss/variables.scss";
 
 html {
     color: $color-text;
     background-color: $color-primary;
     user-select: none;
     touch-action: manipulation;
-    font-family: 'Yanone Kaffeesatz';
+    font-family: "Yanone Kaffeesatz";
 }
 
 .combat-numbers-container {
@@ -31,7 +31,7 @@ html {
 }
 
 .combat-number {
-    font-family: 'Fjalla One';
+    font-family: "Fjalla One";
     animation: fadeCombatNumber 1s;
     opacity: 0;
     height: 0px;
@@ -39,20 +39,19 @@ html {
     font-size: 1.6em;
 }
 
-
 @keyframes fadeCombatNumber {
     0% {
         opacity: 0;
-        transform: scale(0.8)
+        transform: scale(0.8);
     }
 
     10% {
         opacity: 1;
-        transform: scale(1.2)
+        transform: scale(1.2);
     }
 
     20% {
-        transform: scale(1)
+        transform: scale(1);
     }
 
     30% {
@@ -97,14 +96,11 @@ button[disabled] {
 .cast-bar {
     display: grid;
     grid-template-columns: 35px auto;
-    height: 30px;
-
-    .progress-bar {
-        //margin-top: 2px;
-        div {
-            border: 1px solid $color-secondary-v1;
-        }
-    }
+}
+.progress-bar {
+    //margin-top: 2px;
+    border: 1px solid $color-secondary-v1;
+    border-radius: 3px;
 }
 
 .effect-icon-container {
@@ -117,7 +113,6 @@ button[disabled] {
 .effect-icon-container .effect-icon {
     border: 1px solid $color-secondary-v1;
     border-radius: 6px;
-    
 }
 
 .cast-bar-label {
@@ -148,7 +143,8 @@ ul {
     margin-bottom: 10px;
 }
 
-.character-info-container li, p {
+.character-info-container li,
+p {
     line-height: 1.4;
 }
 
@@ -156,7 +152,7 @@ ul {
     max-width: 600px;
     display: flex;
     justify-content: center;
-    padding:10px;
+    padding: 10px;
     text-align: left;
 }
 

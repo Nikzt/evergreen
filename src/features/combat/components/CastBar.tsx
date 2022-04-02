@@ -23,11 +23,11 @@ const CastBar = ({ unitId }: CastBarProps) => {
                 baseBgColor={'#222'}
                 transitionDuration={'0.01'}
                 transitionTimingFunction={'linear'}
-                borderRadius={'3px'}
+                borderRadius={'2px'}
                 isLabelVisible={false}
                 completed={unit ? unit.castProgress : 0}
                 maxCompleted={100}
-                height="25px"
+                height="29px"
                 className='progress-bar'
             />
         </div>
