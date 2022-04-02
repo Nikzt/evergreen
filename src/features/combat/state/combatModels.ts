@@ -28,6 +28,7 @@ export type CombatUnit = {
     // Config
     id: string;
     name: string;
+    icon?: string;
 
     //Stats / Loadout
     abilityIds: CombatAbilityType[];

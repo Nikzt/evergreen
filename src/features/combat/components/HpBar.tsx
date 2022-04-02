@@ -9,7 +9,6 @@ type HpBarProps = {
 const HpBar = ({ hp, maxHp, isFriendly }: HpBarProps) => {
     return (
         <div className="hp-bar">
-            <div className="hp-bar-label">HP:</div>
             <ProgressBar
                 bgColor={isFriendly ? '#87e4b1' : '#e66d64'}
                 transitionDuration={'0.3s'}
@@ -21,7 +20,7 @@ const HpBar = ({ hp, maxHp, isFriendly }: HpBarProps) => {
                 completed={(hp / maxHp) * 100}
                 maxCompleted={100}
                 className="hp-bar-progress"
-                customLabel={`${hp} / ${maxHp}`}
+                customLabel={`HP: ${hp} / ${maxHp}`}
             />
         </div>
     );

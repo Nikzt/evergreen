@@ -1,3 +1,4 @@
+import unitIcons from '../../assets/unitIcons/unitIcons';
 import { CombatAbilityType } from '../../common/combatAbilities';
 import { CombatUnit } from '../combat/state/combatModels';
 import { createFriendlyUnit } from './combatUnitUtils';
@@ -12,6 +13,7 @@ const getStarterCharacter = () => [
     createFriendlyUnit({
         id: 'Greg',
         name: 'Greg',
+        icon: unitIcons.greg,
         maxHp: 30,
         abilityIds: [CombatAbilityType.QUICK_ATTACK],
         weaponDamage: 1,

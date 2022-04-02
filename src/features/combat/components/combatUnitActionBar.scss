@@ -3,12 +3,13 @@
 .unit-abilities {
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     width: 100%;
+    margin-top: 5px;
 
     button {
-        width: 50px;
-        height: 50px;
+        width: 62px;
+        height: 62px;
         padding: 0;
         background: none;
 
