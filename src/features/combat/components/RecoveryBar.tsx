@@ -19,7 +19,7 @@ const RecoveryBar = ({ unitId }: RecoveryBarProps) => {
                 baseBgColor={'#222'}
                 transitionDuration={'0.01'}
                 transitionTimingFunction={'linear'}
-                borderRadius={'2px'}
+                borderRadius={'0'}
                 isLabelVisible={false}
                 completed={100 - unit.recoveryProgress}
                 maxCompleted={100}

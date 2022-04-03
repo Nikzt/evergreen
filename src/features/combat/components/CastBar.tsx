@@ -23,7 +23,7 @@ const CastBar = ({ unitId }: CastBarProps) => {
                 baseBgColor={'#222'}
                 transitionDuration={'0.01'}
                 transitionTimingFunction={'linear'}
-                borderRadius={'2px'}
+                borderRadius={'0'}
                 isLabelVisible={false}
                 completed={unit ? unit.castProgress : 0}
                 maxCompleted={100}

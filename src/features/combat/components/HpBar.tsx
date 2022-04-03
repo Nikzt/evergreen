@@ -13,7 +13,7 @@ const HpBar = ({ hp, maxHp, isFriendly }: HpBarProps) => {
                 bgColor={isFriendly ? '#87e4b1' : '#e66d64'}
                 transitionDuration={'0.3s'}
                 transitionTimingFunction={'ease-out'}
-                borderRadius={'3px'}
+                borderRadius={'0'}
                 isLabelVisible={true}
                 labelAlignment="left"
                 labelClassName="cast-bar-label"
