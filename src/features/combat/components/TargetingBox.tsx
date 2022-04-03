@@ -1,12 +1,12 @@
-import { useAppDispatch, useAppSelector, useSelectCombatUnit } from "../../../hooks";
-import { store } from "../../../store";
-import { CombatAction } from "../state/combatModels";
-import { targetAbility } from "../state/targetAbility";
+import { useAppDispatch, useAppSelector, useSelectCombatUnit } from '../../../hooks';
+import { store } from '../../../store';
+import { CombatAction } from '../state/combatModels';
+import { targetAbility } from '../state/targetAbility';
 import './targetingBox.scss';
 
 type TargetingBoxProps = {
-    unitId: string
-}
+    unitId: string;
+};
 
 const TargetingBox = ({ unitId }: TargetingBoxProps) => {
     const dispatch = useAppDispatch();
@@ -26,10 +26,9 @@ const TargetingBox = ({ unitId }: TargetingBoxProps) => {
         dispatch(targetAbility(combatAction));
     };
 
-    if (!unit || unit.isFriendly || unit.isDead || !isTargeting) return <></>
+    if (!unit || unit.isFriendly || unit.isDead || !isTargeting) return <></>;
 
-    return <button className="targeting-box" onClick={() => onTargetAbility(unit.id)}></button>
-}
+    return <button className="targeting-box" onClick={() => onTargetAbility(unit.id)}></button>;
+};
 
 export default TargetingBox;
-

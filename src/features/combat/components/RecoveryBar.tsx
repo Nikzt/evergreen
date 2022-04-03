@@ -1,6 +1,7 @@
 import { useSelectCombatUnit } from '../../../hooks';
 import ProgressBar from '@ramonak/react-progress-bar';
 import EffectIcon from './EffectIcon';
+import abilityIcons from '../../../assets/abilityIcons/abilityIcons';
 
 type RecoveryBarProps = {
     unitId: string;
@@ -13,7 +14,7 @@ const RecoveryBar = ({ unitId }: RecoveryBarProps) => {
 
     return (
         <div className="cast-bar">
-            <EffectIcon label={require('../../../assets/abilityIcons/sands-of-time.svg')} />
+            <EffectIcon label={abilityIcons.recovery} />
             <ProgressBar
                 bgColor="#999999"
                 baseBgColor={'#222'}
@@ -24,7 +25,7 @@ const RecoveryBar = ({ unitId }: RecoveryBarProps) => {
                 completed={100 - unit.recoveryProgress}
                 maxCompleted={100}
                 height="29px"
-                className='progress-bar'
+                className="progress-bar"
             />
         </div>
     );

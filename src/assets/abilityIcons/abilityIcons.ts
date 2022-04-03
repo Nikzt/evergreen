@@ -3,6 +3,6 @@ const abilityIcons = {
     recovery: require('./sands-of-time.svg'),
     quickAttack: require('./scalpel-strike.svg'),
     block: require('./shield.svg'),
-}
+};
 
 export default abilityIcons;

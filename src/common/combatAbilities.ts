@@ -13,7 +13,7 @@ export enum CombatAbilityType {
 
 export type CombatAbility = {
     id: CombatAbilityType;
-    icon?: any;
+    icon?: string;
     name: string;
     label: string;
     castBarColor?: string;
@@ -28,7 +28,7 @@ export type CombatAbility = {
 const combatAbilities: { [abilityType: number]: CombatAbility } = {
     [CombatAbilityType.QUICK_ATTACK]: {
         id: CombatAbilityType.QUICK_ATTACK,
-        icon: require("../assets/abilityIcons/scalpel-strike.svg"),
+        icon: require('../assets/abilityIcons/scalpel-strike.svg'),
         castBarColor: '#dbb763',
         name: 'Quick Attack',
         weaponDamageMultiplier: 0.5,
@@ -51,7 +51,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
     },
     [CombatAbilityType.STRONG_ATTACK]: {
         id: CombatAbilityType.STRONG_ATTACK,
-        icon: require("../assets/abilityIcons/blade-drag.svg"),
+        icon: require('../assets/abilityIcons/blade-drag.svg'),
         name: 'Strong Attack',
         castBarColor: '#dbb763',
         weaponDamageMultiplier: 1.5,
@@ -63,12 +63,12 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
     },
     [CombatAbilityType.BLOCK]: {
         id: CombatAbilityType.BLOCK,
-        icon: require("../assets/abilityIcons/shield.svg"),
+        icon: require('../assets/abilityIcons/shield.svg'),
         name: 'Block',
         weaponDamageMultiplier: 0.5,
         strengthMultiplier: 1,
         targetType: CombatTargetType.ENEMY,
-        castTimeInSec: 0,
+        castTimeInSec: 1,
         recoveryTimeInSec: 0,
         label: 'Block',
         blockValue: 7,

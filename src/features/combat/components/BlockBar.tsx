@@ -1,30 +1,28 @@
 import { useSelectCombatUnit } from '../../../hooks';
 import ProgressBar from '@ramonak/react-progress-bar';
-import combatAbilities from '../../../common/combatAbilities';
 import EffectIcon from './EffectIcon';
+import abilityIcons from '../../../assets/abilityIcons/abilityIcons';
 
 type CastBarProps = {
     unitId: string;
 };
 
-const CastBar = ({ unitId }: CastBarProps) => {
+const BlockBar = ({ unitId }: CastBarProps) => {
     const unit = useSelectCombatUnit(unitId);
 
-    if (!unit || !unit.isCasting || unit.castingAbility === null) return <></>;
-
-    const ability = combatAbilities[unit.castingAbility];
+    if (!unit || !unit.isBlocking) return <></>;
 
     return (
         <div className="cast-bar">
-            <EffectIcon label={ability.icon ?? ''} />
+            <EffectIcon label={abilityIcons.block} />
             <ProgressBar
-                bgColor={'#f8ca65'}
+                bgColor={'#0da9e7'}
                 baseBgColor={'#222'}
                 transitionDuration={'0.01'}
                 transitionTimingFunction={'linear'}
                 borderRadius={'0'}
                 isLabelVisible={false}
-                completed={unit ? unit.castProgress : 0}
+                completed={100 - unit.blockingProgress}
                 maxCompleted={100}
                 height="29px"
                 className="progress-bar"
@@ -33,4 +31,4 @@ const CastBar = ({ unitId }: CastBarProps) => {
     );
 };
 
-export default CastBar;
+export default BlockBar;

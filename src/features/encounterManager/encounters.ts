@@ -15,11 +15,12 @@ const getStarterCharacter = () => [
         name: 'Greg',
         icon: unitIcons.greg,
         maxHp: 30,
-        abilityIds: [CombatAbilityType.QUICK_ATTACK],
+        abilityIds: [CombatAbilityType.QUICK_ATTACK, CombatAbilityType.BLOCK],
         weaponDamage: 1,
         strength: 1,
         armor: 1,
         block: 6,
+        blockDuration: 0.3,
     }),
 ];
 
@@ -33,6 +34,7 @@ export const getSecondCharacter = () =>
         strength: 2,
         armor: 0,
         block: 4,
+        blockDuration: 1,
     });
 
 export const getStarterEncounter = (): CombatEncounter => {

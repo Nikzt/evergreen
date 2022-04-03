@@ -25,7 +25,6 @@ export type CombatUnit = {
 
     // Block state
     blockedBy: string | null;
-    blocking: string | null;
     isBlocking: boolean;
     blockingProgress: number;
 
@@ -41,6 +40,7 @@ export type CombatUnit = {
     strength: number;
     armor: number;
     block: number;
+    blockDuration: number;
 };
 
 export type CombatState = {

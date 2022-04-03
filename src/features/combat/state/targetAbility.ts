@@ -79,10 +79,6 @@ export const targetAbility = createAsyncThunk(
         if (combatOutcome === CombatOutcome.DEFEAT) setTimeout(() => dispatch(setDefeatState()), 1000);
         else if (combatOutcome === CombatOutcome.VICTORY) setTimeout(() => dispatch(setVictoryState()), 1000);
 
-        //setTimeout(() => {
-        //    dispatch(clearOldestCombatNumber(combatAction.targetUnitId));
-        //}, 5000);
-
         // recovery time after using ability
         const recoveryTickCallback = (currTime: number, recoveryTime: number) => {
             const recoveryProgress = Math.ceil((currTime / recoveryTime) * 100);

@@ -73,6 +73,5 @@ export const selectScriptedText = (state: RootState) => state.combat.scriptedTex
 
 export const selectFriendlyUnitByIdx = (idx: number) => (state: RootState) => {
     const friendlyUnits = selectFriendlyUnits(state);
-    if (friendlyUnits.length > idx)
-        return friendlyUnits[idx];
-}
+    if (friendlyUnits.length > idx) return friendlyUnits[idx];
+};

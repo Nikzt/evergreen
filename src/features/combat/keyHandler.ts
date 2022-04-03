@@ -16,7 +16,7 @@ const handleKeyPress = (unitIdx: number, abilityIdx: number) => {
                 targetUnitId: '',
             }),
         );
-}
+};
 
 class KeyHandler {
     private static isInitialized = false;
@@ -32,19 +32,18 @@ class KeyHandler {
                 event.preventDefault();
                 const name = event.key;
 
-
                 switch (name) {
                     case '1':
                         handleKeyPress(0, 0);
                         break;
                     case '2':
-                        handleKeyPress(0, 1)
+                        handleKeyPress(0, 1);
                         break;
                     case 'q':
-                        handleKeyPress(1, 0)
+                        handleKeyPress(1, 0);
                         break;
                     case 'w':
-                        handleKeyPress(1, 1)
+                        handleKeyPress(1, 1);
                         break;
                 }
             },
