@@ -18,12 +18,16 @@ export type CombatUnit = {
     castingAbility: CombatAbilityType | null;
     targetUnitId: string | null;
 
-    blockedBy: string | null;
-    blocking: string | null;
     castProgress: number;
     recoveryProgress: number;
     combatNumbers: number[];
     isDead: boolean;
+
+    // Block state
+    blockedBy: string | null;
+    blocking: string | null;
+    isBlocking: boolean;
+    blockingProgress: number;
 
     // Config
     id: string;
