@@ -3,7 +3,7 @@ import { store } from "../../../store";
 import checkEndCombat from "../checkEndCombat";
 import castAbility from "./castAbility";
 import { selectUnit } from "./combatSelectors";
-import { performCombatAction } from "./combatSlice";
+import { performCombatAction, updateUnit } from "./combatSlice";
 import recover from "./recover";
 
 
@@ -20,6 +20,12 @@ const revenge = async (sourceUnitId: string) => {
         }
         await castAbility(combatAction);
         store.dispatch(performCombatAction(combatAction));
+        store.dispatch(updateUnit({
+            id: sourceUnitId,
+            changes: {
+                isRevengeEnabled: false
+            }
+        }))
         checkEndCombat();
         recover(sourceUnitId, combatAbilities[CombatAbilityType.REVENGE].recoveryTimeInSec);
     } else {

@@ -79,7 +79,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         strengthMultiplier: 2,
         targetType: CombatTargetType.ENEMY,
         castTimeInSec: 0.4,
-        recoveryTimeInSec: 0,
+        recoveryTimeInSec: 0.5,
         label: 'Revenge',
         description: 'A quick attack that deals high damage to the last target blocked by this character. Only usable after blocking.'
     },
