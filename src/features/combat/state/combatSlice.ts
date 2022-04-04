@@ -30,12 +30,8 @@ const checkDeadEnemies = (state: CombatState) => {
             u.isCasting = false;
 
             // If this unit was blocking another unit, that unit will no longer be blocked
-            if (u.blocking) {
-                const blockingUnit = state.units.entities[u.blocking];
-                if (blockingUnit) blockingUnit.blockedBy = null;
-            }
             u.blockedBy = null;
-            u.blocking = null;
+            u.isBlocking = false;
         }
     });
 };
@@ -48,12 +44,12 @@ export const calculateAbilityDamage = (
     const damageBeforeBlock = Math.max(
         Math.ceil(
             sourceUnit.weaponDamage * ability.weaponDamageMultiplier +
-                sourceUnit.strength * ability.strengthMultiplier -
-                targetUnit.armor,
+            sourceUnit.strength * ability.strengthMultiplier -
+            targetUnit.armor,
         ),
         0,
     );
-    if (sourceUnit.blockedBy) return Math.max(0, damageBeforeBlock - targetUnit.block);
+    if (targetUnit.isBlocking) return Math.max(0, damageBeforeBlock - targetUnit.block);
     return damageBeforeBlock;
 };
 
@@ -65,7 +61,7 @@ const initialState: CombatState = {
     isCombatInProgress: false,
     isCombatFailed: true,
     isCombatVictorious: false,
-    difficulty: 0,
+    difficulty: 4,
     rewardCurrency: 0,
     availableRewards: [],
     scriptedText: '',
@@ -91,7 +87,7 @@ export const combatSlice = createSlice({
             state.isCombatVictorious = false;
             state.isCombatFailed = true;
             state.isCombatInProgress = false;
-            state.difficulty = 0;
+            state.difficulty = 4;
             state.rewardCurrency = 0;
         },
 
@@ -102,14 +98,14 @@ export const combatSlice = createSlice({
             state.isCombatVictorious = true;
             state.isCombatFailed = false;
             state.isCombatInProgress = false;
-            state.difficulty += 0.5;
+            state.difficulty += 1;
             livingFriendlyUnits.forEach((u) => {
                 if (u) u.combatNumbers = [];
             });
 
             // Post combat rewards
             getScriptedRewards(state);
-            state.rewardCurrency += 1 + Math.floor(state.difficulty);
+            state.rewardCurrency += 3;
             state.availableRewards = getRandomRewards(2);
         },
         updateUnit: (state, action: PayloadAction<Update<CombatUnit>>) => {
@@ -154,37 +150,39 @@ export const combatSlice = createSlice({
             // Damage ability
             switch (ability.id) {
                 case CombatAbilityType.BLOCK:
-                    source.blocking = target.id;
-                    target.blockedBy = source.id;
                     break;
                 default:
-                    if (source.blockedBy) {
-                        const newTarget = state.units.entities[source.blockedBy];
-                        if (!newTarget) break;
-                        const damage = calculateAbilityDamage(source, newTarget, ability);
-                        newTarget.hp -= damage;
-                        source.blockedBy = null;
-                        newTarget.blocking = null;
-                        newTarget.combatNumbers.push(damage);
-                    } else {
-                        const damage = calculateAbilityDamage(source, target, ability);
-                        target.hp -= damage;
-                        target.combatNumbers.push(damage);
+                    const damage = calculateAbilityDamage(source, target, ability);
+                    if (target.isBlocking) {
+                        target.isBlockSuccessful = true;
+                        target.lastBlockedUnitId = source.id;
+                        target.isBlocking = false;
+                        target.blockingProgress = 0;
+                        target.isRecovering = false;
+                        target.isRevengeEnabled = true;
+                        console.log("target blocked my attack");
                     }
+                    target.hp -= damage;
+                    target.combatNumbers.push(damage);
             }
             checkDeadEnemies(state);
+        },
+        toggleTaunt: (state, action: PayloadAction<string>) => {
+            const unit = state.units.entities[action.payload];
+            if (!unit) return;
+
+            unit.isTaunting = !unit.isTaunting;
+            if (unit.isTaunting) {
+                const otherUnits = Object.values(state.units.entities).filter(u => u?.isFriendly !== unit.isFriendly);
+                otherUnits.forEach(u => {
+                    if (u) u.targetUnitId = unit.id;
+                })
+            }
         },
         clearOldestCombatNumber: (state, action: PayloadAction<string>) => {
             const unitId = action.payload;
             const unit = state.units.entities[unitId];
             if (unit && unit.combatNumbers.length > 3) unit?.combatNumbers.splice(0, 1);
-        },
-        cancelBlock: (state, action: PayloadAction<string>) => {
-            const unit = state.units.entities[action.payload];
-            if (!unit || !unit.blocking) return;
-            const blockTarget = state.units.entities[unit.blocking];
-            unit.blocking = null;
-            if (blockTarget?.blockedBy) blockTarget.blockedBy = null;
         },
     },
 });
@@ -196,10 +194,10 @@ export const {
     initCombatEncounter,
     setTargetingMode,
     clearOldestCombatNumber,
-    cancelBlock,
     setDefeatState,
     setVictoryState,
     updateUnitWithReward,
+    toggleTaunt
 } = combatSlice.actions;
 
 export default combatSlice.reducer;

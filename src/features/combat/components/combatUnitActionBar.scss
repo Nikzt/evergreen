@@ -2,6 +2,7 @@
 
 .unit-abilities {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     width: 100%;
@@ -21,8 +22,15 @@
             border: 2px solid $color-ability-default;
         }
 
+        &.toggled-on {
+            border: 2px solid $color-blocking;
+        }
+
         &[disabled] {
             border: none;
+            &.toggled-on {
+                border: 2px solid $color-blocking;
+            }
             img {
                 opacity: 0.3;
                 border: 1px solid transparent;

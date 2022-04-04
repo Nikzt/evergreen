@@ -1,4 +1,4 @@
-import combatAbilities from '../../../common/combatAbilities';
+import combatAbilities, { CombatAbility, CombatAbilityType } from '../../../common/combatAbilities';
 import { RootState } from '../../../store';
 import { CombatUnit, unitsAdapter } from './combatModels';
 import { calculateAbilityDamage } from './combatSlice';
@@ -9,8 +9,11 @@ export const selectEnemyUnits = (state: RootState) =>
     unitsSelectors.selectAll(state.combat.units).filter((u) => !u.isFriendly);
 export const selectFriendlyUnits = (state: RootState) =>
     unitsSelectors.selectAll(state.combat.units).filter((u) => u.isFriendly);
+
 export const selectRandomFriendlyUnit = (state: RootState) => {
-    const friendlyUnits = selectFriendlyUnits(state).filter((u) => !u.isDead);
+    let friendlyUnits = selectFriendlyUnits(state).filter((u) => !u.isDead);
+    if (friendlyUnits.some(u => u.isTaunting))
+        friendlyUnits = friendlyUnits.filter(u => u.isTaunting);
     return friendlyUnits[Math.floor(Math.random() * friendlyUnits.length)];
 };
 
@@ -33,10 +36,21 @@ export const selectUnit = (unitId: string) => (state: RootState) =>
     unitsSelectors.selectById(state.combat.units, unitId);
 
 export const selectUnitCastProgress = (unitId: string) => (state: RootState) => selectUnit(unitId)(state)?.castProgress;
-export const selectCanUseAbility = (unitId: string) => (state: RootState) => {
+export const selectCanUseAnyAbilities = (unitId: string) => (state: RootState) => {
     const unit = selectUnit(unitId)(state);
-    return unit && !unit.isCasting && !unit.isRecovering && !unit.blocking && !unit.isDead;
+    return unit && !unit.isCasting && !unit.isRecovering && !unit.isBlocking && !unit.isDead;
 };
+
+export const selectCanUseSpecificAbility = (unitId: string, abilityType: CombatAbilityType) => (state: RootState) => {
+    const unit = selectUnit(unitId)(state);
+    if (unit?.isRecovering) return false;
+    switch (abilityType) {
+        case CombatAbilityType.REVENGE:
+            return !!unit?.isRevengeEnabled;
+    }
+
+    return selectCanUseAnyAbilities(unitId)(state);
+}
 
 export const selectAbilityDamage = (unitId: string) => (state: RootState) => {
     const units = state.combat.units.entities;
@@ -54,15 +68,15 @@ export const selectAbilityDamage = (unitId: string) => (state: RootState) => {
 
 export const selectTargetLines = (state: RootState) => {
     const units = unitsSelectors.selectAll(state.combat.units);
-    const castingUnits = units.filter((u) => u.isCasting || u.blocking);
+    const castingUnits = units.filter((u) => u.isCasting || u.isBlocking);
     return castingUnits.map((u) => {
         const target = u.blockedBy ?? u.targetUnitId;
         return {
             sourceUnitId: u.id,
-            targetUnitId: u.blocking ? u.blocking : target,
+            targetUnitId: target,
             abilityId: u.castingAbility,
             isFriendlySource: u.isFriendly,
-            isBlocking: !!u.blocking,
+            isBlocking: u.isBlocking,
         };
     });
 };
@@ -75,3 +89,4 @@ export const selectFriendlyUnitByIdx = (idx: number) => (state: RootState) => {
     const friendlyUnits = selectFriendlyUnits(state);
     if (friendlyUnits.length > idx) return friendlyUnits[idx];
 };
+

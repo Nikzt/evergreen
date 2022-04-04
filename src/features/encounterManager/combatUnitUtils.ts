@@ -14,6 +14,7 @@ const getDefaultUnitProps = (maxHp: number) => {
         isDead: false,
         castingAbility: null,
         blockDuration: 1,
+        isBlockSuccessful: false
     };
 };
 

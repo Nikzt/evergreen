@@ -15,12 +15,13 @@ const getStarterCharacter = () => [
         name: 'Greg',
         icon: unitIcons.greg,
         maxHp: 30,
-        abilityIds: [CombatAbilityType.QUICK_ATTACK, CombatAbilityType.BLOCK],
+        abilityIds: [CombatAbilityType.REVENGE, CombatAbilityType.BLOCK, CombatAbilityType.STRONG_ATTACK, CombatAbilityType.TAUNT],
         weaponDamage: 1,
         strength: 1,
         armor: 1,
-        block: 6,
+        block: 100,
         blockDuration: 0.3,
+        isTaunting: true
     }),
 ];
 
@@ -29,7 +30,7 @@ export const getSecondCharacter = () =>
         id: 'Tal',
         name: 'Tal',
         maxHp: 30,
-        abilityIds: [CombatAbilityType.STRONG_ATTACK],
+        abilityIds: [CombatAbilityType.QUICK_ATTACK, CombatAbilityType.BLOCK],
         weaponDamage: 2,
         strength: 2,
         armor: 0,
@@ -40,7 +41,7 @@ export const getSecondCharacter = () =>
 export const getStarterEncounter = (): CombatEncounter => {
     return {
         name: 'First Combat',
-        units: [...getStarterCharacter(), getEnemy(EnemyTemplateEnum.BARK_DOG, 'enemy-1')],
+        units: [...getStarterCharacter(), getSecondCharacter(), getEnemy(EnemyTemplateEnum.BARK_DOG, 'enemy-1'), getEnemy(EnemyTemplateEnum.FOREST_PROTECTOR, 'enemy-2')],
     };
 };
 

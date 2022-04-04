@@ -1,7 +1,10 @@
+import abilityIcons from "../assets/abilityIcons/abilityIcons";
+
 export enum CombatTargetType {
     ENEMY = 0,
     FRIENDLY,
     ALL,
+    NONE
 }
 
 export enum CombatAbilityType {
@@ -9,6 +12,8 @@ export enum CombatAbilityType {
     STRONG_ATTACK,
     WHIRLWIND,
     BLOCK,
+    REVENGE,
+    TAUNT
 }
 
 export type CombatAbility = {
@@ -54,8 +59,8 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         icon: require('../assets/abilityIcons/blade-drag.svg'),
         name: 'Strong Attack',
         castBarColor: '#dbb763',
-        weaponDamageMultiplier: 1.5,
-        strengthMultiplier: 2,
+        weaponDamageMultiplier: 2,
+        strengthMultiplier: 3,
         targetType: CombatTargetType.ENEMY,
         castTimeInSec: 2.5,
         recoveryTimeInSec: 2,
@@ -63,7 +68,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
     },
     [CombatAbilityType.BLOCK]: {
         id: CombatAbilityType.BLOCK,
-        icon: require('../assets/abilityIcons/shield.svg'),
+        icon: abilityIcons.block,
         name: 'Block',
         weaponDamageMultiplier: 0.5,
         strengthMultiplier: 1,
@@ -72,6 +77,30 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         recoveryTimeInSec: 0,
         label: 'Block',
         blockValue: 7,
+    },
+    [CombatAbilityType.REVENGE]: {
+        id: CombatAbilityType.REVENGE,
+        icon: abilityIcons.revenge,
+        name: 'Revenge',
+        castBarColor: '#dbb763',
+        weaponDamageMultiplier: 1.5,
+        strengthMultiplier: 2,
+        targetType: CombatTargetType.ENEMY,
+        castTimeInSec: 0.25,
+        recoveryTimeInSec: 1,
+        label: 'Revenge',
+    },
+    [CombatAbilityType.TAUNT]: {
+        id: CombatAbilityType.TAUNT,
+        icon: abilityIcons.taunt,
+        name: 'Taunt',
+        castBarColor: '#dbb763',
+        weaponDamageMultiplier: 0,
+        strengthMultiplier: 0,
+        targetType: CombatTargetType.NONE,
+        castTimeInSec: 0,
+        recoveryTimeInSec: 0,
+        label: 'Taunt',
     },
 };
 

@@ -27,6 +27,11 @@ export type CombatUnit = {
     blockedBy: string | null;
     isBlocking: boolean;
     blockingProgress: number;
+    isBlockSuccessful: boolean;
+    isRevengeEnabled: boolean;
+    lastBlockedUnitId: string | null;
+
+    isTaunting: boolean;
 
     // Config
     id: string;

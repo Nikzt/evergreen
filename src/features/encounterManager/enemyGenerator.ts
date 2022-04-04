@@ -22,7 +22,7 @@ export const enemyTemplates = {
     [EnemyTemplateEnum.FOREST_FIEND]: createEnemyUnit({
         name: 'Forest Fiend',
         maxHp: 10,
-        abilityIds: [CombatAbilityType.QUICK_ATTACK, CombatAbilityType.STRONG_ATTACK, CombatAbilityType.BLOCK],
+        abilityIds: [CombatAbilityType.QUICK_ATTACK, CombatAbilityType.STRONG_ATTACK],
         weaponDamage: 2,
         strength: 3,
         armor: 0,
@@ -31,18 +31,19 @@ export const enemyTemplates = {
     [EnemyTemplateEnum.FOREST_PROTECTOR]: createEnemyUnit({
         name: 'Forest Protector',
         maxHp: 12,
-        abilityIds: [CombatAbilityType.QUICK_ATTACK, CombatAbilityType.BLOCK],
-        weaponDamage: 1,
-        strength: 2,
+        abilityIds: [CombatAbilityType.QUICK_ATTACK],
+        weaponDamage: 2,
+        strength: 3,
         armor: 0,
         block: 3,
+        isTaunting: true
     }),
     [EnemyTemplateEnum.WOOD_GIANT]: createEnemyUnit({
         name: 'Wood Giant',
         maxHp: 18,
         abilityIds: [CombatAbilityType.STRONG_ATTACK],
-        weaponDamage: 2,
-        strength: 3,
+        weaponDamage: 4,
+        strength: 4,
         armor: 0,
         block: 0,
     }),
