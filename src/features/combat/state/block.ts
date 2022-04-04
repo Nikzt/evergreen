@@ -25,7 +25,11 @@ export const block = async (sourceUnitId: string) => {
         }),
     );
 
-    const blockTickCallback = (currTime: number, blockTime: number) => {
+    const blockTickCallback = (currTime: number, blockTime: number, interval: NodeJS.Timer) => {
+        const state = store.getState();
+        const unit = selectUnit(sourceUnitId)(state);
+        if (!unit?.isBlocking)
+            clearInterval(interval);
         const blockingProgress = Math.ceil((currTime / blockTime) * 100);
         store.dispatch(
             updateUnit({
