@@ -20,7 +20,7 @@ const getStarterCharacter = () => [
         strength: 1,
         armor: 1,
         block: 100,
-        blockDuration: 0.3,
+        blockDuration: 1,
         isTaunting: true
     }),
 ];
