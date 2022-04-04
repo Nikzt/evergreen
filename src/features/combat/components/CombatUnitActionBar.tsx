@@ -1,54 +1,49 @@
-import { useMemo } from "react";
-import combatAbilities, { CombatAbility, CombatAbilityType } from "../../../common/combatAbilities";
-import { useAppDispatch, useAppSelector, useSelectCombatUnit } from "../../../hooks";
-import { selectCanUseAbility } from "../state/combatSelectors";
-import { cancelBlock, initTargetingAbility } from "../state/combatSlice";
+import combatAbilities, { CombatAbilityType } from '../../../common/combatAbilities';
+import {  useAppSelector, useSelectCombatUnit } from '../../../hooks';
+import onAbilityButtonClick from '../onAbilityButtonClick';
+import { selectCanUseSpecificAbility } from '../state/combatSelectors';
 import './combatUnitActionBar.scss';
 
 type CombatUnitActionBarProps = {
-    unitId: string
-}
+    unitId: string;
+};
 
 const CombatUnitActionBar = ({ unitId }: CombatUnitActionBarProps) => {
-    const dispatch = useAppDispatch();
     const unit = useSelectCombatUnit(unitId);
     const isTargeting = useAppSelector((state) => state.combat.isTargeting);
     const targetingAbilityId = useAppSelector((state) => state.combat.targetingAbilityId);
-    const canUseAbility = useAppSelector((state) => selectCanUseAbility(unitId)(state));
 
-    const onAbilityButtonClick = (sourceUnitId: string, abilityId: CombatAbilityType) => {
-        if (abilityId === CombatAbilityType.BLOCK && unit?.blocking) dispatch(cancelBlock(sourceUnitId));
-        else
-            dispatch(
-                initTargetingAbility({
-                    sourceUnitId,
-                    abilityId,
-                    targetUnitId: '',
-                }),
-            );
-    };
 
-    const unitAbilities = useMemo<CombatAbility[]>(() => {
+    const unitAbilities = useAppSelector((state) => {
         if (!unit?.abilityIds) return [];
-        return unit.abilityIds.map((id) => combatAbilities[id]);
-    }, [unit?.abilityIds]);
+        return unit.abilityIds.map((id) => {
+            return {
+                ...combatAbilities[id],
+                abilityDisabled: !selectCanUseSpecificAbility(unit.id, id)(state)
+            }
+        });
+    });
 
-    if (!unit || !unit.isFriendly)
-        return <></>
+    if (!unit || !unit.isFriendly) return <></>;
 
-    return <div className="unit-abilities">
-        {unitAbilities.map((ability) => (
-            <button
-                className={'ability-button' + ((isTargeting && targetingAbilityId === ability.id) ? ' targeting' : '')}
-                disabled={!canUseAbility && !(ability.id === CombatAbilityType.BLOCK && unit.blocking)}
-                key={ability.id}
-                onClick={() => onAbilityButtonClick(unit.id, ability.id)}
-            >
-                {/*ability.id === CombatAbilityType.BLOCK && unit.blocking ? 'Cancel' : ability.label}*/}
-                <img src={ability.icon} />
-            </button>
-        ))}
-    </div>
-}
+    return (
+        <div className="unit-abilities">
+            {unitAbilities.map((ability) => (
+                <button
+                    className={
+                        'ability-button' 
+                        + (isTargeting && targetingAbilityId === ability.id ? ' targeting' : '')
+                        + (unit.isTaunting && ability.id === CombatAbilityType.TAUNT ? ' toggled-on' : '')
+                    }
+                    disabled={ability.abilityDisabled}
+                    key={ability.id}
+                    onClick={() => onAbilityButtonClick(unit.id, ability.id)}
+                >
+                    <img src={ability.icon} />
+                </button>
+            ))}
+        </div>
+    );
+};
 
 export default CombatUnitActionBar;

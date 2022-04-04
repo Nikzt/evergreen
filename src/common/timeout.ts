@@ -13,3 +13,9 @@ export const timeout = (tickCallback: (currTime: number, totalTime: number) => v
         }, TICK_INTERVAL_MS);
     });
 };
+
+export const wait = (ms: number) => {
+    return new Promise((resolve) => {
+        setTimeout(() => resolve(true), ms);
+    })
+}

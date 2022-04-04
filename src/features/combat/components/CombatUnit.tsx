@@ -8,6 +8,7 @@ import './combatUnit.scss';
 import TargetingBox from './TargetingBox';
 import UnitInfo from '../../../common/UnitInfo';
 import CombatUnitActionBar from './CombatUnitActionBar';
+import BlockBar from './BlockBar';
 
 type CombatUnitProps = {
     unitId: string;
@@ -20,7 +21,15 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
     if (!unit) return <span>Unit with ID {unitId} not found</span>;
 
     return (
-        <div id={unit.id} className={'unit' + (unit.blocking ? ' blocking' : '') + (unit.isDead ? ' dead' : '') + (unit.isFriendly ? ' friendly' : ' enemy')}>
+        <div
+            id={unit.id}
+            className={
+                'unit' +
+                (unit.isBlocking ? ' blocking' : '') +
+                (unit.isDead ? ' dead' : '') +
+                (unit.isFriendly ? ' friendly' : ' enemy')
+            }
+        >
             {/* Targeting overlay if enemy */}
             <TargetingBox unitId={unitId} />
 
@@ -29,6 +38,7 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
                     <div className="cast-bars-container friendly-castbars">
                         <CastBar unitId={unitId} />
                         <RecoveryBar unitId={unitId} />
+                        <BlockBar unitId={unitId} />
                     </div>
                 )}
 
@@ -36,13 +46,14 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
                 <UnitInfo unitId={unitId} />
 
                 {/* Abilities */}
-                <CombatUnitActionBar unitId={unitId}/>
-                 
+                <CombatUnitActionBar unitId={unitId} />
+
                 {/* Enemy castbars at bottom of unit frame */}
                 {!isFriendly && (
                     <div className="cast-bars-container enemy-castbars">
                         <CastBar unitId={unitId} />
                         <RecoveryBar unitId={unitId} />
+                        <BlockBar unitId={unitId} />
                     </div>
                 )}
             </div>

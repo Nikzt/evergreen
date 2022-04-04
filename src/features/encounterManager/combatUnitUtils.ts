@@ -1,12 +1,11 @@
 import { CombatUnit } from '../combat/state/combatModels';
 
-export const createEnemyUnit = (partialUnit: Partial<CombatUnit>): CombatUnit => {
+const getDefaultUnitProps = (maxHp: number) => {
     return {
-        ...(partialUnit as CombatUnit),
         isCasting: false,
         isFriendly: false,
         isRecovering: false,
-        hp: partialUnit.maxHp as number,
+        hp: maxHp,
         castProgress: 0,
         recoveryProgress: 0,
         combatNumbers: [],
@@ -14,6 +13,15 @@ export const createEnemyUnit = (partialUnit: Partial<CombatUnit>): CombatUnit =>
         blocking: null,
         isDead: false,
         castingAbility: null,
+        blockDuration: 1,
+        isBlockSuccessful: false
+    };
+};
+
+export const createEnemyUnit = (partialUnit: Partial<CombatUnit>): CombatUnit => {
+    return {
+        ...getDefaultUnitProps(partialUnit.maxHp as number),
+        ...(partialUnit as CombatUnit),
     };
 };
 

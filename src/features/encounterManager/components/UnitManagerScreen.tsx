@@ -54,7 +54,7 @@ const UnitManagerScreen = () => {
             <div className="character-info-container">
                 {friendlyUnits.map((u) => (
                     <div key={u.id} className="character-info">
-                        <UnitInfo unitId={u.id}/>
+                        <UnitInfo unitId={u.id} />
 
                         <h3>Stats</h3>
                         <ul>

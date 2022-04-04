@@ -1,7 +1,7 @@
 import { store } from '../../store';
 import { CombatUnit } from '../combat/state/combatModels';
 import {
-    selectCanUseAbility,
+    selectCanUseAnyAbilities,
     selectEnemyUnits,
     selectRandomAbilityId,
     selectRandomFriendlyUnit,
@@ -36,7 +36,7 @@ class EnemyController {
             return;
         }
 
-        if (!selectCanUseAbility(this.unitId)(state)) return;
+        if (!selectCanUseAnyAbilities(this.unitId)(state)) return;
 
         const randomTarget = selectRandomFriendlyUnit(state);
 
