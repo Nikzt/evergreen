@@ -12,11 +12,11 @@ const App = () => {
     const isCombatFailed = useAppSelector((state: RootState) => state.combat.isCombatFailed);
 
     return (
-        <>
+        <div className="app">
             {!isCombatInProgress && isCombatFailed && <GameStartScreen />}
             {!isCombatInProgress && isCombatVictorious && <UnitManagerScreen />}
             {isCombatInProgress && <CombatContainer />}
-        </>
+        </div>
     );
 };
 

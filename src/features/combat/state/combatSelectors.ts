@@ -90,3 +90,6 @@ export const selectFriendlyUnitByIdx = (idx: number) => (state: RootState) => {
     if (friendlyUnits.length > idx) return friendlyUnits[idx];
 };
 
+export const selectFriendlyUnitIndexes = (state: RootState) => {
+    return selectFriendlyUnitIds(state).map((uid, idx) => {return {unitId: uid, idx}});
+}

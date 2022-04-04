@@ -2,10 +2,66 @@ import { store } from '../../store';
 import onAbilityButtonClick from './onAbilityButtonClick';
 import { selectCanUseSpecificAbility, selectFriendlyUnitByIdx } from './state/combatSelectors';
 
-const handleKeyPress = (unitIdx: number, abilityIdx: number) => {
+export type AbilityKeyBinding = {
+    unitIdx: number,
+    abilityIdx: number,
+    key: string
+}
+
+export const abilityKeyBindings: AbilityKeyBinding[] = [
+    // Unit 1
+    {
+        unitIdx: 0,
+        abilityIdx: 0,
+        key: '1'
+    },
+    {
+        unitIdx: 0,
+        abilityIdx: 1,
+        key: '2'
+    },
+    {
+        unitIdx: 0,
+        abilityIdx: 2,
+        key: '3'
+    },
+    {
+        unitIdx: 0,
+        abilityIdx: 3,
+        key: '4'
+    },
+
+    // Unit 2
+    {
+        unitIdx: 1,
+        abilityIdx: 0,
+        key: 'q'
+    },
+    {
+        unitIdx: 1,
+        abilityIdx: 1,
+        key: 'w'
+    },
+    {
+        unitIdx: 1,
+        abilityIdx: 2,
+        key: 'e'
+    },
+    {
+        unitIdx: 1,
+        abilityIdx: 3,
+        key: 'r'
+    },
+]
+
+const handleKeyPress = (key: string) => {
+    const keyBinding = abilityKeyBindings.find(k => k.key === key);
+    if (!keyBinding)
+        return;
+
     const state = store.getState();
-    const unit = selectFriendlyUnitByIdx(unitIdx)(state);
-    const abilityId = unit?.abilityIds[abilityIdx];
+    const unit = selectFriendlyUnitByIdx(keyBinding.unitIdx)(state);
+    const abilityId = unit?.abilityIds[keyBinding.abilityIdx];
     if (unit && abilityId != null && selectCanUseSpecificAbility(unit.id, abilityId)(state)) {
         onAbilityButtonClick(unit.id, abilityId);
     }
@@ -23,25 +79,7 @@ class KeyHandler {
             'keydown',
             (event) => {
                 event.preventDefault();
-                const name = event.key;
-
-                switch (name) {
-                    case '1':
-                        handleKeyPress(0, 0);
-                        break;
-                    case '2':
-                        handleKeyPress(0, 1);
-                        break;
-                    case '3':
-                        handleKeyPress(0, 2);
-                        break;
-                    case 'q':
-                        handleKeyPress(1, 0);
-                        break;
-                    case 'w':
-                        handleKeyPress(1, 1);
-                        break;
-                }
+                handleKeyPress(event.key);
             },
             false,
         );

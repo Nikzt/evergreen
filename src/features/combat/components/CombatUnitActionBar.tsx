@@ -1,7 +1,8 @@
 import combatAbilities, { CombatAbilityType } from '../../../common/combatAbilities';
-import {  useAppSelector, useSelectCombatUnit } from '../../../hooks';
+import { useAppSelector, useSelectCombatUnit } from '../../../hooks';
+import { abilityKeyBindings } from '../keyHandler';
 import onAbilityButtonClick from '../onAbilityButtonClick';
-import { selectCanUseSpecificAbility } from '../state/combatSelectors';
+import { selectCanUseSpecificAbility, selectFriendlyUnitIndexes } from '../state/combatSelectors';
 import './combatUnitActionBar.scss';
 
 type CombatUnitActionBarProps = {
@@ -12,14 +13,16 @@ const CombatUnitActionBar = ({ unitId }: CombatUnitActionBarProps) => {
     const unit = useSelectCombatUnit(unitId);
     const isTargeting = useAppSelector((state) => state.combat.isTargeting);
     const targetingAbilityId = useAppSelector((state) => state.combat.targetingAbilityId);
-
+    const unitIndex = useAppSelector(selectFriendlyUnitIndexes).find(u => u.unitId === unitId)?.idx;
 
     const unitAbilities = useAppSelector((state) => {
-        if (!unit?.abilityIds) return [];
-        return unit.abilityIds.map((id) => {
+        if (!unit?.abilityIds || unitIndex == null) return [];
+        return unit.abilityIds.map((id, idx) => {
+            const keyBinding = abilityKeyBindings.find(k => k.abilityIdx === idx && k.unitIdx === unitIndex);
             return {
                 ...combatAbilities[id],
-                abilityDisabled: !selectCanUseSpecificAbility(unit.id, id)(state)
+                abilityDisabled: !selectCanUseSpecificAbility(unit.id, id)(state),
+                key: keyBinding?.key ?? ''
             }
         });
     });
@@ -31,7 +34,7 @@ const CombatUnitActionBar = ({ unitId }: CombatUnitActionBarProps) => {
             {unitAbilities.map((ability) => (
                 <button
                     className={
-                        'ability-button' 
+                        'ability-button'
                         + (isTargeting && targetingAbilityId === ability.id ? ' targeting' : '')
                         + (unit.isTaunting && ability.id === CombatAbilityType.TAUNT ? ' toggled-on' : '')
                     }
@@ -40,6 +43,7 @@ const CombatUnitActionBar = ({ unitId }: CombatUnitActionBarProps) => {
                     onClick={() => onAbilityButtonClick(unit.id, ability.id)}
                 >
                     <img src={ability.icon} />
+                    <div className="ability-keybinding">{ability.key}</div>
                 </button>
             ))}
         </div>
