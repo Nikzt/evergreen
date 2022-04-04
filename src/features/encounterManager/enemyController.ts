@@ -13,17 +13,19 @@ class EnemyController {
 
     private unitId: string;
     private combatInterval: NodeJS.Timer | null;
+    private idx: number;
 
     static initEnemies() {
         const state = store.getState();
         const enemyUnits: CombatUnit[] = selectEnemyUnits(state);
-        EnemyController.enemies = enemyUnits.map((u) => new EnemyController(u));
+        EnemyController.enemies = enemyUnits.map((u, idx) => new EnemyController(u, idx));
         EnemyController.enemies.forEach((e) => e.beginCombat());
     }
 
-    constructor(unit: CombatUnit) {
+    constructor(unit: CombatUnit, idx: number) {
         this.unitId = unit.id;
         this.combatInterval = null;
+        this.idx = idx;
     }
 
     private combatAction() {
@@ -55,9 +57,11 @@ class EnemyController {
     public beginCombat() {
         if (this.combatInterval) return;
 
-        this.combatInterval = setInterval(() => {
-            this.combatAction();
-        }, 4000 + Math.random() * 2000);
+        setTimeout(() => {
+            this.combatInterval = setInterval(() => {
+                this.combatAction();
+            }, 3500);
+        }, 1000 * this.idx);
     }
 
     static killEnemy(unitId: string) {

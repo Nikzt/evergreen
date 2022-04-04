@@ -10,7 +10,6 @@ export enum CombatTargetType {
 export enum CombatAbilityType {
     QUICK_ATTACK = 0,
     STRONG_ATTACK,
-    WHIRLWIND,
     BLOCK,
     REVENGE,
     TAUNT
@@ -28,6 +27,7 @@ export type CombatAbility = {
     weaponDamageMultiplier: number;
     strengthMultiplier: number;
     blockValue?: number;
+    description: string;
 };
 
 const combatAbilities: { [abilityType: number]: CombatAbility } = {
@@ -42,17 +42,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         castTimeInSec: 1,
         recoveryTimeInSec: 1,
         label: 'Quick Attack',
-    },
-    [CombatAbilityType.WHIRLWIND]: {
-        id: CombatAbilityType.WHIRLWIND,
-        castBarColor: '#dbb763',
-        name: 'Whirlwind',
-        weaponDamageMultiplier: 0.5,
-        strengthMultiplier: 1,
-        targetType: CombatTargetType.ENEMY,
-        castTimeInSec: 0.5,
-        recoveryTimeInSec: 1,
-        label: 'Whirlwind',
+        description: 'Quickly deal a moderate amount of damage to the target.'
     },
     [CombatAbilityType.STRONG_ATTACK]: {
         id: CombatAbilityType.STRONG_ATTACK,
@@ -65,6 +55,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         castTimeInSec: 2.5,
         recoveryTimeInSec: 2,
         label: 'Strong Attack',
+        description: 'Deal a high amount of damage to the target after a long delay.'
     },
     [CombatAbilityType.BLOCK]: {
         id: CombatAbilityType.BLOCK,
@@ -77,6 +68,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         recoveryTimeInSec: 0,
         label: 'Block',
         blockValue: 7,
+        description: 'Block the next attack within 1 second. Long recovery time if nothing is blocked.'
     },
     [CombatAbilityType.REVENGE]: {
         id: CombatAbilityType.REVENGE,
@@ -89,6 +81,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         castTimeInSec: 0.4,
         recoveryTimeInSec: 1,
         label: 'Revenge',
+        description: 'A quick attack that deals high damage to the last target blocked by this character. Only usable after blocking.'
     },
     [CombatAbilityType.TAUNT]: {
         id: CombatAbilityType.TAUNT,
@@ -101,6 +94,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         castTimeInSec: 0,
         recoveryTimeInSec: 0,
         label: 'Taunt',
+        description: 'While toggled on, all enemies must target this character'
     },
 };
 

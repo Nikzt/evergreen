@@ -1,0 +1,16 @@
+.game-start-screen {
+    .ability-description-row {
+        margin-bottom: 10px;
+        width: 300px;
+        margin-left: auto;
+        margin-right: auto;
+        display: grid;
+        grid-template-columns: 70px auto;
+        text-align: left;
+        align-items: center;
+        img {
+            width: 50px;
+            margin-right: 20px;
+        }
+    }
+}
