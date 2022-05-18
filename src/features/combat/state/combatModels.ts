@@ -23,6 +23,9 @@ export type CombatUnit = {
     combatNumbers: number[];
     isDead: boolean;
 
+    // Turn state
+    mana: number;
+
     // Block state
     blockedBy: string | null;
     isBlocking: boolean;
@@ -53,6 +56,7 @@ export type CombatState = {
     difficulty: number;
     isCombatVictorious: boolean;
     isCombatFailed: boolean;
+    isPlayerTurn: boolean;
 
     // Post-combat rewards
     rewardCurrency: number;

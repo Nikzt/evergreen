@@ -4,6 +4,7 @@ import { CombatEncounter } from '../../encounterManager/encounters';
 import { getRandomRewards } from '../../encounterManager/rewards';
 import { getScriptedRewards } from '../../encounterManager/scriptedRewards';
 import { CombatAction, CombatState, CombatUnit, RewardUpdate, unitsAdapter } from './combatModels';
+import { unitsSelectors } from './combatSelectors';
 
 /**
  * Clears everything that shouldn't carry over to next combat
@@ -17,6 +18,7 @@ const clearCombatState = (state: CombatState) => {
     state.isCombatInProgress = false;
     state.isCombatFailed = false;
     state.isCombatVictorious = false;
+    state.isPlayerTurn = true;
 };
 
 /**
@@ -54,6 +56,7 @@ export const calculateAbilityDamage = (
 };
 
 const initialState: CombatState = {
+    isPlayerTurn: true,
     isTargeting: false,
     targetingAbilityId: null,
     targetingSourceUnitId: null,
@@ -77,7 +80,10 @@ export const combatSlice = createSlice({
         },
         initCombatEncounter: (state, action: PayloadAction<CombatEncounter>) => {
             clearCombatState(state);
-            unitsAdapter.addMany(state.units, action.payload.units);
+            unitsAdapter.addMany(state.units, action.payload.units.map(u => {
+                // TODO: Reset all units mana should be helper function
+                return {...u, mana: 1}
+            }));
             state.isCombatInProgress = true;
         },
 
@@ -140,7 +146,8 @@ export const combatSlice = createSlice({
             const source = state.units.entities[action.payload.sourceUnitId];
             const target = state.units.entities[action.payload.targetUnitId];
             const ability = combatAbilities[action.payload.abilityId];
-            if (!target || !ability || !source || source.isDead) return;
+            // TODO: Turn this into helper function
+            if (!target || !ability || !source || source.isDead || source.mana <= 0) return;
 
             source.isCasting = false;
             source.castingAbility = null;
@@ -165,6 +172,7 @@ export const combatSlice = createSlice({
                     target.hp -= damage;
                     target.combatNumbers.push(damage);
             }
+            source.mana--;
             checkDeadEnemies(state);
         },
         toggleTaunt: (state, action: PayloadAction<string>) => {
@@ -184,6 +192,18 @@ export const combatSlice = createSlice({
             const unit = state.units.entities[unitId];
             if (unit && unit.combatNumbers.length > 3) unit?.combatNumbers.splice(0, 1);
         },
+        beginPlayerTurn: (state) => {
+            state.isPlayerTurn = true;
+            Object.values(state.units.entities).forEach(u => {
+                if (u && u.isFriendly) u.mana = 1
+            });
+        },
+        beginEnemyTurn: (state) => {
+            state.isPlayerTurn = false;
+            Object.values(state.units.entities).forEach(u => {
+                if (u && !u.isFriendly) u.mana = 1
+            });
+        }
     },
 });
 
@@ -197,7 +217,9 @@ export const {
     setDefeatState,
     setVictoryState,
     updateUnitWithReward,
-    toggleTaunt
+    toggleTaunt,
+    beginPlayerTurn,
+    beginEnemyTurn
 } = combatSlice.actions;
 
 export default combatSlice.reducer;

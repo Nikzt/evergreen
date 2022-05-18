@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import combatAbilities, { CombatAbilityType } from '../../../common/combatAbilities';
 import { timeout } from '../../../common/timeout';
 import { RootState } from '../../../store';
-import checkEndCombat from '../checkEndCombat';
+import checkEndCombat, { checkEndTurn } from '../checkEndCombat';
 import castAbility from './castAbility';
 import { CombatAction } from './combatModels';
 import { selectCanUseAnyAbilities, selectUnit } from './combatSelectors';
@@ -38,6 +38,7 @@ export const targetAbility = createAsyncThunk(
             combatAction.targetUnitId = newSourceUnit.targetUnitId;
 
         dispatch(performCombatAction(combatAction));
+        checkEndTurn();
         checkEndCombat();
 
         // recovery time after using ability
