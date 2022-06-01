@@ -1,4 +1,5 @@
 import ProgressBar from '@ramonak/react-progress-bar';
+import colors from '../../../common/scss/colors';
 
 type HpBarProps = {
     hp: number;
@@ -10,7 +11,8 @@ const HpBar = ({ hp, maxHp, isFriendly }: HpBarProps) => {
     return (
         <div className="hp-bar">
             <ProgressBar
-                bgColor={isFriendly ? '#87e4b1' : '#e66d64'}
+                bgColor={isFriendly ? colors.friendly : colors.enemy}
+                baseBgColor={colors.text}
                 transitionDuration={'0.3s'}
                 transitionTimingFunction={'ease-out'}
                 borderRadius={'0'}

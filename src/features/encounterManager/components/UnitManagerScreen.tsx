@@ -13,7 +13,7 @@ import {
     selectRewardCurrency,
     selectScriptedText,
 } from '../../combat/state/combatSelectors';
-import UnitInfo from '../../../common/UnitInfo';
+import UnitInfo from '../../../common/components/UnitInfo/UnitInfo';
 
 const UnitManagerScreen = () => {
     const dispatch = useAppDispatch();

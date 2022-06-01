@@ -1,8 +1,8 @@
-import combatAbilities, { CombatAbilityType } from '../../../common/combatAbilities';
-import { useAppSelector, useSelectCombatUnit } from '../../../hooks';
-import { abilityKeyBindings } from '../keyHandler';
-import onAbilityButtonClick from '../onAbilityButtonClick';
-import { selectCanUseSpecificAbility, selectFriendlyUnitIndexes } from '../state/combatSelectors';
+import combatAbilities, { CombatAbilityType } from '../../../../common/combatAbilities';
+import { useAppSelector, useSelectCombatUnit } from '../../../../hooks';
+import { abilityKeyBindings } from '../../keyHandler';
+import onAbilityButtonClick from '../../onAbilityButtonClick';
+import { selectCanUseSpecificAbility, selectFriendlyUnitIndexes } from '../../state/combatSelectors';
 import './combatUnitActionBar.scss';
 
 type CombatUnitActionBarProps = {
@@ -43,7 +43,7 @@ const CombatUnitActionBar = ({ unitId }: CombatUnitActionBarProps) => {
                     onClick={() => onAbilityButtonClick(unit.id, ability.id)}
                 >
                     <img src={ability.icon} />
-                    <div className="ability-keybinding">{ability.key}</div>
+                    <p className='ability-label'>{ability.label}</p>
                 </button>
             ))}
         </div>
