@@ -1,7 +1,7 @@
-import unitIcons from '../assets/unitIcons/unitIcons';
-import CombatNumbers from '../features/combat/components/CombatNumbers';
-import HpBar from '../features/combat/components/HpBar';
-import { useSelectCombatUnit } from '../hooks';
+import unitIcons from '../../../assets/unitIcons/unitIcons';
+import CombatNumbers from '../../../features/combat/components/CombatNumbers';
+import HpBar from '../../../features/combat/components/HpBar';
+import { useSelectCombatUnit } from '../../../hooks';
 import './unitInfo.scss';
 
 type UnitInfoProps = {
@@ -21,10 +21,10 @@ const UnitInfo = ({ unitId }: UnitInfoProps) => {
         <div className="unit-info">
             <div className="unit-info--portrait-container">
                 <img src={icon} alt="" />
+                <h3 className="unit-info--name">{unit.name}</h3>
                 <CombatNumbers unitId={unitId} />
             </div>
             <div className="unit-info--details">
-                <h3 className="unit-info--name">{unit.name}</h3>
                 <HpBar hp={unit.hp} maxHp={unit.maxHp} isFriendly={unit.isFriendly} />
             </div>
         </div>

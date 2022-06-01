@@ -31,6 +31,8 @@ class EnemyController {
     private combatAction() {
         const state = store.getState();
         const unit = state.combat.units.entities[this.unitId];
+        if (state.combat.isPlayerTurn)
+            return;
 
         // Check if unit is dead, so it doesn't take any more actions
         if (unit && unit.isDead) {

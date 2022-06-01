@@ -38,7 +38,7 @@ export const selectUnit = (unitId: string) => (state: RootState) =>
 export const selectUnitCastProgress = (unitId: string) => (state: RootState) => selectUnit(unitId)(state)?.castProgress;
 export const selectCanUseAnyAbilities = (unitId: string) => (state: RootState) => {
     const unit = selectUnit(unitId)(state);
-    return unit && !unit.isCasting && !unit.isRecovering && !unit.isBlocking && !unit.isDead;
+    return unit && !unit.isCasting && !unit.isRecovering && !unit.isBlocking && !unit.isDead && unit.mana > 0;
 };
 
 export const selectCanUseSpecificAbility = (unitId: string, abilityType: CombatAbilityType) => (state: RootState) => {
@@ -92,4 +92,8 @@ export const selectFriendlyUnitByIdx = (idx: number) => (state: RootState) => {
 
 export const selectFriendlyUnitIndexes = (state: RootState) => {
     return selectFriendlyUnitIds(state).map((uid, idx) => {return {unitId: uid, idx}});
+}
+
+export const selectLivingUnits = (state: RootState) => {
+    return unitsSelectors.selectAll(state.combat.units).filter(u => !u.isDead);
 }

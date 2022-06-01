@@ -9,21 +9,11 @@ import './combatContainer.scss';
 const CombatContainer = () => {
     const friendlyUnitIds = useAppSelector(selectFriendlyUnitIds);
     const enemyUnitIds = useAppSelector(selectEnemyUnitIds);
-    const targetLines = useAppSelector(selectTargetLines);
 
     KeyHandler.init();
 
     return (
         <div className="combat-container">
-            {targetLines.map((t) => (
-                <TargetLine
-                    key={t.sourceUnitId + t.targetUnitId}
-                    sourceUnitId={t.sourceUnitId}
-                    targetUnitId={t.targetUnitId}
-                    isFriendlySource={t.isFriendlySource}
-                    isBlocking={t.isBlocking}
-                />
-            ))}
             {/* Enemy units */}
             <div className="units-row enemy-units-row">
                 {enemyUnitIds.map((unitId) => (

@@ -2,12 +2,12 @@ import { CombatAbilityType } from '../../../common/combatAbilities';
 import { useAppDispatch, useSelectCombatUnit } from '../../../hooks';
 import CastBar from './CastBar';
 import CombatNumbers from './CombatNumbers';
-import { cancelBlock, initTargetingAbility } from '../state/combatSlice';
+import { initTargetingAbility } from '../state/combatSlice';
 import RecoveryBar from './RecoveryBar';
 import './combatUnit.scss';
 import TargetingBox from './TargetingBox';
-import UnitInfo from '../../../common/UnitInfo';
-import CombatUnitActionBar from './CombatUnitActionBar';
+import UnitInfo from '../../../common/components/UnitInfo/UnitInfo';
+import CombatUnitActionBar from './ActionBar/CombatUnitActionBar';
 import BlockBar from './BlockBar';
 
 type CombatUnitProps = {

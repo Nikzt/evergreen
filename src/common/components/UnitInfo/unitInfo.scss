@@ -1,0 +1,61 @@
+@import "../../scss/colors.scss";
+
+.unit-info {
+    background-color: $color-secondary;
+    border: 1px solid $color-secondary-v1;
+    border-radius: 0;
+    color: $color-text;
+    display: grid;
+    grid-template-rows: 110px 30px;
+    padding: 5px;
+
+    .unit-info--portrait-container {
+        img {
+            border: 1px solid black;
+            margin-right: 1px;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+            -moz-box-sizing: border-box; /* Firefox, other Gecko */
+            box-sizing: border-box; /* Opera/IE 8+ */
+        }
+        .unit-info--name {
+            position: relative;
+            left: 10px;
+            text-shadow: 1px 1px 2px black;
+            bottom: 30px;
+            margin: 0;
+            font-size: 1em;
+            text-overflow: clip;
+        }
+    }
+
+    .unit-info--details {
+        .hp-bar {
+            text-align: left;
+            margin-top: 5px;
+        }
+
+        .hp-bar-progress {
+            margin-bottom: 3px;
+            border-color: lighten($color-secondary-v1, 8%);
+            .cast-bar-label {
+                color: $color-primary;
+            }
+            .hp-bar-progress {
+                background-color: $color-friendly;
+            }
+        }
+    }
+}
+
+.blocking .unit-info {
+    border: 1px solid $color-blocking;
+}
+
+.enemy .unit-info {
+}
+
+.friendly .unit-info {
+}
