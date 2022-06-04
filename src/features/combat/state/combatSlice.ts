@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, Update } from '@reduxjs/toolkit';
-import combatAbilities, { CombatAbility, CombatAbilityType } from '../../../common/combatAbilities';
+import combatAbilities, { CombatAbility, CombatAbilityType } from '../abilities/combatAbilities';
 import { CombatEncounter } from '../../encounterManager/encounters';
 import { getRandomRewards } from '../../encounterManager/rewards';
 import { getScriptedRewards } from '../../encounterManager/scriptedRewards';
@@ -73,11 +73,6 @@ export const combatSlice = createSlice({
     name: 'combat',
     initialState,
     reducers: {
-        initTargetingAbility: (state, action: PayloadAction<CombatAction>) => {
-            state.isTargeting = true;
-            state.targetingAbilityId = action.payload.abilityId;
-            state.targetingSourceUnitId = action.payload.sourceUnitId;
-        },
         initCombatEncounter: (state, action: PayloadAction<CombatEncounter>) => {
             clearCombatState(state);
             unitsAdapter.addMany(state.units, action.payload.units.map(u => {
@@ -133,7 +128,12 @@ export const combatSlice = createSlice({
                 state.rewardCurrency -= reward.cost;
             }
         },
-        setTargetingMode: (state, action: PayloadAction<boolean>) => {
+        beginTargetingAbility: (state, action: PayloadAction<CombatAction>) => {
+            state.isTargeting = true;
+            state.targetingAbilityId = action.payload.abilityId;
+            state.targetingSourceUnitId = action.payload.sourceUnitId;
+        },
+        endTargetingAbility: (state, action: PayloadAction<boolean>) => {
             state.isTargeting = action.payload;
             state.targetingAbilityId = null;
             state.targetingSourceUnitId = null;
@@ -208,11 +208,11 @@ export const combatSlice = createSlice({
 });
 
 export const {
-    initTargetingAbility,
     updateUnit,
     performCombatAction,
     initCombatEncounter,
-    setTargetingMode,
+    beginTargetingAbility,
+    endTargetingAbility,
     clearOldestCombatNumber,
     setDefeatState,
     setVictoryState,

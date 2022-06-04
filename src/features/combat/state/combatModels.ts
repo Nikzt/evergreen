@@ -1,5 +1,5 @@
 import { createEntityAdapter, EntityState } from '@reduxjs/toolkit';
-import { CombatAbilityType } from '../../../common/combatAbilities';
+import { CombatAbilityType } from '../abilities/combatAbilities';
 import { Reward } from '../../encounterManager/rewards';
 
 export type CombatAction = {

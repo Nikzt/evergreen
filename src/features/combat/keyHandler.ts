@@ -1,5 +1,4 @@
 import { store } from '../../store';
-import onAbilityButtonClick from './onAbilityButtonClick';
 import { selectCanUseSpecificAbility, selectFriendlyUnitByIdx } from './state/combatSelectors';
 
 export type AbilityKeyBinding = {
@@ -63,7 +62,7 @@ const handleKeyPress = (key: string) => {
     const unit = selectFriendlyUnitByIdx(keyBinding.unitIdx)(state);
     const abilityId = unit?.abilityIds[keyBinding.abilityIdx];
     if (unit && abilityId != null && selectCanUseSpecificAbility(unit.id, abilityId)(state)) {
-        onAbilityButtonClick(unit.id, abilityId);
+        console.log("TODO: Implement key press")
     }
 }
 

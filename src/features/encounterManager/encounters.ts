@@ -1,5 +1,5 @@
 import unitIcons from '../../assets/unitIcons/unitIcons';
-import { CombatAbilityType } from '../../common/combatAbilities';
+import { CombatAbilityType } from '../combat/abilities/combatAbilities';
 import { CombatUnit } from '../combat/state/combatModels';
 import { createFriendlyUnit } from './combatUnitUtils';
 import { EnemyTemplateEnum, generateRandomEnemy, getEnemy } from './enemyGenerator';
@@ -15,7 +15,7 @@ const getStarterCharacter = () => [
         name: 'Greg',
         icon: unitIcons.greg,
         maxHp: 30,
-        abilityIds: [CombatAbilityType.REVENGE, CombatAbilityType.BLOCK, CombatAbilityType.STRONG_ATTACK, CombatAbilityType.TAUNT],
+        abilityIds: [CombatAbilityType.REVENGE, CombatAbilityType.BLOCK, CombatAbilityType.STRONG_ATTACK],
         weaponDamage: 1,
         strength: 1,
         armor: 1,

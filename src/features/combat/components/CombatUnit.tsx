@@ -1,14 +1,9 @@
-import { CombatAbilityType } from '../../../common/combatAbilities';
-import { useAppDispatch, useSelectCombatUnit } from '../../../hooks';
-import CastBar from './CastBar';
-import CombatNumbers from './CombatNumbers';
-import { initTargetingAbility } from '../state/combatSlice';
-import RecoveryBar from './RecoveryBar';
+import { useSelectCombatUnit } from '../../../hooks';
 import './combatUnit.scss';
 import TargetingBox from './TargetingBox';
 import UnitInfo from '../../../common/components/UnitInfo/UnitInfo';
 import CombatUnitActionBar from './ActionBar/CombatUnitActionBar';
-import BlockBar from './BlockBar';
+import CombatNumbers from './CombatNumbers/CombatNumbers';
 
 type CombatUnitProps = {
     unitId: string;
@@ -30,33 +25,16 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
                 (unit.isFriendly ? ' friendly' : ' enemy')
             }
         >
+            <CombatNumbers unitId={unitId} />
+
             {/* Targeting overlay if enemy */}
             <TargetingBox unitId={unitId} />
 
-            <div className="unit--content">
-                {isFriendly && (
-                    <div className="cast-bars-container friendly-castbars">
-                        <CastBar unitId={unitId} />
-                        <RecoveryBar unitId={unitId} />
-                        <BlockBar unitId={unitId} />
-                    </div>
-                )}
+            {/* Unit info */}
+            <UnitInfo unitId={unitId} />
 
-                {/* Unit info */}
-                <UnitInfo unitId={unitId} />
-
-                {/* Abilities */}
-                <CombatUnitActionBar unitId={unitId} />
-
-                {/* Enemy castbars at bottom of unit frame */}
-                {!isFriendly && (
-                    <div className="cast-bars-container enemy-castbars">
-                        <CastBar unitId={unitId} />
-                        <RecoveryBar unitId={unitId} />
-                        <BlockBar unitId={unitId} />
-                    </div>
-                )}
-            </div>
+            {/* Abilities */}
+            <CombatUnitActionBar unitId={unitId} />
         </div>
     );
 };

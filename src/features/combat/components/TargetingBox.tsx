@@ -1,7 +1,5 @@
-import { useAppDispatch, useAppSelector, useSelectCombatUnit } from '../../../hooks';
-import { store } from '../../../store';
-import { CombatAction } from '../state/combatModels';
-import { targetAbility } from '../state/targetAbility';
+import {  useAppSelector, useSelectCombatUnit } from '../../../hooks';
+import { targetAbility } from '../abilities/abilityHandler';
 import './targetingBox.scss';
 
 type TargetingBoxProps = {
@@ -9,21 +7,11 @@ type TargetingBoxProps = {
 };
 
 const TargetingBox = ({ unitId }: TargetingBoxProps) => {
-    const dispatch = useAppDispatch();
     const unit = useSelectCombatUnit(unitId);
     const isTargeting = useAppSelector((state) => state.combat.isTargeting);
 
     const onTargetAbility = (targetUnitId: string) => {
-        const state = store.getState();
-        const sourceUnitId = state.combat.targetingSourceUnitId;
-        const abilityId = state.combat.targetingAbilityId;
-        if (!sourceUnitId || abilityId == null) return;
-        const combatAction: CombatAction = {
-            sourceUnitId,
-            abilityId,
-            targetUnitId,
-        };
-        dispatch(targetAbility(combatAction));
+        targetAbility(targetUnitId);
     };
 
     if (!unit || unit.isFriendly || unit.isDead || !isTargeting) return <></>;

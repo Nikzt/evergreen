@@ -1,4 +1,5 @@
-import { useSelectCombatUnit } from '../../../hooks';
+import { useSelectCombatUnit } from '../../../../hooks';
+import './combatNumbers.scss';
 
 type CombatNumbersProps = {
     unitId: string;

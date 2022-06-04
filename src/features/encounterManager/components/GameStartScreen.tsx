@@ -1,4 +1,4 @@
-import combatAbilities from '../../../common/combatAbilities';
+import combatAbilities from '../../combat/abilities/combatAbilities';
 import { useAppDispatch } from '../../../hooks';
 import { initCombatEncounter } from '../../combat/state/combatSlice';
 import { getStarterEncounter } from '../encounters';

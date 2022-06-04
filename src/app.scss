@@ -14,57 +14,6 @@ html {
 .app {
 }
 
-.combat-numbers-container {
-    text-shadow: 0 0 1px rgba(0, 0, 0, 0.315);
-    font-size: 2em;
-    color: $color-damage-physical;
-
-    position: absolute;
-    pointer-events: none;
-}
-
-.combat-numbers {
-    display: grid;
-    align-items: center;
-    position: absolute;
-    text-align: center;
-    z-index: 50;
-    top: -34px;
-    left: 4px;
-}
-
-.combat-number {
-    font-family: "Fjalla One";
-    animation: fadeCombatNumber 1s;
-    opacity: 0;
-    height: 0px;
-    -webkit-text-stroke: 1px black;
-    font-size: 1.6em;
-}
-
-@keyframes fadeCombatNumber {
-    0% {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-
-    10% {
-        opacity: 1;
-        transform: scale(1.2);
-    }
-
-    20% {
-        transform: scale(1);
-    }
-
-    30% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
-}
 
 .cast-bars-container {
     position: absolute;

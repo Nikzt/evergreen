@@ -1,9 +1,9 @@
-import combatAbilities, { CombatAbilityType } from '../../../../common/combatAbilities';
+import combatAbilities, { CombatAbilityType } from '../../abilities/combatAbilities';
 import { useAppSelector, useSelectCombatUnit } from '../../../../hooks';
 import { abilityKeyBindings } from '../../keyHandler';
-import onAbilityButtonClick from '../../onAbilityButtonClick';
 import { selectCanUseSpecificAbility, selectFriendlyUnitIndexes } from '../../state/combatSelectors';
 import './combatUnitActionBar.scss';
+import { handleAbility } from '../../abilities/abilityHandler';
 
 type CombatUnitActionBarProps = {
     unitId: string;
@@ -27,6 +27,14 @@ const CombatUnitActionBar = ({ unitId }: CombatUnitActionBarProps) => {
         });
     });
 
+    const onAbilityButtonClick = (unitId: string, abilityId: CombatAbilityType) => {
+        handleAbility({
+            sourceUnitId: unitId,
+            targetUnitId: "",
+            abilityId
+        })
+    }
+
     if (!unit || !unit.isFriendly) return <></>;
 
     return (
@@ -36,7 +44,6 @@ const CombatUnitActionBar = ({ unitId }: CombatUnitActionBarProps) => {
                     className={
                         'ability-button'
                         + (isTargeting && targetingAbilityId === ability.id ? ' targeting' : '')
-                        + (unit.isTaunting && ability.id === CombatAbilityType.TAUNT ? ' toggled-on' : '')
                     }
                     disabled={ability.abilityDisabled}
                     key={ability.id}

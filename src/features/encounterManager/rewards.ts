@@ -1,4 +1,4 @@
-import { CombatAbilityType } from '../../common/combatAbilities';
+import { CombatAbilityType } from '../combat/abilities/combatAbilities';
 import { CombatUnit } from '../combat/state/combatModels';
 
 export enum RewardType {

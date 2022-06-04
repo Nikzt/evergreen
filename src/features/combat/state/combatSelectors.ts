@@ -1,4 +1,4 @@
-import combatAbilities, { CombatAbility, CombatAbilityType } from '../../../common/combatAbilities';
+import combatAbilities, { CombatAbility, CombatAbilityType } from '../abilities/combatAbilities';
 import { RootState } from '../../../store';
 import { CombatUnit, unitsAdapter } from './combatModels';
 import { calculateAbilityDamage } from './combatSlice';

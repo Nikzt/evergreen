@@ -1,4 +1,5 @@
 import { store } from '../../store';
+import { useAbility } from '../combat/abilities/abilityHandler';
 import { CombatUnit } from '../combat/state/combatModels';
 import {
     selectCanUseAnyAbilities,
@@ -6,7 +7,6 @@ import {
     selectRandomAbilityId,
     selectRandomFriendlyUnit,
 } from '../combat/state/combatSelectors';
-import { targetAbility } from '../combat/state/targetAbility';
 
 class EnemyController {
     static enemies: EnemyController[] = [];
@@ -47,13 +47,11 @@ class EnemyController {
         if (!randomTarget) return;
 
         const randomAbility = selectRandomAbilityId(state, this.unitId);
-        store.dispatch(
-            targetAbility({
-                sourceUnitId: this.unitId,
-                targetUnitId: randomTarget.id,
-                abilityId: randomAbility,
-            }),
-        );
+        useAbility({
+            sourceUnitId: this.unitId,
+            targetUnitId: randomTarget.id,
+            abilityId: randomAbility,
+        });
     }
 
     public beginCombat() {
