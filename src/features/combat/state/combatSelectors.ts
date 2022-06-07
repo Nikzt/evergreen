@@ -1,7 +1,6 @@
 import combatAbilities, { CombatAbility, CombatAbilityType } from '../abilities/combatAbilities';
 import { RootState } from '../../../store';
 import { CombatUnit, unitsAdapter } from './combatModels';
-import { calculateAbilityDamage } from './combatSlice';
 
 export const unitsSelectors = unitsAdapter.getSelectors();
 
@@ -52,20 +51,6 @@ export const selectCanUseSpecificAbility = (unitId: string, abilityType: CombatA
     return selectCanUseAnyAbilities(unitId)(state);
 }
 
-export const selectAbilityDamage = (unitId: string) => (state: RootState) => {
-    const units = state.combat.units.entities;
-    const unit = units[unitId];
-    if (!unit || !unit.targetUnitId || unit.castingAbility === null) return 0;
-
-    let targetUnit: CombatUnit | undefined;
-    if (unit.blockedBy) targetUnit = units[unit.blockedBy];
-    else targetUnit = units[unit.targetUnitId];
-
-    const ability = combatAbilities[unit.castingAbility];
-    if (!targetUnit || !ability) return 0;
-    return calculateAbilityDamage(unit, targetUnit, ability);
-};
-
 export const selectTargetLines = (state: RootState) => {
     const units = unitsSelectors.selectAll(state.combat.units);
     const castingUnits = units.filter((u) => u.isCasting || u.isBlocking);
@@ -91,9 +76,12 @@ export const selectFriendlyUnitByIdx = (idx: number) => (state: RootState) => {
 };
 
 export const selectFriendlyUnitIndexes = (state: RootState) => {
-    return selectFriendlyUnitIds(state).map((uid, idx) => {return {unitId: uid, idx}});
+    return selectFriendlyUnitIds(state).map((uid, idx) => { return { unitId: uid, idx } });
 }
 
 export const selectLivingUnits = (state: RootState) => {
     return unitsSelectors.selectAll(state.combat.units).filter(u => !u.isDead);
 }
+
+export const selectNextEnemyAbility = (unitId: string) => (state: RootState) =>
+    state.combat.enemyAbilitiesQueue.find(a => a.sourceUnitId === unitId);

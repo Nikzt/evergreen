@@ -58,6 +58,9 @@ export type CombatState = {
     isCombatFailed: boolean;
     isPlayerTurn: boolean;
 
+    /** Order of list is the order in which the enemies will perform their actions */
+    enemyAbilitiesQueue: CombatAction[];
+
     // Post-combat rewards
     rewardCurrency: number;
     availableRewards: Reward[];

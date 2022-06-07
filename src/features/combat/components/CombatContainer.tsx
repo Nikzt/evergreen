@@ -14,6 +14,11 @@ const CombatContainer = () => {
 
     return (
         <div className="combat-container">
+            <div>
+                <svg className="svg-layer">
+                    
+                </svg>
+            </div>
             {/* Enemy units */}
             <div className="units-row enemy-units-row">
                 {enemyUnitIds.map((unitId) => (

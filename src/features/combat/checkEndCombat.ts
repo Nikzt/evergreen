@@ -1,6 +1,6 @@
 import { RootState, store } from "../../store";
 import { CombatOutcome, CombatState } from "./state/combatModels";
-import { selectLivingUnits } from "./state/combatSelectors";
+import { selectCanUseAnyAbilities, selectLivingUnits } from "./state/combatSelectors";
 import { beginEnemyTurn, beginPlayerTurn, setDefeatState, setVictoryState } from "./state/combatSlice";
 
 /**
@@ -23,11 +23,11 @@ export const checkEndTurn = () => {
     const state = store.getState() as RootState;
     const isPlayerTurn = state.combat.isPlayerTurn;
     const livingUnits = selectLivingUnits(state);
-    if (livingUnits.filter(u => u.isFriendly === isPlayerTurn).every(u => u.mana <= 0)) {
+    if (livingUnits.filter(u => u.isFriendly === isPlayerTurn).every(u => !selectCanUseAnyAbilities(u.id)(state))) {
         if (isPlayerTurn)
-            store.dispatch(beginEnemyTurn());
-        else
-            store.dispatch(beginPlayerTurn());
+            setTimeout(() => store.dispatch(beginEnemyTurn()), 1000);
+        else 
+            setTimeout(() => store.dispatch(beginPlayerTurn()), 1000);
     }
 }
 

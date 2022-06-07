@@ -4,9 +4,8 @@ import { CombatUnit } from '../combat/state/combatModels';
 import {
     selectCanUseAnyAbilities,
     selectEnemyUnits,
-    selectRandomAbilityId,
-    selectRandomFriendlyUnit,
 } from '../combat/state/combatSelectors';
+import { removeFromEnemyAbilityQueue } from '../combat/state/combatSlice';
 
 class EnemyController {
     static enemies: EnemyController[] = [];
@@ -42,16 +41,19 @@ class EnemyController {
 
         if (!selectCanUseAnyAbilities(this.unitId)(state)) return;
 
-        const randomTarget = selectRandomFriendlyUnit(state);
+        // Use ability for this enemy in ability queue
+        const abilitiesQueue = state.combat.enemyAbilitiesQueue;
+        const ability = abilitiesQueue.find(c => c.sourceUnitId === this.unitId);
+        if (ability) {
+            useAbility(ability);
 
-        if (!randomTarget) return;
+            // Remove ability from queue if turn isn't over, otherwise it
+            // will be cleared in the next turn
+            const state = store.getState();
+            if (!state.combat.isPlayerTurn)
+                store.dispatch(removeFromEnemyAbilityQueue(ability))
+        }
 
-        const randomAbility = selectRandomAbilityId(state, this.unitId);
-        useAbility({
-            sourceUnitId: this.unitId,
-            targetUnitId: randomTarget.id,
-            abilityId: randomAbility,
-        });
     }
 
     public beginCombat() {

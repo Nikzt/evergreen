@@ -5,6 +5,7 @@ import { getRandomRewards } from '../../encounterManager/rewards';
 import { getScriptedRewards } from '../../encounterManager/scriptedRewards';
 import { CombatAction, CombatState, CombatUnit, RewardUpdate, unitsAdapter } from './combatModels';
 import { unitsSelectors } from './combatSelectors';
+import calculateAbilityDamage from '../abilities/calculateAbilityDamage';
 
 /**
  * Clears everything that shouldn't carry over to next combat
@@ -19,40 +20,32 @@ const clearCombatState = (state: CombatState) => {
     state.isCombatFailed = false;
     state.isCombatVictorious = false;
     state.isPlayerTurn = true;
+    state.enemyAbilitiesQueue = [];
 };
+
+const removeAbilitiesWithSourceUnitId = (state: CombatState, sourceUnitId: string) => {
+    const abilities = state.enemyAbilitiesQueue.filter(a =>
+        a.sourceUnitId !== sourceUnitId
+        && a.targetUnitId !== sourceUnitId);
+    state.enemyAbilitiesQueue = abilities;
+};
+
+const onUnitKilled = (state: CombatState, unit: CombatUnit) => {
+    unit.hp = 0;
+    unit.isDead = true;
+    unit.isCasting = false;
+    removeAbilitiesWithSourceUnitId(state, unit.id);
+}
 
 /**
  * Handle state changes for units that have died (ie. HP <= 0)
  */
-const checkDeadEnemies = (state: CombatState) => {
+const checkDeadUnits = (state: CombatState) => {
     Object.values(state.units.entities).forEach((u) => {
         if (u && u.hp <= 0) {
-            u.hp = 0;
-            u.isDead = true;
-            u.isCasting = false;
-
-            // If this unit was blocking another unit, that unit will no longer be blocked
-            u.blockedBy = null;
-            u.isBlocking = false;
+            onUnitKilled(state, u);
         }
     });
-};
-
-export const calculateAbilityDamage = (
-    sourceUnit: CombatUnit,
-    targetUnit: CombatUnit,
-    ability: CombatAbility,
-): number => {
-    const damageBeforeBlock = Math.max(
-        Math.ceil(
-            sourceUnit.weaponDamage * ability.weaponDamageMultiplier +
-            sourceUnit.strength * ability.strengthMultiplier -
-            targetUnit.armor,
-        ),
-        0,
-    );
-    if (targetUnit.isBlocking) return Math.max(0, damageBeforeBlock - targetUnit.block);
-    return damageBeforeBlock;
 };
 
 const initialState: CombatState = {
@@ -68,6 +61,7 @@ const initialState: CombatState = {
     rewardCurrency: 0,
     availableRewards: [],
     scriptedText: '',
+    enemyAbilitiesQueue: []
 };
 export const combatSlice = createSlice({
     name: 'combat',
@@ -77,9 +71,10 @@ export const combatSlice = createSlice({
             clearCombatState(state);
             unitsAdapter.addMany(state.units, action.payload.units.map(u => {
                 // TODO: Reset all units mana should be helper function
-                return {...u, mana: 1}
+                return { ...u, mana: 1 }
             }));
             state.isCombatInProgress = true;
+            onBeginPlayerTurn(state);
         },
 
         /**  Combat Defeat: Anything that needs to be hard reset, do it here */
@@ -159,7 +154,7 @@ export const combatSlice = createSlice({
                 case CombatAbilityType.BLOCK:
                     break;
                 default:
-                    const damage = calculateAbilityDamage(source, target, ability);
+                    const damage = calculateAbilityDamage(action.payload, state);
                     if (target.isBlocking) {
                         target.isBlockSuccessful = true;
                         target.lastBlockedUnitId = source.id;
@@ -173,7 +168,7 @@ export const combatSlice = createSlice({
                     target.combatNumbers.push(damage);
             }
             source.mana--;
-            checkDeadEnemies(state);
+            checkDeadUnits(state);
         },
         toggleTaunt: (state, action: PayloadAction<string>) => {
             const unit = state.units.entities[action.payload];
@@ -193,19 +188,46 @@ export const combatSlice = createSlice({
             if (unit && unit.combatNumbers.length > 3) unit?.combatNumbers.splice(0, 1);
         },
         beginPlayerTurn: (state) => {
-            state.isPlayerTurn = true;
-            Object.values(state.units.entities).forEach(u => {
-                if (u && u.isFriendly) u.mana = 1
-            });
+            onBeginPlayerTurn(state);
         },
         beginEnemyTurn: (state) => {
             state.isPlayerTurn = false;
             Object.values(state.units.entities).forEach(u => {
                 if (u && !u.isFriendly) u.mana = 1
             });
+        },
+        removeFromEnemyAbilityQueue: (state, action: PayloadAction<CombatAction>) => {
+            const idx = state.enemyAbilitiesQueue.findIndex(c => c.sourceUnitId === action.payload.sourceUnitId)
+            if (idx > -1)
+                state.enemyAbilitiesQueue.splice(idx, 1);
         }
     },
 });
+
+const onBeginPlayerTurn = (state: CombatState) => {
+    state.isPlayerTurn = true;
+    populateEnemyAbilitiesQueue(state);
+    Object.values(state.units.entities).forEach(u => {
+        if (u && u.isFriendly) u.mana = 1
+    });
+}
+
+const populateEnemyAbilitiesQueue = (state: CombatState) => {
+    const enemies = unitsSelectors.selectAll(state.units)
+        .filter(u => !u.isFriendly && !u.isDead);
+    const friendlyUnitIds = unitsSelectors.selectAll(state.units)
+        .filter(u => u.isFriendly && !u.isDead)
+        .map(u => u.id);
+    state.enemyAbilitiesQueue = enemies.map(u => {
+        const randomAbilityId = u.abilityIds[Math.floor(Math.random() * u.abilityIds.length)]
+        const randomFriendlyUnitId = friendlyUnitIds[Math.floor(Math.random() * friendlyUnitIds.length)]
+        return {
+            sourceUnitId: u.id,
+            targetUnitId: randomFriendlyUnitId,
+            abilityId: randomAbilityId
+        }
+    })
+}
 
 export const {
     updateUnit,
@@ -219,7 +241,8 @@ export const {
     updateUnitWithReward,
     toggleTaunt,
     beginPlayerTurn,
-    beginEnemyTurn
+    beginEnemyTurn,
+    removeFromEnemyAbilityQueue
 } = combatSlice.actions;
 
 export default combatSlice.reducer;

@@ -14,7 +14,6 @@ html {
 .app {
 }
 
-
 .cast-bars-container {
     position: absolute;
     height: 40px;
@@ -126,4 +125,10 @@ p {
 .game-start-screen {
     padding-top: 50px;
     text-align: center;
+}
+
+.combat-number {
+    font-family: "Fjalla One";
+    -webkit-text-stroke: 1px black;
+    font-size: 1.6em;
 }

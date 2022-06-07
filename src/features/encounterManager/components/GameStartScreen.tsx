@@ -1,6 +1,6 @@
 import combatAbilities from '../../combat/abilities/combatAbilities';
 import { useAppDispatch } from '../../../hooks';
-import { initCombatEncounter } from '../../combat/state/combatSlice';
+import { beginPlayerTurn, initCombatEncounter } from '../../combat/state/combatSlice';
 import { getStarterEncounter } from '../encounters';
 import EnemyController from '../enemyController';
 import './gameStartScreen.scss';
@@ -9,6 +9,7 @@ const GameStartScreen = () => {
     const dispatch = useAppDispatch();
     const onBeginCombatClick = () => {
         dispatch(initCombatEncounter(getStarterEncounter()));
+        dispatch(beginPlayerTurn());
         EnemyController.initEnemies();
     };
     return (

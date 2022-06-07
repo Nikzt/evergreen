@@ -4,6 +4,7 @@ import TargetingBox from './TargetingBox';
 import UnitInfo from '../../../common/components/UnitInfo/UnitInfo';
 import CombatUnitActionBar from './ActionBar/CombatUnitActionBar';
 import CombatNumbers from './CombatNumbers/CombatNumbers';
+import EnemyActionPreview from './EnemyActionPreview/EnemyActionPreview';
 
 type CombatUnitProps = {
     unitId: string;
@@ -35,6 +36,8 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
 
             {/* Abilities */}
             <CombatUnitActionBar unitId={unitId} />
+
+            {!unit.isFriendly && <EnemyActionPreview unitId={unitId}/>}
         </div>
     );
 };

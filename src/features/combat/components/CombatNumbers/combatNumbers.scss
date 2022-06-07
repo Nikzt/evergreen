@@ -18,12 +18,9 @@
     }
 
     .combat-number {
-        font-family: "Fjalla One";
         animation: fadeCombatNumber 1s;
         opacity: 0;
         height: 0px;
-        -webkit-text-stroke: 1px black;
-        font-size: 1.6em;
     }
 }
 

@@ -1,0 +1,16 @@
+@import "../../../../common/scss/colors.scss";
+
+.enemy-action-preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+        width: 25px;
+        height: 25px;
+        margin: 5px;
+    }
+    .combat-number {
+        margin-top: 3px;
+        color: $color-damage-physical;
+    }
+}
