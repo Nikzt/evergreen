@@ -27,8 +27,9 @@ const getStarterCharacter = () => [
 
 export const getSecondCharacter = () =>
     createFriendlyUnit({
-        id: 'Tal',
-        name: 'Tal',
+        id: 'Mira',
+        name: 'Mira',
+        icon: unitIcons.mira,
         maxHp: 30,
         abilityIds: [CombatAbilityType.QUICK_ATTACK, CombatAbilityType.BLOCK],
         weaponDamage: 2,
