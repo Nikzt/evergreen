@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '../../../../hooks';
 import KeyHandler from '../../keyHandler';
 import { selectEnemyAbilitiesQueue, selectEnemyUnitIds, selectFriendlyUnitIds, selectTargetLines } from '../../state/combatSelectors';
-import { beginEnemyTurn } from '../../state/combatSlice';
+import { beginEnemyTurn, toggleUnitActionBar } from '../../state/combatSlice';
 import CombatUnitActionBar from '../ActionBar/CombatUnitActionBar';
 import CombatUnit from '../CombatUnit';
 import TargetLine from '../TargetLine';
@@ -14,9 +14,14 @@ const CombatContainer = () => {
     const friendlyUnitIds = useAppSelector(selectFriendlyUnitIds);
     const enemyUnitIds = useAppSelector(selectEnemyUnitIds);
     const enemyAbilitiesQueue = useAppSelector(selectEnemyAbilitiesQueue);
+    const displayedUnitActionBar = useAppSelector((state) => state.combat.displayedUnitActionBar);
 
     const onEndTurnButtonClick = () => {
         dispatch(beginEnemyTurn())
+    }
+
+    const onCancelAbilityClick = () => {
+        dispatch(toggleUnitActionBar(null));
     }
 
     KeyHandler.init();
@@ -35,6 +40,8 @@ const CombatContainer = () => {
                         <TargetLine key={combatAction.sourceUnitId} sourceUnitId={combatAction.sourceUnitId} targetUnitId={combatAction.targetUnitId} isFriendlySource={false} isBlocking={false} />)}
                 </svg>
             </div>
+            {displayedUnitActionBar != null && <div className="cancel-ability-overlay"
+                onClick={() => onCancelAbilityClick()}></div>}
             {/* Enemy units */}
             <div className="units-row enemy-units-row">
                 {enemyUnitIds.map((unitId) => (

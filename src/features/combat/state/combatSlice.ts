@@ -73,8 +73,7 @@ export const combatSlice = createSlice({
         initCombatEncounter: (state, action: PayloadAction<CombatEncounter>) => {
             clearCombatState(state);
             unitsAdapter.addMany(state.units, action.payload.units.map(u => {
-                // TODO: Reset all units mana should be helper function
-                return { ...u, mana: u.maxMana }
+                return {...u};
             }));
             state.isCombatInProgress = true;
             onBeginPlayerTurn(state);
@@ -154,6 +153,8 @@ export const combatSlice = createSlice({
             target.hp -= damage;
             target.combatNumbers.push(damage);
             source.mana -= ability.manaCost;
+
+            state.displayedUnitActionBar = null;
             checkDeadUnits(state);
         },
         performBlock: (state, action: PayloadAction<CombatAction>) => {
@@ -180,6 +181,7 @@ export const combatSlice = createSlice({
             source.combatNumbers.push(damageAfterBlock);
             source.mana -= ability.manaCost;
 
+            state.displayedUnitActionBar = null;
             // Remove blocked ability from enemyAbilitiesQueue
             state.enemyAbilitiesQueue = state.enemyAbilitiesQueue.filter(a => a.sourceUnitId !== action.payload.targetUnitId);
 
@@ -215,7 +217,14 @@ export const combatSlice = createSlice({
             if (idx > -1)
                 state.enemyAbilitiesQueue.splice(idx, 1);
         },
-        toggleUnitActionBar: (state, action: PayloadAction<string>) => {
+        toggleUnitActionBar: (state, action: PayloadAction<string | null>) => {
+            if (action.payload == null) {
+                state.displayedUnitActionBar = null;
+                state.isTargeting = false;
+                state.targetingAbilityId = null;
+                return;
+            }
+
             const unit = state.units.entities[action.payload];
 
             // toggle off cases

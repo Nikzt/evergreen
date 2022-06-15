@@ -13,7 +13,7 @@
     margin-top: 5px;
     background-color: $color-secondary;
     border: 1px solid $color-secondary-v1;
-    bottom: 70px;
+    bottom: 20vh;
     z-index: 1000;
 
     position: absolute;
@@ -23,7 +23,6 @@
     right: 0;
 
     &.is-targeting {
-        bottom: 26%;
     }
 
     button {

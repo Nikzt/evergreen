@@ -15,7 +15,7 @@ const CombatUnitActionBar = () => {
     const targetingAbility = useMemo(() => targetingAbilityId != null
         ? getAbility(targetingAbilityId)
         : null, [targetingAbilityId]);
-    const targetingAbilityDescription = useMemo(() => { 
+    const targetingAbilityDescription = useMemo(() => {
         if (targetingAbility != null && unit != null) {
             return getAbilityDescription(unit, targetingAbility);
         }
