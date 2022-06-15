@@ -15,4 +15,17 @@
     .unit--content {
         height: 100%;
     }
+
+    .anchor-point {
+        position: absolute;
+        width: 0;
+        left: 50%;
+    }
+
+    &.friendly .anchor-point {
+        top: 0;
+    }
+    &.enemy .anchor-point {
+        bottom: 0;
+    }
 }

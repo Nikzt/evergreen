@@ -38,6 +38,8 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
             <CombatUnitActionBar unitId={unitId} />
 
             {!unit.isFriendly && <EnemyActionPreview unitId={unitId}/>}
+
+            <div id={unit.id + '-anchor-point'} className="anchor-point"></div>
         </div>
     );
 };

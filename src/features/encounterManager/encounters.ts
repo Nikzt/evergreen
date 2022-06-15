@@ -11,7 +11,7 @@ export type CombatEncounter = {
 
 const getStarterCharacter = () => [
     createFriendlyUnit({
-        id: 'Greg',
+        id: 'greg',
         name: 'Greg',
         icon: unitIcons.greg,
         maxHp: 30,
@@ -27,7 +27,7 @@ const getStarterCharacter = () => [
 
 export const getSecondCharacter = () =>
     createFriendlyUnit({
-        id: 'Mira',
+        id: 'mira',
         name: 'Mira',
         icon: unitIcons.mira,
         maxHp: 30,

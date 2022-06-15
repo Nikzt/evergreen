@@ -83,5 +83,9 @@ export const selectLivingUnits = (state: RootState) => {
     return unitsSelectors.selectAll(state.combat.units).filter(u => !u.isDead);
 }
 
+export const selectEnemyAbilitiesQueue = (state: RootState) => {
+    return state.combat.enemyAbilitiesQueue;
+}
+
 export const selectNextEnemyAbility = (unitId: string) => (state: RootState) =>
     state.combat.enemyAbilitiesQueue.find(a => a.sourceUnitId === unitId);
