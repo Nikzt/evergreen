@@ -21,6 +21,7 @@ const clearCombatState = (state: CombatState) => {
     state.isCombatVictorious = false;
     state.isPlayerTurn = true;
     state.enemyAbilitiesQueue = [];
+    state.displayedUnitActionBar = null;
 };
 
 const removeAbilitiesWithSourceUnitId = (state: CombatState, sourceUnitId: string) => {
@@ -61,7 +62,8 @@ const initialState: CombatState = {
     rewardCurrency: 0,
     availableRewards: [],
     scriptedText: '',
-    enemyAbilitiesQueue: []
+    enemyAbilitiesQueue: [],
+    displayedUnitActionBar: null
 };
 export const combatSlice = createSlice({
     name: 'combat',
@@ -198,6 +200,16 @@ export const combatSlice = createSlice({
             const idx = state.enemyAbilitiesQueue.findIndex(c => c.sourceUnitId === action.payload.sourceUnitId)
             if (idx > -1)
                 state.enemyAbilitiesQueue.splice(idx, 1);
+        },
+        toggleUnitActionBar: (state, action: PayloadAction<string>) => {
+            const unit = state.units.entities[action.payload];
+
+            // toggle off cases
+            if (!unit || !unit.isFriendly || unit.id === state.displayedUnitActionBar)
+                state.displayedUnitActionBar = null;
+            // toggle on cases
+            else
+                state.displayedUnitActionBar = unit.id;
         }
     },
 });
@@ -255,7 +267,8 @@ export const {
     toggleTaunt,
     beginPlayerTurn,
     beginEnemyTurn,
-    removeFromEnemyAbilityQueue
+    removeFromEnemyAbilityQueue,
+    toggleUnitActionBar
 } = combatSlice.actions;
 
 export default combatSlice.reducer;

@@ -1,15 +1,23 @@
-import { useAppSelector } from '../../../../hooks';
+import { useAppDispatch, useAppSelector } from '../../../../hooks';
 import KeyHandler from '../../keyHandler';
 import { selectEnemyAbilitiesQueue, selectEnemyUnitIds, selectFriendlyUnitIds, selectTargetLines } from '../../state/combatSelectors';
+import { beginEnemyTurn } from '../../state/combatSlice';
+import CombatUnitActionBar from '../ActionBar/CombatUnitActionBar';
 import CombatUnit from '../CombatUnit';
 import TargetLine from '../TargetLine';
 
 import './combatContainer.scss';
 
 const CombatContainer = () => {
+    const dispatch = useAppDispatch();
+    const isPlayerTurn = useAppSelector((state) => state.combat.isPlayerTurn)
     const friendlyUnitIds = useAppSelector(selectFriendlyUnitIds);
     const enemyUnitIds = useAppSelector(selectEnemyUnitIds);
     const enemyAbilitiesQueue = useAppSelector(selectEnemyAbilitiesQueue);
+
+    const onEndTurnButtonClick = () => {
+        dispatch(beginEnemyTurn())
+    }
 
     KeyHandler.init();
 
@@ -39,6 +47,13 @@ const CombatContainer = () => {
                     <CombatUnit key={unitId} isFriendly={true} unitId={unitId} />
                 ))}
             </div>
+            {/* Abilities */}
+            <CombatUnitActionBar />
+
+            <button onClick={() => onEndTurnButtonClick()}
+                className="end-turn-button"
+                disabled={!isPlayerTurn}
+                >End Turn</button>
         </div>
     );
 };

@@ -5,11 +5,8 @@ import { selectCanUseSpecificAbility, selectFriendlyUnitIndexes } from '../../st
 import './combatUnitActionBar.scss';
 import { handleAbility } from '../../abilities/abilityHandler';
 
-type CombatUnitActionBarProps = {
-    unitId: string;
-};
-
-const CombatUnitActionBar = ({ unitId }: CombatUnitActionBarProps) => {
+const CombatUnitActionBar = () => {
+    const unitId = useAppSelector((state) => state.combat.displayedUnitActionBar);
     const unit = useSelectCombatUnit(unitId);
     const isTargeting = useAppSelector((state) => state.combat.isTargeting);
     const targetingAbilityId = useAppSelector((state) => state.combat.targetingAbilityId);

@@ -58,6 +58,7 @@ export type CombatState = {
     isCombatVictorious: boolean;
     isCombatFailed: boolean;
     isPlayerTurn: boolean;
+    displayedUnitActionBar: string | null;
 
     /** Order of list is the order in which the enemies will perform their actions */
     enemyAbilitiesQueue: CombatAction[];
