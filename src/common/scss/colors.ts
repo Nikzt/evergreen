@@ -10,6 +10,7 @@ const colors = {
     targeting: "#c7080880",
     damagePhysical: "#e66d64",
     blocking: "#0da9e7",
+    mana: "#607eeb"
 }
 
 export default colors;

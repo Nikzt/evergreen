@@ -1,6 +1,7 @@
 import unitIcons from '../../../assets/unitIcons/unitIcons';
 import CombatNumbers from '../../../features/combat/components/CombatNumbers/CombatNumbers';
-import HpBar from '../../../features/combat/components/HpBar';
+import HpBar from '../../../features/combat/components/HpBar/HpBar';
+import ManaBar from '../../../features/combat/components/ManaBar/ManaBar';
 import { useSelectCombatUnit } from '../../../hooks';
 import './unitInfo.scss';
 
@@ -25,6 +26,7 @@ const UnitInfo = ({ unitId }: UnitInfoProps) => {
             </div>
             <div className="unit-info--details">
                 <HpBar hp={unit.hp} maxHp={unit.maxHp} isFriendly={unit.isFriendly} />
+                <ManaBar mana={unit.mana} maxMana={unit.maxMana} />
             </div>
         </div>
     );

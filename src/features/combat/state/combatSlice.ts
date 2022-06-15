@@ -71,7 +71,7 @@ export const combatSlice = createSlice({
             clearCombatState(state);
             unitsAdapter.addMany(state.units, action.payload.units.map(u => {
                 // TODO: Reset all units mana should be helper function
-                return { ...u, mana: 1 }
+                return { ...u, mana: u.maxMana }
             }));
             state.isCombatInProgress = true;
             onBeginPlayerTurn(state);
@@ -192,9 +192,7 @@ export const combatSlice = createSlice({
         },
         beginEnemyTurn: (state) => {
             state.isPlayerTurn = false;
-            Object.values(state.units.entities).forEach(u => {
-                if (u && !u.isFriendly) u.mana = 1
-            });
+            regenerateEnemyUnitsMana(state);
         },
         removeFromEnemyAbilityQueue: (state, action: PayloadAction<CombatAction>) => {
             const idx = state.enemyAbilitiesQueue.findIndex(c => c.sourceUnitId === action.payload.sourceUnitId)
@@ -204,12 +202,27 @@ export const combatSlice = createSlice({
     },
 });
 
+const regenerateFriendlyUnitsMana = (state: CombatState) => {
+    Object.values(state.units.entities)
+        .filter(u => u?.isFriendly)
+        .forEach(u => u && regenerateUnitMana(u))
+}
+
+const regenerateEnemyUnitsMana = (state: CombatState) => {
+    Object.values(state.units.entities)
+        .filter(u => !u?.isFriendly)
+        .forEach(u => u && regenerateUnitMana(u))
+}
+
+const regenerateUnitMana = (unit: CombatUnit) => {
+    if (unit.mana < unit.maxMana)
+        unit.mana++;
+}
+
 const onBeginPlayerTurn = (state: CombatState) => {
     state.isPlayerTurn = true;
     populateEnemyAbilitiesQueue(state);
-    Object.values(state.units.entities).forEach(u => {
-        if (u && u.isFriendly) u.mana = 1
-    });
+    regenerateFriendlyUnitsMana(state);
 }
 
 const populateEnemyAbilitiesQueue = (state: CombatState) => {

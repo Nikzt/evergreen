@@ -1,4 +1,4 @@
-import CombatContainer from './features/combat/components/CombatContainer';
+import CombatContainer from './features/combat/components/CombatContainer/CombatContainer';
 import './reset.css';
 import './app.scss';
 import { RootState } from './store';

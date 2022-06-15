@@ -2,7 +2,7 @@ import combatAbilities from '../../combat/abilities/combatAbilities';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { store } from '../../../store';
 import { initCombatEncounter, updateUnitWithReward } from '../../combat/state/combatSlice';
-import HpBar from '../../combat/components/HpBar';
+import HpBar from '../../combat/components/HpBar/HpBar';
 import { randomEncounterGenerator } from '../encounters';
 import EnemyController from '../enemyController';
 import { Reward } from '../rewards';

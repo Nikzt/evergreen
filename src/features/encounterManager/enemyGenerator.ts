@@ -18,6 +18,7 @@ export const enemyTemplates = {
         strength: 1,
         armor: 0,
         block: 0,
+        maxMana: 1
     }),
     [EnemyTemplateEnum.FOREST_FIEND]: createEnemyUnit({
         name: 'Forest Fiend',
@@ -27,6 +28,7 @@ export const enemyTemplates = {
         strength: 3,
         armor: 0,
         block: 2,
+        maxMana: 1
     }),
     [EnemyTemplateEnum.FOREST_PROTECTOR]: createEnemyUnit({
         name: 'Forest Protector',
@@ -36,7 +38,8 @@ export const enemyTemplates = {
         strength: 3,
         armor: 0,
         block: 3,
-        isTaunting: true
+        isTaunting: true,
+        maxMana: 1
     }),
     [EnemyTemplateEnum.WOOD_GIANT]: createEnemyUnit({
         name: 'Wood Giant',
@@ -46,6 +49,7 @@ export const enemyTemplates = {
         strength: 4,
         armor: 0,
         block: 0,
+        maxMana: 1
     }),
 };
 

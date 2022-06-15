@@ -26,6 +26,7 @@
         top: 0;
     }
     &.enemy .anchor-point {
-        bottom: 0;
+        bottom: 15px;
+        left: calc(50% - 5px);
     }
 }

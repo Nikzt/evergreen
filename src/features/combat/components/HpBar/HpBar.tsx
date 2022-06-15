@@ -1,5 +1,5 @@
 import ProgressBar from '@ramonak/react-progress-bar';
-import colors from '../../../common/scss/colors';
+import colors from '../../../../common/scss/colors';
 
 type HpBarProps = {
     hp: number;

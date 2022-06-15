@@ -44,6 +44,7 @@ export type CombatUnit = {
     //Stats / Loadout
     abilityIds: CombatAbilityType[];
     maxHp: number;
+    maxMana: number;
     weaponDamage: number;
     strength: number;
     armor: number;
