@@ -20,6 +20,7 @@ const TargetLine = ({ sourceUnitId, targetUnitId, isFriendlySource, isBlocking }
     }
 
     const calculateLineCoordinates = () => {
+        console.count();
         if (!sourceUnitId || !targetUnitId) return;
 
         const sourceUnitAnchorPoint = getCoordinatesOfUnitAnchorPoint(sourceUnitId);
@@ -37,17 +38,8 @@ const TargetLine = ({ sourceUnitId, targetUnitId, isFriendlySource, isBlocking }
             lineColor: '#f8ca65aa',
         }
     }
-    const [lineProps, setLineProps] = useState(calculateLineCoordinates());
 
-    const handleResize = useDebouncedCallback(() => setLineProps(calculateLineCoordinates()), 500);
-    window.addEventListener('resize', () => {
-        handleResize();
-    });
-
-    // Delayed initializetion of lineProps to ensure that the line is drawn after the unit is rendered
-    setTimeout(() => {
-        setLineProps(calculateLineCoordinates());
-    }, 0);
+    const lineProps = calculateLineCoordinates();
 
     if (!lineProps) return <></>;
 

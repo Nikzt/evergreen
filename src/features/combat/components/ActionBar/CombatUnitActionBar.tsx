@@ -12,15 +12,8 @@ const CombatUnitActionBar = () => {
     const unit = useSelectCombatUnit(unitId);
     const isTargeting = useAppSelector((state) => state.combat.isTargeting);
     const targetingAbilityId = useAppSelector((state) => state.combat.targetingAbilityId);
-    const targetingAbility = useMemo(() => targetingAbilityId != null
-        ? getAbility(targetingAbilityId)
-        : null, [targetingAbilityId]);
-    const targetingAbilityDescription = useMemo(() => {
-        if (targetingAbility != null && unit != null) {
-            return getAbilityDescription(unit, targetingAbility);
-        }
-    }, [targetingAbility, unit])
     const unitIndex = useAppSelector(selectFriendlyUnitIndexes).find(u => u.unitId === unitId)?.idx;
+
 
     const unitAbilities = useAppSelector((state) => {
         if (!unit?.abilityIds || unitIndex == null) return [];
@@ -43,6 +36,9 @@ const CombatUnitActionBar = () => {
     }
 
     if (!unit || !unit.isFriendly) return <></>;
+
+    const targetingAbility = targetingAbilityId != null ? getAbility(targetingAbilityId) : null;
+    const targetingAbilityDescription = targetingAbility ? getAbilityDescription(unit, targetingAbility): null;
 
     return (
         <div className={`unit-abilities ${isTargeting ? " is-targeting" : ""}`}>
