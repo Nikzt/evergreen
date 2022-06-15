@@ -95,7 +95,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         strengthMultiplier: 2,
         targetType: CombatTargetType.ENEMY,
         label: 'Revenge',
-        description: 'Deal [DIRECT_DAMAGE] damage to target enemy unit. Only usable if target has taken damage in the previous turn',
+        description: 'Deal damage to all targets equal to the amount of damage [SOURCE_UNIT_NAME] has blocked this combat ([DIRECT_DAMAGE])',
         isTargetRequired: false,
         manaCost: 1
     },

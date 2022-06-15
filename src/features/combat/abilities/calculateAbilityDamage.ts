@@ -1,6 +1,6 @@
 import { CombatAction, CombatState, CombatUnit } from "../state/combatModels";
 import { store } from "../../../store";
-import combatAbilities, { CombatAbility } from "./combatAbilities";
+import combatAbilities, { CombatAbility, CombatAbilityType } from "./combatAbilities";
 
 const calculateAbilityDamage = (combatAction: CombatAction, state?: CombatState) => {
     if (!state) 
@@ -24,6 +24,9 @@ const calculateAbilityDamage = (combatAction: CombatAction, state?: CombatState)
 }
 
 export const calculateRawDamage = (sourceUnit: CombatUnit, ability: CombatAbility) => {
+    if (ability.id === CombatAbilityType.REVENGE)
+        return sourceUnit.blockedDamageThisCombat;
+
     const rawDamage = ability.weaponDamageMultiplier * sourceUnit.weaponDamage
         + ability.strengthMultiplier * sourceUnit.strength;
     return Math.floor(rawDamage);

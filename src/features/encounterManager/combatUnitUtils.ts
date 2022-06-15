@@ -15,7 +15,9 @@ const getDefaultUnitProps = (maxHp: number) => {
         castingAbility: null,
         blockDuration: 1,
         isBlockSuccessful: false,
-        mana: 1
+        mana: 1,
+        blockedDamageThisCombat: 0,
+        revengeCharges: 1
     };
 };
 

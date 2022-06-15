@@ -51,7 +51,7 @@ export const selectCanUseSpecificAbility = (unitId: string, abilityType: CombatA
         return false;
     switch (abilityType) {
         case CombatAbilityType.REVENGE:
-            return !!unit?.isRevengeEnabled;
+            return unit.blockedDamageThisCombat > 0 && unit.revengeCharges > 0;
     }
 
     return selectCanUseAnyAbilities(unitId)(state);

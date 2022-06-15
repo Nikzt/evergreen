@@ -22,17 +22,9 @@ export const rewards: { [key: number]: Reward } = {
     [RewardType.HEAL]: {
         type: RewardType.HEAL,
         label: '+10 HP',
-        cost: 5,
-        update: {
-            hp: 10,
-        },
-    },
-    [RewardType.MAX_HP]: {
-        type: RewardType.MAX_HP,
-        label: '+2 Max HP',
         cost: 2,
         update: {
-            maxHp: 5,
+            hp: 10,
         },
     },
     [RewardType.STRENGTH]: {
@@ -41,14 +33,6 @@ export const rewards: { [key: number]: Reward } = {
         cost: 2,
         update: {
             strength: 2,
-        },
-    },
-    [RewardType.WEAPON_DAMAGE]: {
-        type: RewardType.WEAPON_DAMAGE,
-        label: '+3 Weapon Damage',
-        cost: 5,
-        update: {
-            weaponDamage: 3,
         },
     },
     [RewardType.ARMOR]: {
@@ -65,12 +49,5 @@ export const rewardsList = Object.values(rewards);
 
 export const getRandomRewards = (numRewards: number) => {
     const rewardsListCopy = [...rewardsList];
-    const randomRewards = [];
-    while (numRewards > 0) {
-        const randomRewardIdx = Math.floor(Math.random() * rewardsListCopy.length);
-        randomRewards.push(rewardsListCopy[randomRewardIdx]);
-        rewardsListCopy.splice(randomRewardIdx, 1);
-        numRewards--;
-    }
-    return randomRewards;
+    return rewardsListCopy;
 };

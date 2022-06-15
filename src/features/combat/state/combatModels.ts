@@ -27,6 +27,8 @@ export type CombatUnit = {
     mana: number;
 
     // Block state
+    blockedDamageThisCombat: number;
+    revengeCharges: number;
     blockedBy: string | null;
     isBlocking: boolean;
     blockingProgress: number;

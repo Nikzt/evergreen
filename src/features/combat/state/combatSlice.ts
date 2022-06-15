@@ -73,7 +73,7 @@ export const combatSlice = createSlice({
         initCombatEncounter: (state, action: PayloadAction<CombatEncounter>) => {
             clearCombatState(state);
             unitsAdapter.addMany(state.units, action.payload.units.map(u => {
-                return {...u};
+                return { ...u, revengeCharges: 1, blockedDamageThisCombat: 0 };
             }));
             state.isCombatInProgress = true;
             onBeginPlayerTurn(state);
@@ -157,6 +157,31 @@ export const combatSlice = createSlice({
             state.displayedUnitActionBar = null;
             checkDeadUnits(state);
         },
+        performRevenge: (state, action: PayloadAction<CombatAction>) => {
+            if (!action?.payload) return;
+            const source = state.units.entities[action.payload.sourceUnitId];
+            // All living other targets
+            const targets = Object.values(state.units.entities).filter(u => u?.isFriendly !== source?.isFriendly && !u?.isDead)
+            const ability = combatAbilities[action.payload.abilityId];
+            // TODO: Turn this into helper function
+            if (targets.length <= 0 || !ability || !source || source.isDead || source.mana < ability.manaCost || source.revengeCharges < 1) return;
+
+            source.targetUnitId = null;
+
+            // Basic damaging ability
+            const damage = source.blockedDamageThisCombat;
+            targets.forEach(target => {
+                if (target) {
+                    target.hp -= damage;
+                    target.combatNumbers.push(damage);
+                }
+            })
+            source.mana -= ability.manaCost;
+            source.revengeCharges--;
+
+            state.displayedUnitActionBar = null;
+            checkDeadUnits(state);
+        },
         performBlock: (state, action: PayloadAction<CombatAction>) => {
             if (!action?.payload) return;
             const source = state.units.entities[action.payload.sourceUnitId];
@@ -176,7 +201,10 @@ export const combatSlice = createSlice({
             // The damage the enemy would do if they hadn't been blocked
             const enemyDamageBeforeBlock = calculateRawDamage(target, enemyAbility)
 
-            const damageAfterBlock = Math.max(0, Math.round(enemyDamageBeforeBlock - (enemyDamageBeforeBlock * (source.blockPercent / 100))));
+            const blockedDamage = Math.ceil(enemyDamageBeforeBlock * (source.blockPercent / 100));
+            const damageAfterBlock = Math.max(0, enemyDamageBeforeBlock - blockedDamage);
+
+            source.blockedDamageThisCombat += blockedDamage;
             source.hp -= damageAfterBlock;
             source.combatNumbers.push(damageAfterBlock);
             source.mana -= ability.manaCost;
@@ -255,9 +283,9 @@ const regenerateUnitMana = (unit: CombatUnit) => {
 }
 
 const onBeginPlayerTurn = (state: CombatState) => {
+    populateEnemyAbilitiesQueue(state);
     state.isPlayerTurn = true;
     state.displayedUnitActionBar = null;
-    populateEnemyAbilitiesQueue(state);
     regenerateFriendlyUnitsMana(state);
 }
 
@@ -293,7 +321,8 @@ export const {
     beginEnemyTurn,
     removeFromEnemyAbilityQueue,
     toggleUnitActionBar,
-    performBlock
+    performBlock,
+    performRevenge
 } = combatSlice.actions;
 
 export default combatSlice.reducer;

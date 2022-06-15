@@ -60,15 +60,6 @@ const UnitManagerScreen = () => {
                         <ul>
                             <li>Strength: {u.strength}</li>
                             <li>Armor: {u.armor}</li>
-                            <li>Block: {u.block}</li>
-                            <li>Weapon Damage: {u.weaponDamage}</li>
-                        </ul>
-
-                        <h3>Abilities</h3>
-                        <ul>
-                            {u.abilityIds.map((aid) => (
-                                <li key={aid}>{combatAbilities[aid].name}</li>
-                            ))}
                         </ul>
 
                         <div className="rewards-container">

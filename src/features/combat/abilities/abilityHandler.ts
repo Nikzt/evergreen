@@ -2,19 +2,11 @@ import { CombatAbilityType, getAbility } from "./combatAbilities";
 import { RootState, store } from "../../../store";
 import { CombatAction } from "../state/combatModels";
 import { selectCanUseAnyAbilities, selectUnit } from "../state/combatSelectors";
-import { beginTargetingAbility, endTargetingAbility, performBlock, performCombatAction } from "../state/combatSlice";
+import { beginTargetingAbility, endTargetingAbility, performBlock, performCombatAction, performRevenge } from "../state/combatSlice";
 import checkEndCombat, { checkEndTurn } from "../checkEndCombat";
 
 export const handleAbility = (combatAction: CombatAction) => {
-    const ability = getAbility(combatAction.abilityId);
-
-    // Player selects targeted ability
-    if (selectUnit(combatAction.sourceUnitId)(store.getState())?.isFriendly && ability.isTargetRequired)
-        store.dispatch(beginTargetingAbility(combatAction));
-    // Otherwise ability's effects are invoked immediately
-    else
-        useAbility(combatAction);
-
+    store.dispatch(beginTargetingAbility(combatAction));
 }
 
 export const targetAbility = (targetUnitId: string) => {
@@ -43,6 +35,8 @@ export const useAbility = (combatAction: CombatAction) => {
     // Handle non-targeted abilities (eg. revenge)
     if (combatAction.abilityId === CombatAbilityType.BLOCK) {
         store.dispatch(performBlock(combatAction));
+    } else if (combatAction.abilityId === CombatAbilityType.REVENGE) {
+        store.dispatch(performRevenge(combatAction));
     } else {
         store.dispatch(performCombatAction(combatAction));
     }
