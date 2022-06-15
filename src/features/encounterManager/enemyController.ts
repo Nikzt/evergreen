@@ -1,5 +1,6 @@
 import { store } from '../../store';
 import { useAbility } from '../combat/abilities/abilityHandler';
+import { checkEndTurn } from '../combat/checkEndCombat';
 import { CombatUnit } from '../combat/state/combatModels';
 import {
     selectCanUseAnyAbilities,
@@ -21,6 +22,10 @@ class EnemyController {
         EnemyController.enemies.forEach((e) => e.beginCombat());
     }
 
+    static canEnemiesUseAnyAbilities() {
+        return EnemyController.enemies.some((e) => selectCanUseAnyAbilities(e.unitId)(store.getState()));
+    }
+
     constructor(unit: CombatUnit, idx: number) {
         this.unitId = unit.id;
         this.combatInterval = null;
@@ -38,6 +43,8 @@ class EnemyController {
             EnemyController.killEnemy(this.unitId);
             return;
         }
+
+        checkEndTurn();
 
         if (!selectCanUseAnyAbilities(this.unitId)(state)) return;
 

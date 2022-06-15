@@ -1,6 +1,6 @@
-import { CombatAction, CombatState } from "../state/combatModels";
+import { CombatAction, CombatState, CombatUnit } from "../state/combatModels";
 import { store } from "../../../store";
-import combatAbilities from "./combatAbilities";
+import combatAbilities, { CombatAbility } from "./combatAbilities";
 
 const calculateAbilityDamage = (combatAction: CombatAction, state?: CombatState) => {
     if (!state) 
@@ -12,17 +12,21 @@ const calculateAbilityDamage = (combatAction: CombatAction, state?: CombatState)
 
     if (!sourceUnit || !targetUnit || !ability) return 0;
 
-    const rawDamage = ability.weaponDamageMultiplier * sourceUnit.weaponDamage
-        + ability.strengthMultiplier * sourceUnit.strength;
-
-    const damageAfterArmor = rawDamage - targetUnit.armor;
-
+    const rawDamage = calculateRawDamage(sourceUnit, ability);
+    // TODO: No armor yet
+    const damageAfterArmor = rawDamage;
     const damageAfterBlock = targetUnit.isBlocking
         ? damageAfterArmor - targetUnit.block
         : damageAfterArmor;
 
     const damage = Math.floor(damageAfterBlock > 0 ? damageAfterBlock : 0);
     return damage;
+}
+
+export const calculateRawDamage = (sourceUnit: CombatUnit, ability: CombatAbility) => {
+    const rawDamage = ability.weaponDamageMultiplier * sourceUnit.weaponDamage
+        + ability.strengthMultiplier * sourceUnit.strength;
+    return Math.floor(rawDamage);
 }
 
 export default calculateAbilityDamage;

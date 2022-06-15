@@ -9,6 +9,10 @@
     &.blocking {
     }
 
+    &.selected-unit .unit-info{
+        border: 1px solid $color-highlight;
+    }
+
     &.dead .unit-name {
         text-decoration: line-through;
     }

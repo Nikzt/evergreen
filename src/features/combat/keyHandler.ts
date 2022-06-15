@@ -77,7 +77,6 @@ class KeyHandler {
         document.addEventListener(
             'keydown',
             (event) => {
-                event.preventDefault();
                 handleKeyPress(event.key);
             },
             false,

@@ -1,4 +1,4 @@
-import combatAbilities, { CombatAbility, CombatAbilityType } from '../abilities/combatAbilities';
+import combatAbilities, { CombatAbility, CombatAbilityType, getAbility } from '../abilities/combatAbilities';
 import { RootState } from '../../../store';
 import { CombatUnit, unitsAdapter } from './combatModels';
 
@@ -37,12 +37,18 @@ export const selectUnit = (unitId: string) => (state: RootState) =>
 export const selectUnitCastProgress = (unitId: string) => (state: RootState) => selectUnit(unitId)(state)?.castProgress;
 export const selectCanUseAnyAbilities = (unitId: string) => (state: RootState) => {
     const unit = selectUnit(unitId)(state);
+    // Enemies can only use abilities in their queue
+    if (!unit?.isFriendly && !state.combat.enemyAbilitiesQueue.some(a => a.sourceUnitId === unitId)) {
+        return false;
+    }
     return unit && !unit.isCasting && !unit.isRecovering && !unit.isBlocking && !unit.isDead && unit.mana > 0;
 };
 
 export const selectCanUseSpecificAbility = (unitId: string, abilityType: CombatAbilityType) => (state: RootState) => {
     const unit = selectUnit(unitId)(state);
-    if (unit?.isRecovering) return false;
+    const ability = getAbility(abilityType);
+    if (!unit || unit.mana < ability.manaCost)
+        return false;
     switch (abilityType) {
         case CombatAbilityType.REVENGE:
             return !!unit?.isRevengeEnabled;

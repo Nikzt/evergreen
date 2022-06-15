@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction, Update } from '@reduxjs/toolkit';
-import combatAbilities, { CombatAbility, CombatAbilityType } from '../abilities/combatAbilities';
+import combatAbilities, { CombatAbility, CombatAbilityType, getAbility } from '../abilities/combatAbilities';
 import { CombatEncounter } from '../../encounterManager/encounters';
 import { getRandomRewards } from '../../encounterManager/rewards';
 import { getScriptedRewards } from '../../encounterManager/scriptedRewards';
 import { CombatAction, CombatState, CombatUnit, RewardUpdate, unitsAdapter } from './combatModels';
 import { unitsSelectors } from './combatSelectors';
-import calculateAbilityDamage from '../abilities/calculateAbilityDamage';
+import calculateAbilityDamage, { calculateRawDamage } from '../abilities/calculateAbilityDamage';
+import abilityIcons from '../../../assets/abilityIcons/abilityIcons';
 
 /**
  * Clears everything that shouldn't carry over to next combat
@@ -144,32 +145,44 @@ export const combatSlice = createSlice({
             const target = state.units.entities[action.payload.targetUnitId];
             const ability = combatAbilities[action.payload.abilityId];
             // TODO: Turn this into helper function
-            if (!target || !ability || !source || source.isDead || source.mana <= 0) return;
+            if (!target || !ability || !source || source.isDead || source.mana < ability.manaCost) return;
 
-            source.isCasting = false;
-            source.castingAbility = null;
-            source.castProgress = 0;
             source.targetUnitId = null;
 
-            // Damage ability
-            switch (ability.id) {
-                case CombatAbilityType.BLOCK:
-                    break;
-                default:
-                    const damage = calculateAbilityDamage(action.payload, state);
-                    if (target.isBlocking) {
-                        target.isBlockSuccessful = true;
-                        target.lastBlockedUnitId = source.id;
-                        target.isBlocking = false;
-                        target.blockingProgress = 0;
-                        target.isRecovering = false;
-                        target.isRevengeEnabled = true;
-                        console.log("target blocked my attack");
-                    }
-                    target.hp -= damage;
-                    target.combatNumbers.push(damage);
-            }
-            source.mana--;
+            // Basic damaging ability
+            const damage = calculateAbilityDamage(action.payload, state);
+            target.hp -= damage;
+            target.combatNumbers.push(damage);
+            source.mana -= ability.manaCost;
+            checkDeadUnits(state);
+        },
+        performBlock: (state, action: PayloadAction<CombatAction>) => {
+            if (!action?.payload) return;
+            const source = state.units.entities[action.payload.sourceUnitId];
+            const target = state.units.entities[action.payload.targetUnitId];
+            const ability = combatAbilities[action.payload.abilityId];
+            const enemyAbilityId = state.enemyAbilitiesQueue.find(a => a.sourceUnitId === action.payload.targetUnitId)?.abilityId;
+
+            if (enemyAbilityId == null) return;
+
+            const enemyAbility = getAbility(enemyAbilityId);
+
+            // TODO: Turn this into helper function
+            if (!target || !ability || !source || !enemyAbility || source.isDead || source.mana < ability.manaCost) return;
+
+            source.targetUnitId = null;
+
+            // The damage the enemy would do if they hadn't been blocked
+            const enemyDamageBeforeBlock = calculateRawDamage(target, enemyAbility)
+
+            const damageAfterBlock = Math.max(0, Math.round(enemyDamageBeforeBlock - (enemyDamageBeforeBlock * (source.blockPercent / 100))));
+            source.hp -= damageAfterBlock;
+            source.combatNumbers.push(damageAfterBlock);
+            source.mana -= ability.manaCost;
+
+            // Remove blocked ability from enemyAbilitiesQueue
+            state.enemyAbilitiesQueue = state.enemyAbilitiesQueue.filter(a => a.sourceUnitId !== action.payload.targetUnitId);
+
             checkDeadUnits(state);
         },
         toggleTaunt: (state, action: PayloadAction<string>) => {
@@ -194,6 +207,7 @@ export const combatSlice = createSlice({
         },
         beginEnemyTurn: (state) => {
             state.isPlayerTurn = false;
+            state.displayedUnitActionBar = null;
             regenerateEnemyUnitsMana(state);
         },
         removeFromEnemyAbilityQueue: (state, action: PayloadAction<CombatAction>) => {
@@ -233,6 +247,7 @@ const regenerateUnitMana = (unit: CombatUnit) => {
 
 const onBeginPlayerTurn = (state: CombatState) => {
     state.isPlayerTurn = true;
+    state.displayedUnitActionBar = null;
     populateEnemyAbilitiesQueue(state);
     regenerateFriendlyUnitsMana(state);
 }
@@ -268,7 +283,8 @@ export const {
     beginPlayerTurn,
     beginEnemyTurn,
     removeFromEnemyAbilityQueue,
-    toggleUnitActionBar
+    toggleUnitActionBar,
+    performBlock
 } = combatSlice.actions;
 
 export default combatSlice.reducer;

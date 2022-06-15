@@ -1,4 +1,4 @@
-import { useAppDispatch, useSelectCombatUnit } from '../../../hooks';
+import { useAppDispatch, useAppSelector, useSelectCombatUnit } from '../../../hooks';
 import './combatUnit.scss';
 import TargetingBox from './TargetingBox';
 import UnitInfo from '../../../common/components/UnitInfo/UnitInfo';
@@ -15,6 +15,7 @@ type CombatUnitProps = {
 const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
     const unit = useSelectCombatUnit(unitId);
     const dispatch = useAppDispatch();
+    const displayedUnitActionBar = useAppSelector((state) => state.combat.displayedUnitActionBar);
 
     if (!unit) return <span>Unit with ID {unitId} not found</span>;
 
@@ -29,7 +30,8 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
                 'unit' +
                 (unit.isBlocking ? ' blocking' : '') +
                 (unit.isDead ? ' dead' : '') +
-                (unit.isFriendly ? ' friendly' : ' enemy')
+                (unit.isFriendly ? ' friendly' : ' enemy') + 
+                (displayedUnitActionBar === unit.id ? ' selected-unit' : '')
             }
         >
             <CombatNumbers unitId={unitId} />

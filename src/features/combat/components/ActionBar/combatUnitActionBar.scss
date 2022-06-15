@@ -1,11 +1,19 @@
 @import "../../../../common/scss/colors.scss";
 
+.ability-icon {
+    border-radius: 0;
+    border: 1px solid rgb(46, 46, 46);
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box; /* Firefox, other Gecko */
+    box-sizing: border-box; /* Opera/IE 8+ */
+}
 .unit-abilities {
     width: 200px;
+    height: auto;
     margin-top: 5px;
     background-color: $color-secondary;
     border: 1px solid $color-secondary-v1;
-    bottom: 20px;
+    bottom: 70px;
     z-index: 1000;
 
     position: absolute;
@@ -14,12 +22,17 @@
     left: 0;
     right: 0;
 
+    &.is-targeting {
+        bottom: 26%;
+    }
+
     button {
         width: 100%;
         height: 35px;
         padding: 0;
         background: none;
         position: relative;
+        text-align: left;
         display: grid;
         align-items: center;
         grid-template-columns: 30px auto;
@@ -68,17 +81,38 @@
 
         .ability-label {
             color: $color-text;
+            margin-left: 20px;
         }
     }
 
-    img {
-        border-radius: 0;
-        border: 1px solid rgb(46, 46, 46);
+    .ability-icon {
         float: left;
         height: 31px;
         width: 31px;
-        -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-        -moz-box-sizing: border-box; /* Firefox, other Gecko */
-        box-sizing: border-box; /* Opera/IE 8+ */
+    }
+
+    .ability-details {
+        .ability-header {
+            display: grid;
+            grid-template-columns: 60px auto;
+            align-items: center;
+            .ability-icon {
+                width: 50px;
+                height: 50px;
+                margin: 8px;
+            }
+            .ability-label {
+                margin-left: 10px;
+                font-size: 1.2em;
+            }
+        }
+        .mana-bar {
+            margin-bottom: 20px;
+        }
+        .ability-description {
+            padding-left: 8px;
+            padding-right: 8px;
+            margin-bottom: 20px;
+        }
     }
 }

@@ -1,4 +1,6 @@
 import abilityIcons from "../../../assets/abilityIcons/abilityIcons";
+import { CombatUnit } from "../state/combatModels";
+import { calculateRawDamage } from "./calculateAbilityDamage";
 
 export enum CombatTargetType {
     ENEMY = 0,
@@ -25,13 +27,26 @@ export type CombatAbility = {
     blockValue?: number;
     description: string;
     isTargetRequired: boolean;
+    manaCost: number;
 };
 
 export const getAbility = (abilityType: CombatAbilityType | null): CombatAbility => {
+    console.log(abilityType);
     if (abilityType != null && combatAbilities[abilityType] != null)
         return combatAbilities[abilityType];
     else
         throw new Error();
+}
+
+export const getAbilityDescription = (unit: CombatUnit, ability: CombatAbility) => {
+    // Replace [DIRECT_DAMAGE] with calculated damage
+    const description = ability.description
+        .replace("[DIRECT_DAMAGE]",
+            `${calculateRawDamage(unit, ability)}`)
+        .replace("[BLOCK_PERCENT]", `${unit.blockPercent}%`)
+        .replace("[SOURCE_UNIT_NAME]", `${unit.name}`);
+
+    return description;
 }
 
 const combatAbilities: { [abilityType: number]: CombatAbility } = {
@@ -43,8 +58,9 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         strengthMultiplier: 1,
         targetType: CombatTargetType.ENEMY,
         label: 'Quick Attack',
-        description: 'Quickly deal a moderate amount of damage to the target this turn.',
+        description: 'Deal [DIRECT_DAMAGE] damage to target enemy unit',
         isTargetRequired: true,
+        manaCost: 1
     },
     [CombatAbilityType.STRONG_ATTACK]: {
         id: CombatAbilityType.STRONG_ATTACK,
@@ -54,8 +70,9 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         strengthMultiplier: 3,
         targetType: CombatTargetType.ENEMY,
         label: 'Strong Attack',
-        description: 'Deal a high amount of damage to the target on this unit\'s next turn.',
+        description: 'Deal [DIRECT_DAMAGE] damage to target enemy unit',
         isTargetRequired: true,
+        manaCost: 2
     },
     [CombatAbilityType.BLOCK]: {
         id: CombatAbilityType.BLOCK,
@@ -66,8 +83,9 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         targetType: CombatTargetType.ENEMY,
         label: 'Block',
         blockValue: 7,
-        description: '???',
-        isTargetRequired: false,
+        description: 'Force target enemy to attack [SOURCE_UNIT_NAME] for [BLOCK_PERCENT] reduced damage',
+        isTargetRequired: true,
+        manaCost: 1
     },
     [CombatAbilityType.REVENGE]: {
         id: CombatAbilityType.REVENGE,
@@ -77,8 +95,9 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         strengthMultiplier: 2,
         targetType: CombatTargetType.ENEMY,
         label: 'Revenge',
-        description: 'Deal a high amount of damage to the last target to attack this unit',
+        description: 'Deal [DIRECT_DAMAGE] damage to target enemy unit. Only usable if target has taken damage in the previous turn',
         isTargetRequired: false,
+        manaCost: 1
     },
 };
 

@@ -1,8 +1,8 @@
-import { getAbility } from "./combatAbilities";
+import { CombatAbilityType, getAbility } from "./combatAbilities";
 import { RootState, store } from "../../../store";
 import { CombatAction } from "../state/combatModels";
 import { selectCanUseAnyAbilities, selectUnit } from "../state/combatSelectors";
-import { beginTargetingAbility, endTargetingAbility, performCombatAction } from "../state/combatSlice";
+import { beginTargetingAbility, endTargetingAbility, performBlock, performCombatAction } from "../state/combatSlice";
 import checkEndCombat, { checkEndTurn } from "../checkEndCombat";
 
 export const handleAbility = (combatAction: CombatAction) => {
@@ -41,9 +41,13 @@ export const targetAbility = (targetUnitId: string) => {
 
 export const useAbility = (combatAction: CombatAction) => {
     // Handle non-targeted abilities (eg. revenge)
+    if (combatAction.abilityId === CombatAbilityType.BLOCK) {
+        store.dispatch(performBlock(combatAction));
+    } else {
+        store.dispatch(performCombatAction(combatAction));
+    }
 
     // Only perform combat action if entire combat action is filled out
-    store.dispatch(performCombatAction(combatAction));
     checkEndTurn();
     checkEndCombat();
 }

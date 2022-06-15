@@ -22,7 +22,8 @@ const getStarterCharacter = () => [
         block: 100,
         blockDuration: 1,
         isTaunting: true,
-        maxMana: 2
+        maxMana: 2,
+        blockPercent: 80
     }),
 ];
 
@@ -38,7 +39,8 @@ export const getSecondCharacter = () =>
         armor: 0,
         block: 4,
         blockDuration: 1,
-        maxMana: 3
+        maxMana: 3,
+        blockPercent: 30
     });
 
 export const getStarterEncounter = (): CombatEncounter => {

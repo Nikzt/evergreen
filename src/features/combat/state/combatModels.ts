@@ -48,7 +48,11 @@ export type CombatUnit = {
     weaponDamage: number;
     strength: number;
     armor: number;
+
+    // Depcrecated, use blockPercent instead
     block: number;
+
+    blockPercent: number;
     blockDuration: number;
 };
 
