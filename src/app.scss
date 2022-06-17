@@ -98,29 +98,25 @@ ul {
     margin-bottom: 10px;
 }
 
-.character-info-container li,
-p {
-    line-height: 1.4;
-}
-
 .character-info-container {
     max-width: 600px;
     display: flex;
     justify-content: center;
     padding: 10px;
     text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+
+    .character-info {
+        flex: 1;
+    }
+
+    .unit-info {
+        grid-template-rows: 300px 40px;
+        margin: 10px;
+    }
 }
 
-.character-info .hp-bar {
-    margin-left: 10px;
-    margin-bottom: 10px;
-}
-
-.character-info {
-    max-width: 180px;
-    padding: 10px;
-    border: 1px solid black;
-}
 
 .unit-manager-screen {
     text-align: center;

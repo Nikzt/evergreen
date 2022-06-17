@@ -13,9 +13,12 @@ const TargetLine = ({ sourceUnitId, targetUnitId, isFriendlySource, isBlocking }
         const unitAnchorPoint = document.getElementById(unitId + '-anchor-point');
         if (!unitAnchorPoint) return null;
         const rect = unitAnchorPoint.getBoundingClientRect();
+        const combatContainer = document.getElementsByClassName('combat-container')[0];
+        const style = getComputedStyle(combatContainer);
+        const marginLeft = parseInt(style.marginLeft.replace('px', ''));
         return {
-            x: rect.left,
-            y: rect.top,
+            x: rect.x - marginLeft,
+            y: rect.y
         };
     }
 

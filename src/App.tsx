@@ -4,7 +4,7 @@ import './app.scss';
 import { RootState } from './store';
 import { useAppSelector } from './hooks';
 import GameStartScreen from './features/encounterManager/components/GameStartScreen';
-import UnitManagerScreen from './features/encounterManager/components/UnitManagerScreen';
+import UnitManagerScreen from './features/encounterManager/components/UnitManagerScreen/UnitManagerScreen';
 
 const App = () => {
     const isCombatInProgress = useAppSelector((state: RootState) => state.combat.isCombatInProgress);

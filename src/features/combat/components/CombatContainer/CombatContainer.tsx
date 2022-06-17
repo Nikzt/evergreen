@@ -27,7 +27,7 @@ const CombatContainer = () => {
     KeyHandler.init();
 
     return (
-        <div className="combat-container">
+        <div className="combat-container" id="combat-container">
             <div>
                 <svg className="svg-layer">
                     <defs>
