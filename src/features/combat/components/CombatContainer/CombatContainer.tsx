@@ -58,7 +58,7 @@ const CombatContainer = () => {
             <CombatUnitActionBar />
 
             <button onClick={() => onEndTurnButtonClick()}
-                className="end-turn-button"
+                className="end-turn-button menu-button"
                 disabled={!isPlayerTurn}
                 >End Turn</button>
         </div>

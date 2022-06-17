@@ -1,5 +1,7 @@
 import { store } from '../../store';
+import checkEndCombat from './checkEndCombat';
 import { selectCanUseSpecificAbility, selectFriendlyUnitByIdx } from './state/combatSelectors';
+import { setVictoryState } from './state/combatSlice';
 
 export type AbilityKeyBinding = {
     unitIdx: number,
@@ -54,6 +56,12 @@ export const abilityKeyBindings: AbilityKeyBinding[] = [
 ]
 
 const handleKeyPress = (key: string) => {
+    // if pressed space, end combat
+    if (key === ' ') {
+        store.dispatch(setVictoryState());
+    }
+
+
     const keyBinding = abilityKeyBindings.find(k => k.key === key);
     if (!keyBinding)
         return;

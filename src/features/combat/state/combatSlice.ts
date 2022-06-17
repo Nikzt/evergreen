@@ -1,12 +1,11 @@
 import { createSlice, PayloadAction, Update } from '@reduxjs/toolkit';
 import combatAbilities, { CombatAbility, CombatAbilityType, getAbility } from '../abilities/combatAbilities';
 import { CombatEncounter } from '../../encounterManager/encounters';
-import { getRandomRewards } from '../../encounterManager/rewards';
-import { getScriptedRewards } from '../../encounterManager/scriptedRewards';
 import { CombatAction, CombatState, CombatUnit, RewardUpdate, unitsAdapter } from './combatModels';
 import { unitsSelectors } from './combatSelectors';
 import calculateAbilityDamage, { calculateRawDamage } from '../abilities/calculateAbilityDamage';
 import abilityIcons from '../../../assets/abilityIcons/abilityIcons';
+import { getRandomConsumableReward, getRandomPowerReward, Power, RewardType } from '../../encounterManager/rewards';
 
 /**
  * Clears everything that shouldn't carry over to next combat
@@ -39,6 +38,23 @@ const onUnitKilled = (state: CombatState, unit: CombatUnit) => {
     removeAbilitiesWithSourceUnitId(state, unit.id);
 }
 
+const getUnit = (state: CombatState, unitId: string) => {
+    const unit = state.units.entities[unitId];
+    if (!unit) throw new Error(`Unit ${unitId} not found`);
+    return unit;
+}
+
+const makeChangesAdditive = (changes: Partial<CombatUnit>, unit: CombatUnit) => {
+    let additiveChanges = {};
+    Object.keys(changes).forEach(key => {
+        /* @ts-ignore */
+        if (unit[key] !== undefined)
+            /* @ts-ignore */
+            additiveChanges[key] = changes[key] + unit[key];
+    });
+    return additiveChanges;
+}
+
 /**
  * Handle state changes for units that have died (ie. HP <= 0)
  */
@@ -60,6 +76,7 @@ const initialState: CombatState = {
     isCombatFailed: true,
     isCombatVictorious: false,
     difficulty: 4,
+    numEncounters: 0,
     rewardCurrency: 0,
     availableRewards: [],
     scriptedText: '',
@@ -102,28 +119,36 @@ export const combatSlice = createSlice({
             });
 
             // Post combat rewards
-            getScriptedRewards(state);
-            state.rewardCurrency += 3;
-            state.availableRewards = getRandomRewards(2);
+            state.availableRewards = [getRandomPowerReward(state), getRandomConsumableReward(state)];
         },
         updateUnit: (state, action: PayloadAction<Update<CombatUnit>>) => {
             unitsAdapter.updateOne(state.units, action.payload);
         },
         updateUnitWithReward: (state, action: PayloadAction<RewardUpdate>) => {
-            const reward = action.payload.reward;
-            const unit = state.units.entities[action.payload.unitId];
-            if (unit && state.rewardCurrency >= reward.cost) {
-                const changes: Partial<CombatUnit> = {};
-                for (const prop in reward.update) {
-                    // @ts-ignore
-                    changes[prop] = unit[prop] + reward.update[prop];
-                }
+            const unit = getUnit(state, action.payload.unitId);
+            let changes = action.payload.reward.value.changes;
+            if (changes)
+                changes = makeChangesAdditive(changes, unit);
+
+            if (action.payload.reward.type === RewardType.POWER) {
+                const power = action.payload.reward.value as Power;
+                unit.powers.push(power);
+
                 unitsAdapter.updateOne(state.units, {
                     id: unit.id,
-                    changes,
+                    changes
                 });
-                state.rewardCurrency -= reward.cost;
+                console.log(changes);
+            } else if (action.payload.reward.type === RewardType.CONSUMABLE) {
+                unitsAdapter.updateOne(state.units, {
+                    id: unit.id,
+                    changes
+                })
             }
+
+            state.availableRewards = [];
+            // Going to need to update everything that reads stats from the unit to actually
+            // derive those values based on rewards...
         },
         beginTargetingAbility: (state, action: PayloadAction<CombatAction>) => {
             state.isTargeting = true;

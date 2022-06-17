@@ -1,12 +1,8 @@
-import combatAbilities from '../../combat/abilities/combatAbilities';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { store } from '../../../store';
 import { initCombatEncounter, updateUnitWithReward } from '../../combat/state/combatSlice';
-import HpBar from '../../combat/components/HpBar/HpBar';
 import { randomEncounterGenerator } from '../encounters';
 import EnemyController from '../enemyController';
-import { Reward } from '../rewards';
-import { CombatUnit } from '../../combat/state/combatModels';
 import {
     selectAvailableRewards,
     selectFriendlyUnits,
@@ -14,6 +10,7 @@ import {
     selectScriptedText,
 } from '../../combat/state/combatSelectors';
 import UnitInfo from '../../../common/components/UnitInfo/UnitInfo';
+import RewardSelector from './RewardSelector/RewardSelector';
 
 const UnitManagerScreen = () => {
     const dispatch = useAppDispatch();
@@ -31,15 +28,6 @@ const UnitManagerScreen = () => {
         EnemyController.initEnemies();
     };
 
-    const onRewardClick = (unit: CombatUnit, reward: Reward) => {
-        dispatch(
-            updateUnitWithReward({
-                unitId: unit.id,
-                reward,
-            }),
-        );
-    };
-
     return (
         <div className="unit-manager-screen">
             <h1>Victory!</h1>
@@ -51,6 +39,7 @@ const UnitManagerScreen = () => {
 
             <h2>Upgrade Characters</h2>
             <h3>Gold: {rewardCurrency}</h3>
+            {availableRewards.length > 0 && <RewardSelector />}
             <div className="character-info-container">
                 {friendlyUnits.map((u) => (
                     <div key={u.id} className="character-info">
@@ -62,22 +51,15 @@ const UnitManagerScreen = () => {
                             <li>Armor: {u.armor}</li>
                         </ul>
 
-                        <div className="rewards-container">
-                            <h3>Upgrades</h3>
-                            {availableRewards.map((r) => (
-                                <label key={r.type}>
-                                    <button disabled={r.cost > rewardCurrency} onClick={() => onRewardClick(u, r)}>
-                                        {r.label}
-                                    </button>
-                                    {r.cost}G
-                                </label>
-                            ))}
-                        </div>
                     </div>
                 ))}
             </div>
 
-            <button onClick={onBeginCombatClick}>Begin Combat</button>
+
+            <button className="menu-button"
+                    onClick={onBeginCombatClick}>
+                Begin Combat
+            </button>
         </div>
     );
 };

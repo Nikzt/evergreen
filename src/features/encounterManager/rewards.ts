@@ -1,53 +1,138 @@
-import { CombatAbilityType } from '../combat/abilities/combatAbilities';
-import { CombatUnit } from '../combat/state/combatModels';
+import { RootState, store } from "../../store";
+import { CombatUnit } from "../combat/state/combatModels";
+import { selectFriendlyUnitIds, selectUnit, unitsSelectors } from "../combat/state/combatSelectors";
+import { CombatState } from "../combat/state/combatModels";
+import { getEntityList } from "../../common/entityUtils";
 
 export enum RewardType {
-    HEAL = 0,
+    POWER,
+    CONSUMABLE
+}
+
+export enum PowerType {
     MAX_HP,
     STRENGTH,
-    WEAPON_DAMAGE,
     ARMOR,
-    ABILITY,
+}
+
+export enum ConsumableType {
+    HEALTH,
+    MANA,
+}
+
+export type Power = {
+    id: PowerType;
+
+    /**The IDs for which this power is available */
+    availableUnitIds: string[];
+
+    unitId?: string;
+    label: string;
+    description: string;
+    changes: Partial<CombatUnit>;
+
+}
+
+export type Consumable = {
+    id: ConsumableType;
+    availableUnitIds: string[];
+    unitId?: string;
+    label: string;
+    description: string;
+    changes: Partial<CombatUnit>;
 }
 
 export type Reward = {
     type: RewardType;
-    cost: number;
-    label: string;
-    abilityId?: CombatAbilityType;
-    update?: Partial<CombatUnit>;
+    value: Power | Consumable;
+}
+
+const powers: { [key: number]: Power } = {
+    [PowerType.STRENGTH]: {
+        availableUnitIds: [],
+        id: PowerType.STRENGTH,
+        label: 'Manifest Strength',
+        description: '[UNIT_NAME] gains +1 strength',
+        changes: {
+            strength: 1,
+        },
+    },
+    [PowerType.ARMOR]: {
+        availableUnitIds: [],
+        id: PowerType.ARMOR,
+        label: 'Manifest Armor',
+        description: '[UNIT_NAME] gains +1 armor',
+        changes: {
+            armor: 1,
+        },
+    },
+    [PowerType.MAX_HP]: {
+        availableUnitIds: [],
+        id: PowerType.MAX_HP,
+        label: 'Reinforce Will to Live',
+        description: '[UNIT_NAME] gains +5 Max HP',
+        changes: {
+            maxHp: 5,
+            hp: 5
+        },
+    },
 };
 
-export const rewards: { [key: number]: Reward } = {
-    [RewardType.HEAL]: {
-        type: RewardType.HEAL,
-        label: '+10 HP',
-        cost: 2,
-        update: {
+const consumables: { [key: number]: Consumable } = {
+    [ConsumableType.HEALTH]: {
+        availableUnitIds: [],
+        id: ConsumableType.HEALTH,
+        label: 'Absorb Vitality',
+        description: '[UNIT_NAME] heals +10 HP',
+        changes: {
             hp: 10,
         },
     },
-    [RewardType.STRENGTH]: {
-        type: RewardType.STRENGTH,
-        label: '+2 Strength',
-        cost: 2,
-        update: {
-            strength: 2,
-        },
-    },
-    [RewardType.ARMOR]: {
-        type: RewardType.ARMOR,
-        label: '+2 Armor',
-        cost: 2,
-        update: {
-            armor: 2,
-        },
-    },
 };
 
-export const rewardsList = Object.values(rewards);
+const getRandomFriendlyUnitId = (state: CombatState): string => {
+    const friendlyUnitIds = getEntityList(state.units.entities).filter(unit => unit.isFriendly).map(unit => unit.id);
+    const randomIndex = Math.floor(Math.random() * friendlyUnitIds.length);
+    return friendlyUnitIds[randomIndex];
+}
 
-export const getRandomRewards = (numRewards: number) => {
-    const rewardsListCopy = [...rewardsList];
-    return rewardsListCopy;
-};
+const filterByAvailableUnitIds = (unitId: string, rewardList: (Power | Consumable)[]) => {
+    return rewardList.filter(reward => {
+        return reward.availableUnitIds.length <= 0 || reward.availableUnitIds.includes(unitId);
+    });
+}
+
+export const getRandomPowerReward = (state: CombatState): Reward => {
+    const powersListCopy = [...Object.values(powers)];
+    const randomFriendlyUnitId = getRandomFriendlyUnitId(state);
+    const filteredPowers = filterByAvailableUnitIds(randomFriendlyUnitId, powersListCopy);
+    const randomPower = filteredPowers[Math.floor(Math.random() * powersListCopy.length)];
+
+    return {
+        type: RewardType.POWER,
+        value: {...randomPower, unitId: randomFriendlyUnitId},
+    }
+}
+
+export const getRandomConsumableReward = (state: CombatState): Reward => {
+    const consumablesListCopy = [...Object.values(consumables)];
+    const randomFriendlyUnitId = getRandomFriendlyUnitId(state);
+    const filteredConsumables = filterByAvailableUnitIds(randomFriendlyUnitId, consumablesListCopy);
+    const randomConsumable = filteredConsumables[Math.floor(Math.random() * consumablesListCopy.length)];
+
+    return {
+        type: RewardType.CONSUMABLE,
+        value: {...randomConsumable, unitId: randomFriendlyUnitId},
+    }
+}
+
+export const getRewardDescription = (reward: Reward): string => {
+    if (!reward.value.unitId)
+        return reward.value.description;
+
+    const unit = selectUnit(reward.value.unitId)(store.getState() as RootState);
+    if (!unit)
+        throw new Error('Unit not found');
+
+    return reward.value.description.replace('[UNIT_NAME]', unit.name);
+}

@@ -1,6 +1,6 @@
 import { createEntityAdapter, EntityState } from '@reduxjs/toolkit';
+import { Power, Reward } from '../../encounterManager/rewards';
 import { CombatAbilityType } from '../abilities/combatAbilities';
-import { Reward } from '../../encounterManager/rewards';
 
 export type CombatAction = {
     sourceUnitId: string;
@@ -50,6 +50,7 @@ export type CombatUnit = {
     weaponDamage: number;
     strength: number;
     armor: number;
+    powers: Power[];
 
     // Depcrecated, use blockPercent instead
     block: number;
@@ -65,6 +66,7 @@ export type CombatState = {
     isCombatFailed: boolean;
     isPlayerTurn: boolean;
     displayedUnitActionBar: string | null;
+    numEncounters: number;
 
     /** Order of list is the order in which the enemies will perform their actions */
     enemyAbilitiesQueue: CombatAction[];

@@ -31,13 +31,16 @@ html {
 }
 
 button {
+    font-family: "Yanone Kaffeesatz";
+}
+
+.menu-button {
     width: 125px;
     height: 42px;
     border: 1px solid black;
     border-radius: 0;
     margin: 6px 3px 3px 3px;
     font-size: 1em;
-    font-family: "Yanone Kaffeesatz";
 }
 
 button[disabled] {

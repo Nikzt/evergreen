@@ -15,7 +15,7 @@ const GameStartScreen = () => {
     return (
         <div className="game-start-screen">
             <p>Your presence has drawn the attention of the creatures in the Evergreen.</p>
-            <button onClick={onBeginCombatClick}>Begin Combat</button>
+            <button className='menu-button' onClick={onBeginCombatClick}>Begin Combat</button>
             <h3>Instructions</h3>
             {Object.values(combatAbilities).map(ability => <div className="ability-description-row">
                 <img src={ability.icon} />

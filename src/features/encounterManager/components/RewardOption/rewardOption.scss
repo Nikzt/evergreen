@@ -1,0 +1,9 @@
+@import "../../../../common/scss/colors.scss";
+
+.reward-option {
+    background-color: $color-secondary;
+    border: 1px solid $color-secondary-v1;
+    width: 150px;
+    height: 100px;
+    margin: 10px;
+}
