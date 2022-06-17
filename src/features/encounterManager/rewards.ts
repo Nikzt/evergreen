@@ -13,6 +13,7 @@ export enum PowerType {
     MAX_HP,
     STRENGTH,
     ARMOR,
+    MAX_MANA
 }
 
 export enum ConsumableType {
@@ -30,6 +31,7 @@ export type Power = {
     label: string;
     description: string;
     changes: Partial<CombatUnit>;
+    maxAmountPerUnit: number | null;
 
 }
 
@@ -56,6 +58,7 @@ const powers: { [key: number]: Power } = {
         changes: {
             strength: 1,
         },
+        maxAmountPerUnit: null
     },
     [PowerType.ARMOR]: {
         availableUnitIds: [],
@@ -65,6 +68,7 @@ const powers: { [key: number]: Power } = {
         changes: {
             armor: 1,
         },
+        maxAmountPerUnit: null
     },
     [PowerType.MAX_HP]: {
         availableUnitIds: [],
@@ -75,6 +79,18 @@ const powers: { [key: number]: Power } = {
             maxHp: 5,
             hp: 5
         },
+        maxAmountPerUnit: null
+    },
+    [PowerType.MAX_MANA]: {
+        availableUnitIds: [],
+        id: PowerType.MAX_HP,
+        label: 'Consolidate Energy',
+        description: '[UNIT_NAME] gains +1 Max Mana',
+        changes: {
+            maxMana: 1,
+            mana: 1
+        },
+        maxAmountPerUnit: 5
     },
 };
 

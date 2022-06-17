@@ -138,7 +138,6 @@ export const combatSlice = createSlice({
                     id: unit.id,
                     changes
                 });
-                console.log(changes);
             } else if (action.payload.reward.type === RewardType.CONSUMABLE) {
                 unitsAdapter.updateOne(state.units, {
                     id: unit.id,

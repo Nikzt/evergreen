@@ -41,7 +41,6 @@ export const block = async (sourceUnitId: string) => {
         );
     };
 
-    console.log("begin blocking");
     await timeout(blockTickCallback, unit.blockDuration * 1000);
     store.dispatch(
         updateUnit({
@@ -53,7 +52,6 @@ export const block = async (sourceUnitId: string) => {
         }),
     );
 
-    console.log("done blocking");
     const unitAfterBlock = getUnit(sourceUnitId);
 
     // Only enter recovery if unit didn't block anything

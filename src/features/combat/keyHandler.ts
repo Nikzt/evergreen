@@ -70,7 +70,6 @@ const handleKeyPress = (key: string) => {
     const unit = selectFriendlyUnitByIdx(keyBinding.unitIdx)(state);
     const abilityId = unit?.abilityIds[keyBinding.abilityIdx];
     if (unit && abilityId != null && selectCanUseSpecificAbility(unit.id, abilityId)(state)) {
-        console.log("TODO: Implement key press")
     }
 }
 

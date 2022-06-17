@@ -25,9 +25,9 @@ export const checkEndTurn = () => {
     const livingUnits = selectLivingUnits(state);
     if (livingUnits.filter(u => u.isFriendly === isPlayerTurn).every(u => !selectCanUseAnyAbilities(u.id)(state))) {
         if (isPlayerTurn)
-            setTimeout(() => store.dispatch(beginEnemyTurn()), 1000);
+            store.dispatch(beginEnemyTurn());
         else 
-            setTimeout(() => store.dispatch(beginPlayerTurn()), 1000);
+            store.dispatch(beginPlayerTurn());
     }
 }
 
@@ -35,8 +35,8 @@ const checkEndCombat = () => {
     // Check if combat has ended based on results of action
     const stateAfterCombatAction = store.getState() as RootState;
     const combatOutcome = getCombatOutcome(stateAfterCombatAction.combat);
-    if (combatOutcome === CombatOutcome.DEFEAT) setTimeout(() => store.dispatch(setDefeatState()), 1000);
-    else if (combatOutcome === CombatOutcome.VICTORY) setTimeout(() => store.dispatch(setVictoryState()), 1000);
+    if (combatOutcome === CombatOutcome.DEFEAT) setTimeout(() => store.dispatch(setDefeatState()), 200);
+    else if (combatOutcome === CombatOutcome.VICTORY) setTimeout(() => store.dispatch(setVictoryState()), 200);
 }
 
 export default checkEndCombat;

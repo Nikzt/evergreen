@@ -31,7 +31,6 @@ export type CombatAbility = {
 };
 
 export const getAbility = (abilityType: CombatAbilityType | null): CombatAbility => {
-    console.log(abilityType);
     if (abilityType != null && combatAbilities[abilityType] != null)
         return combatAbilities[abilityType];
     else
