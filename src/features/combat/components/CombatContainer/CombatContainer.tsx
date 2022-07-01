@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from '../../../../hooks';
 import KeyHandler from '../../keyHandler';
+import { onBeginEnemyTurn } from '../../state/beginEnemyTurn';
 import { selectEnemyAbilitiesQueue, selectEnemyUnitIds, selectFriendlyUnitIds, selectTargetLines } from '../../state/combatSelectors';
 import { beginEnemyTurn, toggleUnitActionBar } from '../../state/combatSlice';
 import CombatUnitActionBar from '../ActionBar/CombatUnitActionBar';
@@ -17,7 +18,7 @@ const CombatContainer = () => {
     const displayedUnitActionBar = useAppSelector((state) => state.combat.displayedUnitActionBar);
 
     const onEndTurnButtonClick = () => {
-        dispatch(beginEnemyTurn())
+        onBeginEnemyTurn();
     }
 
     const onCancelAbilityClick = () => {

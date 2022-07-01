@@ -1,6 +1,3 @@
-import { useState } from 'react';
-import { useDebouncedCallback } from 'use-debounce';
-
 type TargetLineProps = {
     sourceUnitId: string;
     targetUnitId: string | null;
@@ -13,17 +10,15 @@ const TargetLine = ({ sourceUnitId, targetUnitId, isFriendlySource, isBlocking }
         const unitAnchorPoint = document.getElementById(unitId + '-anchor-point');
         if (!unitAnchorPoint) return null;
         const rect = unitAnchorPoint.getBoundingClientRect();
-        const combatContainer = document.getElementsByClassName('combat-container')[0];
-        const style = getComputedStyle(combatContainer);
-        const marginLeft = parseInt(style.marginLeft.replace('px', ''));
+        const combatContainer = document.getElementById('combat-container');
+        const offsetLeft = combatContainer?.offsetLeft ?? 0;
         return {
-            x: rect.x - marginLeft,
+            x: rect.x - offsetLeft,
             y: rect.y
         };
     }
 
     const calculateLineCoordinates = () => {
-        console.count();
         if (!sourceUnitId || !targetUnitId) return;
 
         const sourceUnitAnchorPoint = getCoordinatesOfUnitAnchorPoint(sourceUnitId);

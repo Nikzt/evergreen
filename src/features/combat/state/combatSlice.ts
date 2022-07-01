@@ -1,10 +1,9 @@
 import { createSlice, PayloadAction, Update } from '@reduxjs/toolkit';
-import combatAbilities, { CombatAbility, CombatAbilityType, getAbility } from '../abilities/combatAbilities';
+import combatAbilities, {  getAbility } from '../abilities/combatAbilities';
 import { CombatEncounter } from '../../encounterManager/encounters';
 import { CombatAction, CombatState, CombatUnit, RewardUpdate, unitsAdapter } from './combatModels';
 import { unitsSelectors } from './combatSelectors';
 import calculateAbilityDamage, { calculateRawDamage } from '../abilities/calculateAbilityDamage';
-import abilityIcons from '../../../assets/abilityIcons/abilityIcons';
 import { getRandomConsumableReward, getRandomPowerReward, Power, RewardType } from '../../encounterManager/rewards';
 
 /**
@@ -258,11 +257,13 @@ export const combatSlice = createSlice({
         },
         beginPlayerTurn: (state) => {
             onBeginPlayerTurn(state);
+            // Enemy mana regenerates on player turn because the player needs to see
+            // how much mana the enemy *will* have at the start of their turn.
+            regenerateEnemyUnitsMana(state);
         },
         beginEnemyTurn: (state) => {
             state.isPlayerTurn = false;
             state.displayedUnitActionBar = null;
-            regenerateEnemyUnitsMana(state);
         },
         removeFromEnemyAbilityQueue: (state, action: PayloadAction<CombatAction>) => {
             const idx = state.enemyAbilitiesQueue.findIndex(c => c.sourceUnitId === action.payload.sourceUnitId)
@@ -302,6 +303,7 @@ const regenerateEnemyUnitsMana = (state: CombatState) => {
 }
 
 const regenerateUnitMana = (unit: CombatUnit) => {
+    console.log(unit.mana)
     if (unit.mana < unit.maxMana)
         unit.mana++;
 }

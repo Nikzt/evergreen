@@ -15,6 +15,8 @@ export const timeout = (tickCallback: (currTime: number, totalTime: number, inte
 };
 
 export const wait = (ms: number) => {
+    // If you want to test the game without delays, uncomment this line
+    //return new Promise((resolve) => resolve(true));
     return new Promise((resolve) => {
         setTimeout(() => resolve(true), ms);
     })
