@@ -1,8 +1,8 @@
 import { useAppDispatch, useAppSelector } from '../../../../hooks';
 import KeyHandler from '../../keyHandler';
 import { onBeginEnemyTurn } from '../../state/beginEnemyTurn';
-import { selectEnemyAbilitiesQueue, selectEnemyUnitIds, selectFriendlyUnitIds, selectTargetLines } from '../../state/combatSelectors';
-import { beginEnemyTurn, toggleUnitActionBar } from '../../state/combatSlice';
+import { selectEnemyAbilitiesQueue, selectEnemyUnitIds, selectFriendlyUnitIds } from '../../state/combatSelectors';
+import { toggleUnitActionBar } from '../../state/combatSlice';
 import CombatUnitActionBar from '../ActionBar/CombatUnitActionBar';
 import CombatUnit from '../CombatUnit';
 import TargetLine from '../TargetLine';
@@ -11,7 +11,7 @@ import './combatContainer.scss';
 
 const CombatContainer = () => {
     const dispatch = useAppDispatch();
-    const isPlayerTurn = useAppSelector((state) => state.combat.isPlayerTurn)
+    const isPlayerTurn = useAppSelector((state) => state.combat.isPlayerTurn);
     const friendlyUnitIds = useAppSelector(selectFriendlyUnitIds);
     const enemyUnitIds = useAppSelector(selectEnemyUnitIds);
     const enemyAbilitiesQueue = useAppSelector(selectEnemyAbilitiesQueue);
@@ -19,11 +19,11 @@ const CombatContainer = () => {
 
     const onEndTurnButtonClick = () => {
         onBeginEnemyTurn();
-    }
+    };
 
     const onCancelAbilityClick = () => {
         dispatch(toggleUnitActionBar(null));
-    }
+    };
 
     KeyHandler.init();
 
@@ -33,16 +33,24 @@ const CombatContainer = () => {
                 <svg className="svg-layer">
                     <defs>
                         <linearGradient id="lgrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style={{ stopColor: "rgb(128,0,0)", stopOpacity: 1 }} />
-                            <stop offset="100%" style={{ stopColor: "rgb(60,0,0)", stopOpacity: 0 }} />
+                            <stop offset="0%" style={{ stopColor: 'rgb(128,0,0)', stopOpacity: 1 }} />
+                            <stop offset="100%" style={{ stopColor: 'rgb(60,0,0)', stopOpacity: 0 }} />
                         </linearGradient>
                     </defs>
-                    {enemyAbilitiesQueue.map((combatAction) =>
-                        <TargetLine key={combatAction.sourceUnitId} sourceUnitId={combatAction.sourceUnitId} targetUnitId={combatAction.targetUnitId} isFriendlySource={false} isBlocking={false} />)}
+                    {enemyAbilitiesQueue.map((combatAction) => (
+                        <TargetLine
+                            key={combatAction.sourceUnitId}
+                            sourceUnitId={combatAction.sourceUnitId}
+                            targetUnitId={combatAction.targetUnitId}
+                            isFriendlySource={false}
+                            isBlocking={false}
+                        />
+                    ))}
                 </svg>
             </div>
-            {displayedUnitActionBar != null && <div className="cancel-ability-overlay"
-                onClick={() => onCancelAbilityClick()}></div>}
+            {displayedUnitActionBar != null && (
+                <button className="cancel-ability-overlay" onClick={() => onCancelAbilityClick()}></button>
+            )}
             {/* Enemy units */}
             <div className="units-row enemy-units-row">
                 {enemyUnitIds.map((unitId) => (
@@ -58,10 +66,13 @@ const CombatContainer = () => {
             {/* Abilities */}
             <CombatUnitActionBar />
 
-            <button onClick={() => onEndTurnButtonClick()}
+            <button
+                onClick={() => onEndTurnButtonClick()}
                 className="end-turn-button menu-button"
                 disabled={!isPlayerTurn}
-                >End Turn</button>
+            >
+                End Turn
+            </button>
         </div>
     );
 };

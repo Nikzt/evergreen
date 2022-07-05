@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, Update } from '@reduxjs/toolkit';
-import combatAbilities, {  getAbility } from '../abilities/combatAbilities';
+import combatAbilities, { getAbility } from '../abilities/combatAbilities';
 import { CombatEncounter } from '../../encounterManager/encounters';
 import { CombatAction, CombatState, CombatUnit, RewardUpdate, unitsAdapter } from './combatModels';
 import { unitsSelectors } from './combatSelectors';
@@ -24,9 +24,9 @@ const clearCombatState = (state: CombatState) => {
 };
 
 const removeAbilitiesWithSourceUnitId = (state: CombatState, sourceUnitId: string) => {
-    const abilities = state.enemyAbilitiesQueue.filter(a =>
-        a.sourceUnitId !== sourceUnitId
-        && a.targetUnitId !== sourceUnitId);
+    const abilities = state.enemyAbilitiesQueue.filter(
+        (a) => a.sourceUnitId !== sourceUnitId && a.targetUnitId !== sourceUnitId,
+    );
     state.enemyAbilitiesQueue = abilities;
 };
 
@@ -35,24 +35,21 @@ const onUnitKilled = (state: CombatState, unit: CombatUnit) => {
     unit.isDead = true;
     unit.isCasting = false;
     removeAbilitiesWithSourceUnitId(state, unit.id);
-}
+};
 
 const getUnit = (state: CombatState, unitId: string) => {
     const unit = state.units.entities[unitId];
     if (!unit) throw new Error(`Unit ${unitId} not found`);
     return unit;
-}
+};
 
 const makeChangesAdditive = (changes: Partial<CombatUnit>, unit: CombatUnit) => {
-    let additiveChanges = {};
-    Object.keys(changes).forEach(key => {
-        /* @ts-ignore */
-        if (unit[key] !== undefined)
-            /* @ts-ignore */
-            additiveChanges[key] = changes[key] + unit[key];
+    const additiveChanges: any = {};
+    Object.keys(changes).forEach((key) => {
+        if ((unit as any)[key] !== undefined) additiveChanges[key] = (changes as any)[key] + (unit as any)[key];
     });
     return additiveChanges;
-}
+};
 
 /**
  * Handle state changes for units that have died (ie. HP <= 0)
@@ -80,7 +77,7 @@ const initialState: CombatState = {
     availableRewards: [],
     scriptedText: '',
     enemyAbilitiesQueue: [],
-    displayedUnitActionBar: null
+    displayedUnitActionBar: null,
 };
 export const combatSlice = createSlice({
     name: 'combat',
@@ -88,9 +85,12 @@ export const combatSlice = createSlice({
     reducers: {
         initCombatEncounter: (state, action: PayloadAction<CombatEncounter>) => {
             clearCombatState(state);
-            unitsAdapter.addMany(state.units, action.payload.units.map(u => {
-                return { ...u, revengeCharges: 1, blockedDamageThisCombat: 0 };
-            }));
+            unitsAdapter.addMany(
+                state.units,
+                action.payload.units.map((u) => {
+                    return { ...u, revengeCharges: 1, blockedDamageThisCombat: 0 };
+                }),
+            );
             state.isCombatInProgress = true;
             onBeginPlayerTurn(state);
         },
@@ -126,8 +126,7 @@ export const combatSlice = createSlice({
         updateUnitWithReward: (state, action: PayloadAction<RewardUpdate>) => {
             const unit = getUnit(state, action.payload.unitId);
             let changes = action.payload.reward.value.changes;
-            if (changes)
-                changes = makeChangesAdditive(changes, unit);
+            if (changes) changes = makeChangesAdditive(changes, unit);
 
             if (action.payload.reward.type === RewardType.POWER) {
                 const power = action.payload.reward.value as Power;
@@ -135,13 +134,13 @@ export const combatSlice = createSlice({
 
                 unitsAdapter.updateOne(state.units, {
                     id: unit.id,
-                    changes
+                    changes,
                 });
             } else if (action.payload.reward.type === RewardType.CONSUMABLE) {
                 unitsAdapter.updateOne(state.units, {
                     id: unit.id,
-                    changes
-                })
+                    changes,
+                });
             }
 
             state.availableRewards = [];
@@ -184,21 +183,31 @@ export const combatSlice = createSlice({
             if (!action?.payload) return;
             const source = state.units.entities[action.payload.sourceUnitId];
             // All living other targets
-            const targets = Object.values(state.units.entities).filter(u => u?.isFriendly !== source?.isFriendly && !u?.isDead)
+            const targets = Object.values(state.units.entities).filter(
+                (u) => u?.isFriendly !== source?.isFriendly && !u?.isDead,
+            );
             const ability = combatAbilities[action.payload.abilityId];
             // TODO: Turn this into helper function
-            if (targets.length <= 0 || !ability || !source || source.isDead || source.mana < ability.manaCost || source.revengeCharges < 1) return;
+            if (
+                targets.length <= 0 ||
+                !ability ||
+                !source ||
+                source.isDead ||
+                source.mana < ability.manaCost ||
+                source.revengeCharges < 1
+            )
+                return;
 
             source.targetUnitId = null;
 
             // Basic damaging ability
             const damage = source.blockedDamageThisCombat;
-            targets.forEach(target => {
+            targets.forEach((target) => {
                 if (target) {
                     target.hp -= damage;
                     target.combatNumbers.push(damage);
                 }
-            })
+            });
             source.mana -= ability.manaCost;
             source.revengeCharges--;
 
@@ -210,19 +219,22 @@ export const combatSlice = createSlice({
             const source = state.units.entities[action.payload.sourceUnitId];
             const target = state.units.entities[action.payload.targetUnitId];
             const ability = combatAbilities[action.payload.abilityId];
-            const enemyAbilityId = state.enemyAbilitiesQueue.find(a => a.sourceUnitId === action.payload.targetUnitId)?.abilityId;
+            const enemyAbilityId = state.enemyAbilitiesQueue.find(
+                (a) => a.sourceUnitId === action.payload.targetUnitId,
+            )?.abilityId;
 
             if (enemyAbilityId == null) return;
 
             const enemyAbility = getAbility(enemyAbilityId);
 
             // TODO: Turn this into helper function
-            if (!target || !ability || !source || !enemyAbility || source.isDead || source.mana < ability.manaCost) return;
+            if (!target || !ability || !source || !enemyAbility || source.isDead || source.mana < ability.manaCost)
+                return;
 
             source.targetUnitId = null;
 
             // The damage the enemy would do if they hadn't been blocked
-            const enemyDamageBeforeBlock = calculateRawDamage(target, enemyAbility)
+            const enemyDamageBeforeBlock = calculateRawDamage(target, enemyAbility);
 
             const blockedDamage = Math.ceil(enemyDamageBeforeBlock * (source.blockPercent / 100));
             const damageAfterBlock = Math.max(0, enemyDamageBeforeBlock - blockedDamage);
@@ -234,7 +246,9 @@ export const combatSlice = createSlice({
 
             state.displayedUnitActionBar = null;
             // Remove blocked ability from enemyAbilitiesQueue
-            state.enemyAbilitiesQueue = state.enemyAbilitiesQueue.filter(a => a.sourceUnitId !== action.payload.targetUnitId);
+            state.enemyAbilitiesQueue = state.enemyAbilitiesQueue.filter(
+                (a) => a.sourceUnitId !== action.payload.targetUnitId,
+            );
 
             checkDeadUnits(state);
         },
@@ -244,10 +258,10 @@ export const combatSlice = createSlice({
 
             unit.isTaunting = !unit.isTaunting;
             if (unit.isTaunting) {
-                const otherUnits = Object.values(state.units.entities).filter(u => u?.isFriendly !== unit.isFriendly);
-                otherUnits.forEach(u => {
+                const otherUnits = Object.values(state.units.entities).filter((u) => u?.isFriendly !== unit.isFriendly);
+                otherUnits.forEach((u) => {
                     if (u) u.targetUnitId = unit.id;
-                })
+                });
             }
         },
         clearOldestCombatNumber: (state, action: PayloadAction<string>) => {
@@ -266,9 +280,8 @@ export const combatSlice = createSlice({
             state.displayedUnitActionBar = null;
         },
         removeFromEnemyAbilityQueue: (state, action: PayloadAction<CombatAction>) => {
-            const idx = state.enemyAbilitiesQueue.findIndex(c => c.sourceUnitId === action.payload.sourceUnitId)
-            if (idx > -1)
-                state.enemyAbilitiesQueue.splice(idx, 1);
+            const idx = state.enemyAbilitiesQueue.findIndex((c) => c.sourceUnitId === action.payload.sourceUnitId);
+            if (idx > -1) state.enemyAbilitiesQueue.splice(idx, 1);
         },
         toggleUnitActionBar: (state, action: PayloadAction<string | null>) => {
             if (action.payload == null) {
@@ -284,53 +297,51 @@ export const combatSlice = createSlice({
             if (!unit || !unit.isFriendly || unit.id === state.displayedUnitActionBar)
                 state.displayedUnitActionBar = null;
             // toggle on cases
-            else
-                state.displayedUnitActionBar = unit.id;
-        }
+            else state.displayedUnitActionBar = unit.id;
+        },
     },
 });
 
 const regenerateFriendlyUnitsMana = (state: CombatState) => {
     Object.values(state.units.entities)
-        .filter(u => u?.isFriendly)
-        .forEach(u => u && regenerateUnitMana(u))
-}
+        .filter((u) => u?.isFriendly)
+        .forEach((u) => u && regenerateUnitMana(u));
+};
 
 const regenerateEnemyUnitsMana = (state: CombatState) => {
     Object.values(state.units.entities)
-        .filter(u => !u?.isFriendly)
-        .forEach(u => u && regenerateUnitMana(u))
-}
+        .filter((u) => !u?.isFriendly)
+        .forEach((u) => u && regenerateUnitMana(u));
+};
 
 const regenerateUnitMana = (unit: CombatUnit) => {
-    console.log(unit.mana)
-    if (unit.mana < unit.maxMana)
-        unit.mana++;
-}
+    console.log(unit.mana);
+    if (unit.mana < unit.maxMana) unit.mana++;
+};
 
 const onBeginPlayerTurn = (state: CombatState) => {
     populateEnemyAbilitiesQueue(state);
     state.isPlayerTurn = true;
     state.displayedUnitActionBar = null;
     regenerateFriendlyUnitsMana(state);
-}
+};
 
 const populateEnemyAbilitiesQueue = (state: CombatState) => {
-    const enemies = unitsSelectors.selectAll(state.units)
-        .filter(u => !u.isFriendly && !u.isDead);
-    const friendlyUnitIds = unitsSelectors.selectAll(state.units)
-        .filter(u => u.isFriendly && !u.isDead)
-        .map(u => u.id);
-    state.enemyAbilitiesQueue = enemies.map(u => {
-        const randomAbilityId = u.abilityIds[Math.floor(Math.random() * u.abilityIds.length)]
-        const randomFriendlyUnitId = friendlyUnitIds[Math.floor(Math.random() * friendlyUnitIds.length)]
+    const enemies = unitsSelectors.selectAll(state.units).filter((u) => !u.isFriendly && !u.isDead);
+    const friendlyUnitIds = unitsSelectors
+        .selectAll(state.units)
+        .filter((u) => u.isFriendly && !u.isDead)
+        .map((u) => u.id);
+    state.enemyAbilitiesQueue = enemies.map((u) => {
+        const randomAbilityId = u.abilityIds[Math.floor(Math.random() * u.abilityIds.length)];
+        const randomFriendlyUnitId = friendlyUnitIds[Math.floor(Math.random() * friendlyUnitIds.length)];
         return {
             sourceUnitId: u.id,
             targetUnitId: randomFriendlyUnitId,
-            abilityId: randomAbilityId
-        }
-    })
-}
+            abilityId: randomAbilityId,
+        };
+    });
+};
 
 export const {
     updateUnit,
@@ -348,7 +359,7 @@ export const {
     removeFromEnemyAbilityQueue,
     toggleUnitActionBar,
     performBlock,
-    performRevenge
+    performRevenge,
 } = combatSlice.actions;
 
 export default combatSlice.reducer;

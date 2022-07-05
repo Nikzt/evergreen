@@ -1,12 +1,12 @@
-import abilityIcons from "../../../assets/abilityIcons/abilityIcons";
-import { CombatUnit } from "../state/combatModels";
-import { calculateRawDamage } from "./calculateAbilityDamage";
+import abilityIcons from '../../../assets/abilityIcons/abilityIcons';
+import { CombatUnit } from '../state/combatModels';
+import { calculateRawDamage } from './calculateAbilityDamage';
 
 export enum CombatTargetType {
     ENEMY = 0,
     FRIENDLY,
     ALL,
-    NONE
+    NONE,
 }
 
 export enum CombatAbilityType {
@@ -31,22 +31,19 @@ export type CombatAbility = {
 };
 
 export const getAbility = (abilityType: CombatAbilityType | null): CombatAbility => {
-    if (abilityType != null && combatAbilities[abilityType] != null)
-        return combatAbilities[abilityType];
-    else
-        throw new Error();
-}
+    if (abilityType != null && combatAbilities[abilityType] != null) return combatAbilities[abilityType];
+    else throw new Error();
+};
 
 export const getAbilityDescription = (unit: CombatUnit, ability: CombatAbility) => {
     // Replace [DIRECT_DAMAGE] with calculated damage
     const description = ability.description
-        .replace("[DIRECT_DAMAGE]",
-            `${calculateRawDamage(unit, ability)}`)
-        .replace("[BLOCK_PERCENT]", `${unit.blockPercent}%`)
-        .replace("[SOURCE_UNIT_NAME]", `${unit.name}`);
+        .replace('[DIRECT_DAMAGE]', `${calculateRawDamage(unit, ability)}`)
+        .replace('[BLOCK_PERCENT]', `${unit.blockPercent}%`)
+        .replace('[SOURCE_UNIT_NAME]', `${unit.name}`);
 
     return description;
-}
+};
 
 const combatAbilities: { [abilityType: number]: CombatAbility } = {
     [CombatAbilityType.QUICK_ATTACK]: {
@@ -59,7 +56,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         label: 'Quick Attack',
         description: 'Deal [DIRECT_DAMAGE] damage to target enemy unit',
         isTargetRequired: true,
-        manaCost: 1
+        manaCost: 1,
     },
     [CombatAbilityType.STRONG_ATTACK]: {
         id: CombatAbilityType.STRONG_ATTACK,
@@ -71,7 +68,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         label: 'Strong Attack',
         description: 'Deal [DIRECT_DAMAGE] damage to target enemy unit',
         isTargetRequired: true,
-        manaCost: 2
+        manaCost: 2,
     },
     [CombatAbilityType.BLOCK]: {
         id: CombatAbilityType.BLOCK,
@@ -84,7 +81,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         blockValue: 7,
         description: 'Force target enemy to attack [SOURCE_UNIT_NAME] for [BLOCK_PERCENT] reduced damage',
         isTargetRequired: true,
-        manaCost: 1
+        manaCost: 1,
     },
     [CombatAbilityType.REVENGE]: {
         id: CombatAbilityType.REVENGE,
@@ -94,9 +91,10 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         strengthMultiplier: 2,
         targetType: CombatTargetType.ENEMY,
         label: 'Revenge',
-        description: 'Deal damage to all targets equal to the amount of damage [SOURCE_UNIT_NAME] has blocked this combat ([DIRECT_DAMAGE])',
+        description:
+            'Deal damage to all targets equal to the amount of damage [SOURCE_UNIT_NAME] has blocked this combat ([DIRECT_DAMAGE])',
         isTargetRequired: false,
-        manaCost: 1
+        manaCost: 1,
     },
 };
 

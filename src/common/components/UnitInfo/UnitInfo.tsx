@@ -1,5 +1,4 @@
 import unitIcons from '../../../assets/unitIcons/unitIcons';
-import CombatNumbers from '../../../features/combat/components/CombatNumbers/CombatNumbers';
 import HpBar from '../../../features/combat/components/HpBar/HpBar';
 import ManaBar from '../../../features/combat/components/ManaBar/ManaBar';
 import { useSelectCombatUnit } from '../../../hooks';

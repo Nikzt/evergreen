@@ -1,18 +1,18 @@
-import unitIcons from "../assets/unitIcons/unitIcons";
-import { CombatAbilityType } from "../features/combat/abilities/combatAbilities";
-import { createFriendlyUnit } from "../features/encounterManager/combatUnitUtils";
+import unitIcons from '../assets/unitIcons/unitIcons';
+import { CombatAbilityType } from '../features/combat/abilities/combatAbilities';
+import { createFriendlyUnit } from '../features/encounterManager/combatUnitUtils';
 
 export type PlayerCharacter = {
     id: string;
-}
+};
 
 export const PlayerCharacterGreg: PlayerCharacter = {
-    id: 'greg'
-}
+    id: 'greg',
+};
 
 export const PlayerCharacterMira: PlayerCharacter = {
-    id: 'mira'
-}
+    id: 'mira',
+};
 
 export const initGreg = () =>
     createFriendlyUnit({
@@ -28,7 +28,7 @@ export const initGreg = () =>
         blockDuration: 1,
         isTaunting: true,
         maxMana: 2,
-        blockPercent: 80
+        blockPercent: 80,
     });
 
 export const initMira = () =>
@@ -44,5 +44,5 @@ export const initMira = () =>
         block: 4,
         blockDuration: 1,
         maxMana: 3,
-        blockPercent: 30
+        blockPercent: 30,
     });

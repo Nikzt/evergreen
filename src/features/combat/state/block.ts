@@ -1,6 +1,6 @@
 import { timeout, wait } from '../../../common/timeout';
 import { store } from '../../../store';
-import {  selectCanUseAnyAbilities, selectUnit } from './combatSelectors';
+import { selectCanUseAnyAbilities, selectUnit } from './combatSelectors';
 import { updateUnit } from './combatSlice';
 import recover from './recover';
 
@@ -8,7 +8,7 @@ const getUnit = (sourceUnitId: string) => {
     const state = store.getState();
     const unit = selectUnit(sourceUnitId)(state);
     return unit;
-}
+};
 
 export const block = async (sourceUnitId: string) => {
     const state = store.getState();
@@ -20,7 +20,7 @@ export const block = async (sourceUnitId: string) => {
             id: sourceUnitId,
             changes: {
                 isBlocking: true,
-                isBlockSuccessful: false
+                isBlockSuccessful: false,
             },
         }),
     );
@@ -28,8 +28,7 @@ export const block = async (sourceUnitId: string) => {
     const blockTickCallback = (currTime: number, blockTime: number, interval: NodeJS.Timer) => {
         const state = store.getState();
         const unit = selectUnit(sourceUnitId)(state);
-        if (!unit?.isBlocking)
-            clearInterval(interval);
+        if (!unit?.isBlocking) clearInterval(interval);
         const blockingProgress = Math.ceil((currTime / blockTime) * 100);
         store.dispatch(
             updateUnit({
@@ -57,10 +56,8 @@ export const block = async (sourceUnitId: string) => {
     // Only enter recovery if unit didn't block anything
     if (unitAfterBlock?.isBlockSuccessful) {
         await wait(2000);
-        store.dispatch(updateUnit({id: sourceUnitId, changes: {isRevengeEnabled: false}}))
-    }
-    else {
+        store.dispatch(updateUnit({ id: sourceUnitId, changes: { isRevengeEnabled: false } }));
+    } else {
         recover(sourceUnitId, 2);
     }
-
 };

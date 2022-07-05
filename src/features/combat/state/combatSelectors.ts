@@ -1,6 +1,6 @@
-import combatAbilities, { CombatAbility, CombatAbilityType, getAbility } from '../abilities/combatAbilities';
+import { CombatAbilityType, getAbility } from '../abilities/combatAbilities';
 import { RootState } from '../../../store';
-import { CombatUnit, unitsAdapter } from './combatModels';
+import { unitsAdapter } from './combatModels';
 
 export const unitsSelectors = unitsAdapter.getSelectors();
 
@@ -11,8 +11,7 @@ export const selectFriendlyUnits = (state: RootState) =>
 
 export const selectRandomFriendlyUnit = (state: RootState) => {
     let friendlyUnits = selectFriendlyUnits(state).filter((u) => !u.isDead);
-    if (friendlyUnits.some(u => u.isTaunting))
-        friendlyUnits = friendlyUnits.filter(u => u.isTaunting);
+    if (friendlyUnits.some((u) => u.isTaunting)) friendlyUnits = friendlyUnits.filter((u) => u.isTaunting);
     return friendlyUnits[Math.floor(Math.random() * friendlyUnits.length)];
 };
 
@@ -38,7 +37,7 @@ export const selectUnitCastProgress = (unitId: string) => (state: RootState) => 
 export const selectCanUseAnyAbilities = (unitId: string) => (state: RootState) => {
     const unit = selectUnit(unitId)(state);
     // Enemies can only use abilities in their queue
-    if (!unit?.isFriendly && !state.combat.enemyAbilitiesQueue.some(a => a.sourceUnitId === unitId)) {
+    if (!unit?.isFriendly && !state.combat.enemyAbilitiesQueue.some((a) => a.sourceUnitId === unitId)) {
         return false;
     }
     return unit && !unit.isCasting && !unit.isRecovering && !unit.isBlocking && !unit.isDead && unit.mana > 0;
@@ -47,15 +46,14 @@ export const selectCanUseAnyAbilities = (unitId: string) => (state: RootState) =
 export const selectCanUseSpecificAbility = (unitId: string, abilityType: CombatAbilityType) => (state: RootState) => {
     const unit = selectUnit(unitId)(state);
     const ability = getAbility(abilityType);
-    if (!unit || unit.mana < ability.manaCost)
-        return false;
+    if (!unit || unit.mana < ability.manaCost) return false;
     switch (abilityType) {
         case CombatAbilityType.REVENGE:
             return unit.blockedDamageThisCombat > 0 && unit.revengeCharges > 0;
     }
 
     return selectCanUseAnyAbilities(unitId)(state);
-}
+};
 
 export const selectTargetLines = (state: RootState) => {
     const units = unitsSelectors.selectAll(state.combat.units);
@@ -82,16 +80,18 @@ export const selectFriendlyUnitByIdx = (idx: number) => (state: RootState) => {
 };
 
 export const selectFriendlyUnitIndexes = (state: RootState) => {
-    return selectFriendlyUnitIds(state).map((uid, idx) => { return { unitId: uid, idx } });
-}
+    return selectFriendlyUnitIds(state).map((uid, idx) => {
+        return { unitId: uid, idx };
+    });
+};
 
 export const selectLivingUnits = (state: RootState) => {
-    return unitsSelectors.selectAll(state.combat.units).filter(u => !u.isDead);
-}
+    return unitsSelectors.selectAll(state.combat.units).filter((u) => !u.isDead);
+};
 
 export const selectEnemyAbilitiesQueue = (state: RootState) => {
     return state.combat.enemyAbilitiesQueue;
-}
+};
 
 export const selectNextEnemyAbility = (unitId: string) => (state: RootState) =>
-    state.combat.enemyAbilitiesQueue.find(a => a.sourceUnitId === unitId);
+    state.combat.enemyAbilitiesQueue.find((a) => a.sourceUnitId === unitId);

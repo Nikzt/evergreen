@@ -1,5 +1,7 @@
-import { Dictionary } from "@reduxjs/toolkit";
+import { Dictionary } from '@reduxjs/toolkit';
 
-export const getEntityList = (entities: Dictionary<any>) => {
-    return Object.values(entities).filter(entity => entity != null); 
+export function getEntityList<T>(entities: Dictionary<T>): T[] {
+    const values = Object.values(entities);
+    const filteredValues = values.filter((value) => value != undefined);
+    return filteredValues as T[];
 }

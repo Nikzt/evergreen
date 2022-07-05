@@ -1,8 +1,5 @@
-import unitIcons from '../../assets/unitIcons/unitIcons';
 import { initGreg, initMira } from '../../common/playerCharacters';
-import { CombatAbilityType } from '../combat/abilities/combatAbilities';
 import { CombatUnit } from '../combat/state/combatModels';
-import { createFriendlyUnit } from './combatUnitUtils';
 import { EnemyTemplateEnum, generateRandomEnemy, getEnemy } from './enemyGenerator';
 
 export type CombatEncounter = {
@@ -10,11 +7,15 @@ export type CombatEncounter = {
     units: CombatUnit[];
 };
 
-
 export const getStarterEncounter = (): CombatEncounter => {
     return {
         name: 'First Combat',
-        units: [initGreg(), initMira(), getEnemy(EnemyTemplateEnum.BARK_DOG, 'enemy-1'), getEnemy(EnemyTemplateEnum.FOREST_PROTECTOR, 'enemy-2')],
+        units: [
+            initGreg(),
+            initMira(),
+            getEnemy(EnemyTemplateEnum.BARK_DOG, 'enemy-1'),
+            getEnemy(EnemyTemplateEnum.FOREST_PROTECTOR, 'enemy-2'),
+        ],
     };
 };
 

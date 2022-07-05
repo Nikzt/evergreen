@@ -1,19 +1,18 @@
-import { RootState, store } from "../../store";
-import { CombatUnit } from "../combat/state/combatModels";
-import { selectFriendlyUnitIds, selectUnit, unitsSelectors } from "../combat/state/combatSelectors";
-import { CombatState } from "../combat/state/combatModels";
-import { getEntityList } from "../../common/entityUtils";
+import { RootState, store } from '../../store';
+import { CombatUnit, CombatState } from '../combat/state/combatModels';
+import { selectUnit } from '../combat/state/combatSelectors';
+import { getEntityList } from '../../common/entityUtils';
 
 export enum RewardType {
     POWER,
-    CONSUMABLE
+    CONSUMABLE,
 }
 
 export enum PowerType {
     MAX_HP,
     STRENGTH,
     ARMOR,
-    MAX_MANA
+    MAX_MANA,
 }
 
 export enum ConsumableType {
@@ -32,8 +31,7 @@ export type Power = {
     description: string;
     changes: Partial<CombatUnit>;
     maxAmountPerUnit: number | null;
-
-}
+};
 
 export type Consumable = {
     id: ConsumableType;
@@ -42,12 +40,12 @@ export type Consumable = {
     label: string;
     description: string;
     changes: Partial<CombatUnit>;
-}
+};
 
 export type Reward = {
     type: RewardType;
     value: Power | Consumable;
-}
+};
 
 const powers: { [key: number]: Power } = {
     [PowerType.STRENGTH]: {
@@ -58,7 +56,7 @@ const powers: { [key: number]: Power } = {
         changes: {
             strength: 1,
         },
-        maxAmountPerUnit: null
+        maxAmountPerUnit: null,
     },
     [PowerType.ARMOR]: {
         availableUnitIds: [],
@@ -68,7 +66,7 @@ const powers: { [key: number]: Power } = {
         changes: {
             armor: 1,
         },
-        maxAmountPerUnit: null
+        maxAmountPerUnit: null,
     },
     [PowerType.MAX_HP]: {
         availableUnitIds: [],
@@ -77,9 +75,9 @@ const powers: { [key: number]: Power } = {
         description: '[UNIT_NAME] gains +5 Max HP',
         changes: {
             maxHp: 5,
-            hp: 5
+            hp: 5,
         },
-        maxAmountPerUnit: null
+        maxAmountPerUnit: null,
     },
     [PowerType.MAX_MANA]: {
         availableUnitIds: [],
@@ -88,9 +86,9 @@ const powers: { [key: number]: Power } = {
         description: '[UNIT_NAME] gains +1 Max Mana',
         changes: {
             maxMana: 1,
-            mana: 1
+            mana: 1,
         },
-        maxAmountPerUnit: 5
+        maxAmountPerUnit: 5,
     },
 };
 
@@ -107,16 +105,18 @@ const consumables: { [key: number]: Consumable } = {
 };
 
 const getRandomFriendlyUnitId = (state: CombatState): string => {
-    const friendlyUnitIds = getEntityList(state.units.entities).filter(unit => unit.isFriendly).map(unit => unit.id);
+    const friendlyUnitIds = getEntityList(state.units.entities)
+        .filter((unit) => unit.isFriendly)
+        .map((unit) => unit.id);
     const randomIndex = Math.floor(Math.random() * friendlyUnitIds.length);
     return friendlyUnitIds[randomIndex];
-}
+};
 
 const filterByAvailableUnitIds = (unitId: string, rewardList: (Power | Consumable)[]) => {
-    return rewardList.filter(reward => {
+    return rewardList.filter((reward) => {
         return reward.availableUnitIds.length <= 0 || reward.availableUnitIds.includes(unitId);
     });
-}
+};
 
 export const getRandomPowerReward = (state: CombatState): Reward => {
     const powersListCopy = [...Object.values(powers)];
@@ -126,9 +126,9 @@ export const getRandomPowerReward = (state: CombatState): Reward => {
 
     return {
         type: RewardType.POWER,
-        value: {...randomPower, unitId: randomFriendlyUnitId},
-    }
-}
+        value: { ...randomPower, unitId: randomFriendlyUnitId },
+    };
+};
 
 export const getRandomConsumableReward = (state: CombatState): Reward => {
     const consumablesListCopy = [...Object.values(consumables)];
@@ -138,17 +138,15 @@ export const getRandomConsumableReward = (state: CombatState): Reward => {
 
     return {
         type: RewardType.CONSUMABLE,
-        value: {...randomConsumable, unitId: randomFriendlyUnitId},
-    }
-}
+        value: { ...randomConsumable, unitId: randomFriendlyUnitId },
+    };
+};
 
 export const getRewardDescription = (reward: Reward): string => {
-    if (!reward.value.unitId)
-        return reward.value.description;
+    if (!reward.value.unitId) return reward.value.description;
 
     const unit = selectUnit(reward.value.unitId)(store.getState() as RootState);
-    if (!unit)
-        throw new Error('Unit not found');
+    if (!unit) throw new Error('Unit not found');
 
     return reward.value.description.replace('[UNIT_NAME]', unit.name);
-}
+};

@@ -1,5 +1,4 @@
-import { CombatState, unitsAdapter } from '../combat/state/combatModels';
-import { getSecondCharacter } from './encounters';
+import { CombatState } from '../combat/state/combatModels';
 
 export const getScriptedRewards = (state: CombatState): void => {
     switch (state.difficulty) {

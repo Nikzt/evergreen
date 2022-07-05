@@ -1,59 +1,58 @@
 import { store } from '../../store';
-import checkEndCombat from './checkEndCombat';
 import { selectCanUseSpecificAbility, selectFriendlyUnitByIdx } from './state/combatSelectors';
 import { setVictoryState } from './state/combatSlice';
 
 export type AbilityKeyBinding = {
-    unitIdx: number,
-    abilityIdx: number,
-    key: string
-}
+    unitIdx: number;
+    abilityIdx: number;
+    key: string;
+};
 
 export const abilityKeyBindings: AbilityKeyBinding[] = [
     // Unit 1
     {
         unitIdx: 0,
         abilityIdx: 0,
-        key: '1'
+        key: '1',
     },
     {
         unitIdx: 0,
         abilityIdx: 1,
-        key: '2'
+        key: '2',
     },
     {
         unitIdx: 0,
         abilityIdx: 2,
-        key: '3'
+        key: '3',
     },
     {
         unitIdx: 0,
         abilityIdx: 3,
-        key: '4'
+        key: '4',
     },
 
     // Unit 2
     {
         unitIdx: 1,
         abilityIdx: 0,
-        key: 'q'
+        key: 'q',
     },
     {
         unitIdx: 1,
         abilityIdx: 1,
-        key: 'w'
+        key: 'w',
     },
     {
         unitIdx: 1,
         abilityIdx: 2,
-        key: 'e'
+        key: 'e',
     },
     {
         unitIdx: 1,
         abilityIdx: 3,
-        key: 'r'
+        key: 'r',
     },
-]
+];
 
 const handleKeyPress = (key: string) => {
     // if pressed space, end combat
@@ -61,17 +60,15 @@ const handleKeyPress = (key: string) => {
         store.dispatch(setVictoryState());
     }
 
-
-    const keyBinding = abilityKeyBindings.find(k => k.key === key);
-    if (!keyBinding)
-        return;
+    const keyBinding = abilityKeyBindings.find((k) => k.key === key);
+    if (!keyBinding) return;
 
     const state = store.getState();
     const unit = selectFriendlyUnitByIdx(keyBinding.unitIdx)(state);
     const abilityId = unit?.abilityIds[keyBinding.abilityIdx];
     if (unit && abilityId != null && selectCanUseSpecificAbility(unit.id, abilityId)(state)) {
     }
-}
+};
 
 class KeyHandler {
     private static isInitialized = false;

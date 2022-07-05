@@ -1,11 +1,9 @@
 type TargetLineProps = {
     sourceUnitId: string;
     targetUnitId: string | null;
-    isFriendlySource: boolean;
-    isBlocking: boolean;
 };
 
-const TargetLine = ({ sourceUnitId, targetUnitId, isFriendlySource, isBlocking }: TargetLineProps) => {
+const TargetLine = ({ sourceUnitId, targetUnitId }: TargetLineProps) => {
     const getCoordinatesOfUnitAnchorPoint = (unitId: string) => {
         const unitAnchorPoint = document.getElementById(unitId + '-anchor-point');
         if (!unitAnchorPoint) return null;
@@ -14,9 +12,9 @@ const TargetLine = ({ sourceUnitId, targetUnitId, isFriendlySource, isBlocking }
         const offsetLeft = combatContainer?.offsetLeft ?? 0;
         return {
             x: rect.x - offsetLeft,
-            y: rect.y
+            y: rect.y,
         };
-    }
+    };
 
     const calculateLineCoordinates = () => {
         if (!sourceUnitId || !targetUnitId) return;
@@ -26,16 +24,15 @@ const TargetLine = ({ sourceUnitId, targetUnitId, isFriendlySource, isBlocking }
         if (sourceUnitAnchorPoint == null || targetUnitAnchorPoint == null) return;
 
         // If line is perfectly vertical, the gradient will not work
-        if (sourceUnitAnchorPoint.x - targetUnitAnchorPoint.x === 0)
-            sourceUnitAnchorPoint.x += 0.0001
+        if (sourceUnitAnchorPoint.x - targetUnitAnchorPoint.x === 0) sourceUnitAnchorPoint.x += 0.0001;
         return {
             x1: sourceUnitAnchorPoint.x,
             y1: sourceUnitAnchorPoint.y,
             x2: targetUnitAnchorPoint.x,
             y2: targetUnitAnchorPoint.y,
             lineColor: '#f8ca65aa',
-        }
-    }
+        };
+    };
 
     const lineProps = calculateLineCoordinates();
 
@@ -50,7 +47,7 @@ const TargetLine = ({ sourceUnitId, targetUnitId, isFriendlySource, isBlocking }
                 y2={lineProps.y2}
                 strokeWidth="3"
                 stroke="url(#lgrad)"
-                style={{stroke: "url(#lgrad)"}}
+                style={{ stroke: 'url(#lgrad)' }}
             />
         </>
     );

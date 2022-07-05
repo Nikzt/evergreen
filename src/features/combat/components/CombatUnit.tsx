@@ -9,10 +9,9 @@ import { toggleUnitActionBar } from '../state/combatSlice';
 
 type CombatUnitProps = {
     unitId: string;
-    isFriendly: boolean;
 };
 
-const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
+const CombatUnit = ({ unitId }: CombatUnitProps) => {
     const unit = useSelectCombatUnit(unitId);
     const dispatch = useAppDispatch();
     const displayedUnitActionBar = useAppSelector((state) => state.combat.displayedUnitActionBar);
@@ -20,8 +19,8 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
     if (!unit) return <span>Unit with ID {unitId} not found</span>;
 
     const onClickFriendlyUnit = (unitId: string) => {
-        dispatch(toggleUnitActionBar(unitId))
-    }
+        dispatch(toggleUnitActionBar(unitId));
+    };
 
     return (
         <div
@@ -30,7 +29,7 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
                 'unit' +
                 (unit.isBlocking ? ' blocking' : '') +
                 (unit.isDead ? ' dead' : '') +
-                (unit.isFriendly ? ' friendly' : ' enemy') + 
+                (unit.isFriendly ? ' friendly' : ' enemy') +
                 (displayedUnitActionBar === unit.id ? ' selected-unit' : '')
             }
         >
@@ -44,7 +43,7 @@ const CombatUnit = ({ unitId, isFriendly }: CombatUnitProps) => {
             {/* Unit info */}
             <UnitInfo unitId={unitId} />
 
-            {!unit.isFriendly && <EnemyActionPreview unitId={unitId}/>}
+            {!unit.isFriendly && <EnemyActionPreview unitId={unitId} />}
 
             <div id={unit.id + '-anchor-point'} className="anchor-point"></div>
         </div>

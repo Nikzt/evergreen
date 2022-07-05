@@ -1,9 +1,9 @@
-import { wait } from "../../common/timeout";
-import { RootState, store } from "../../store";
-import { onBeginEnemyTurn } from "./state/beginEnemyTurn";
-import { CombatOutcome, CombatState } from "./state/combatModels";
-import { selectCanUseAnyAbilities, selectLivingUnits } from "./state/combatSelectors";
-import { beginPlayerTurn, setDefeatState, setVictoryState } from "./state/combatSlice";
+import { wait } from '../../common/timeout';
+import { RootState, store } from '../../store';
+import { onBeginEnemyTurn } from './state/beginEnemyTurn';
+import { CombatOutcome, CombatState } from './state/combatModels';
+import { selectCanUseAnyAbilities, selectLivingUnits } from './state/combatSelectors';
+import { beginPlayerTurn, setDefeatState, setVictoryState } from './state/combatSlice';
 
 /**
  * End the game if all player characters are dead or all enemies are dead
@@ -25,7 +25,7 @@ export const checkEndTurn = async () => {
     const state = store.getState() as RootState;
     const isPlayerTurn = state.combat.isPlayerTurn;
     const livingUnits = selectLivingUnits(state);
-    if (livingUnits.filter(u => u.isFriendly === isPlayerTurn).every(u => !selectCanUseAnyAbilities(u.id)(state))) {
+    if (livingUnits.filter((u) => u.isFriendly === isPlayerTurn).every((u) => !selectCanUseAnyAbilities(u.id)(state))) {
         await wait(1000);
         if (isPlayerTurn) {
             onBeginEnemyTurn();
@@ -33,7 +33,7 @@ export const checkEndTurn = async () => {
             store.dispatch(beginPlayerTurn());
         }
     }
-}
+};
 
 const checkEndCombat = () => {
     // Check if combat has ended based on results of action
@@ -41,6 +41,6 @@ const checkEndCombat = () => {
     const combatOutcome = getCombatOutcome(stateAfterCombatAction.combat);
     if (combatOutcome === CombatOutcome.DEFEAT) setTimeout(() => store.dispatch(setDefeatState()), 1000);
     else if (combatOutcome === CombatOutcome.VICTORY) setTimeout(() => store.dispatch(setVictoryState()), 1000);
-}
+};
 
 export default checkEndCombat;

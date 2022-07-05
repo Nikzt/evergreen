@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from 'react';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { ItemType } from './common/items';
 import { selectNextEnemyAbility, selectUnit } from './features/combat/state/combatSelectors';
@@ -19,4 +18,4 @@ export const useSelectCombatUnit = (unitId: string | null) => {
 
 export const useSelectNextEnemyAbility = (unitId: string) => {
     return useAppSelector(selectNextEnemyAbility(unitId));
-}
+};

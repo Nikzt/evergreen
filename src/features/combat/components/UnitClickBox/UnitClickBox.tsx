@@ -1,7 +1,7 @@
 import './unitClickBox.scss';
 
 type UnitClickBoxProps = {
-    clickCallback: Function;
+    clickCallback: () => void;
 };
 
 const UnitClickBox = ({ clickCallback }: UnitClickBoxProps) => {

@@ -1,20 +1,28 @@
-import { CombatAbilityType, getAbility } from "./combatAbilities";
-import { RootState, store } from "../../../store";
-import { CombatAction } from "../state/combatModels";
-import { selectCanUseAnyAbilities, selectUnit } from "../state/combatSelectors";
-import { beginTargetingAbility, endTargetingAbility, performBlock, performCombatAction, performRevenge } from "../state/combatSlice";
-import checkEndCombat, { checkEndTurn } from "../checkEndCombat";
+import { CombatAbilityType, getAbility } from './combatAbilities';
+import { RootState, store } from '../../../store';
+import { CombatAction } from '../state/combatModels';
+import { selectCanUseAnyAbilities } from '../state/combatSelectors';
+import {
+    beginTargetingAbility,
+    endTargetingAbility,
+    performBlock,
+    performCombatAction,
+    performRevenge,
+} from '../state/combatSlice';
+import checkEndCombat, { checkEndTurn } from '../checkEndCombat';
 
 export const handleAbility = (combatAction: CombatAction) => {
     store.dispatch(beginTargetingAbility(combatAction));
-}
+};
 
 export const targetAbility = (targetUnitId: string) => {
     const state = store.getState() as RootState;
 
-    if (state.combat.targetingSourceUnitId == null
-        || state.combat.targetingAbilityId == null
-        || !state.combat.isTargeting)
+    if (
+        state.combat.targetingSourceUnitId == null ||
+        state.combat.targetingAbilityId == null ||
+        !state.combat.isTargeting
+    )
         return;
 
     const ability = getAbility(state.combat.targetingAbilityId);
@@ -24,14 +32,14 @@ export const targetAbility = (targetUnitId: string) => {
     if (!ability || !sourceUnit || !targetUnit || !selectCanUseAnyAbilities(sourceUnit.id)(state)) return;
 
     store.dispatch(endTargetingAbility(false));
-    useAbility({
+    performAbility({
         sourceUnitId: state.combat.targetingSourceUnitId,
         abilityId: state.combat.targetingAbilityId,
-        targetUnitId
+        targetUnitId,
     });
-}
+};
 
-export const useAbility = (combatAction: CombatAction) => {
+export const performAbility = (combatAction: CombatAction) => {
     // Handle non-targeted abilities (eg. revenge)
     if (combatAction.abilityId === CombatAbilityType.BLOCK) {
         store.dispatch(performBlock(combatAction));
@@ -44,4 +52,4 @@ export const useAbility = (combatAction: CombatAction) => {
     // Only perform combat action if entire combat action is filled out
     checkEndTurn();
     checkEndCombat();
-}
+};

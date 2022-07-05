@@ -1,4 +1,4 @@
-import {  useAppSelector, useSelectCombatUnit } from '../../../hooks';
+import { useAppSelector, useSelectCombatUnit } from '../../../hooks';
 import { targetAbility } from '../abilities/abilityHandler';
 import './targetingBox.scss';
 

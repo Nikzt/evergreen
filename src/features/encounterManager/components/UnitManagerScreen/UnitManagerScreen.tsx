@@ -1,12 +1,8 @@
 import { useAppDispatch, useAppSelector } from '../../../../hooks';
 import { store } from '../../../../store';
-import { initCombatEncounter, updateUnitWithReward } from '../../../combat/state/combatSlice';
+import { initCombatEncounter } from '../../../combat/state/combatSlice';
 import { randomEncounterGenerator } from '../../encounters';
-import EnemyController from '../../enemyController';
-import {
-    selectAvailableRewards,
-    selectFriendlyUnits,
-} from '../../../combat/state/combatSelectors';
+import { selectAvailableRewards, selectFriendlyUnits } from '../../../combat/state/combatSelectors';
 import UnitInfo from '../../../../common/components/UnitInfo/UnitInfo';
 import RewardSelector from '../RewardSelector/RewardSelector';
 
@@ -21,7 +17,6 @@ const UnitManagerScreen = () => {
         const friendlyUnits = selectFriendlyUnits(state);
 
         dispatch(initCombatEncounter(randomEncounterGenerator(difficulty, friendlyUnits)));
-        EnemyController.initEnemies();
     };
 
     return (
@@ -36,14 +31,11 @@ const UnitManagerScreen = () => {
                             <li>Strength: {u.strength}</li>
                             <li>Armor: {u.armor}</li>
                         </ul>
-
                     </div>
                 ))}
             </div>
 
-
-            <button className="menu-button"
-                    onClick={onBeginCombatClick}>
+            <button className="menu-button" onClick={onBeginCombatClick}>
                 Begin Combat
             </button>
         </div>
