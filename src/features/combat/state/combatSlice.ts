@@ -46,7 +46,13 @@ const getUnit = (state: CombatState, unitId: string) => {
 const makeChangesAdditive = (changes: Partial<CombatUnit>, unit: CombatUnit) => {
     const additiveChanges: any = {};
     Object.keys(changes).forEach((key) => {
-        if ((unit as any)[key] !== undefined) additiveChanges[key] = (changes as any)[key] + (unit as any)[key];
+        if ((unit as any)[key] !== undefined) {
+            if ((unit as any)[key] instanceof Array) {
+                additiveChanges[key] = [...(unit as any)[key], ...(changes as any)[key]];
+            } else if (typeof((unit as any)[key]) === 'number') {
+                additiveChanges[key] = (changes as any)[key] + (unit as any)[key];
+            }
+        }
     });
     return additiveChanges;
 };
