@@ -1,13 +1,19 @@
 $color-primary: #010705;
-$color-secondary: #00442255;
-$color-secondary-v1: #49605a;
+$color-secondary: rgb(1, 27, 14);
+$color-secondary-v1: #7b7e7d;
+
+$color-friendly-outline: #5c7c74;
+$color-friendly-background: rgb(1, 27, 14);
+
+$color-enemy-outline: #774956;
+$color-enemy-background: rgb(27, 1, 3);
 
 $color-highlight: #92e487;
 $color-text: #dfdfdf;
 $color-greentext:  #c9fae2;
-$color-enemy: #e66d64;
+$color-enemy: #d06962;
 
-$color-friendly: #76cf9e;
+$color-friendly: #85bfa4;
 
 $color-ability-default: #f8ca65;
 

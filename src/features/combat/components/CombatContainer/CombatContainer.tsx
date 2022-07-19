@@ -42,8 +42,6 @@ const CombatContainer = () => {
                             key={combatAction.sourceUnitId}
                             sourceUnitId={combatAction.sourceUnitId}
                             targetUnitId={combatAction.targetUnitId}
-                            isFriendlySource={false}
-                            isBlocking={false}
                         />
                     ))}
                 </svg>
@@ -54,13 +52,13 @@ const CombatContainer = () => {
             {/* Enemy units */}
             <div className="units-row enemy-units-row">
                 {enemyUnitIds.map((unitId) => (
-                    <CombatUnit key={unitId} isFriendly={false} unitId={unitId} />
+                    <CombatUnit key={unitId} unitId={unitId} />
                 ))}
             </div>
             {/* Friendly units */}
             <div className="units-row friendly-units-row">
                 {friendlyUnitIds.map((unitId) => (
-                    <CombatUnit key={unitId} isFriendly={true} unitId={unitId} />
+                    <CombatUnit key={unitId} unitId={unitId} />
                 ))}
             </div>
             {/* Abilities */}

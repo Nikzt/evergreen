@@ -4,6 +4,7 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 @import url("https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz&display=swap");
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;700&display=swap');
 @import "./common/scss/colors.scss";
 
 html {
@@ -11,7 +12,7 @@ html {
     background-color: $color-primary;
     user-select: none;
     touch-action: manipulation;
-    font-family: 'VT323', monospace;
+    font-family: 'Rajdhani', sans-serif;
 }
 
 .app {
@@ -34,7 +35,7 @@ html {
 }
 
 button {
-    font-family: 'VT323', monospace;
+    font-family: 'Rajdhani', sans-serif;
 }
 
 .menu-button {
@@ -133,7 +134,7 @@ ul {
 }
 
 .combat-number {
-    font-family: 'VT323', monospace;
     -webkit-text-stroke: 1px black;
+    font-weight: 700;
     font-size: 1.6em;
 }

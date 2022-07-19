@@ -1,13 +1,17 @@
 @import "../../scss/colors.scss";
 
 .unit-info {
-    background-color: $color-secondary;
-    border: 1px solid $color-secondary-v1;
     border-radius: 0;
     color: $color-text;
     display: grid;
     grid-template-rows: 110px 40px;
     padding: 5px;
+
+    background-color: $color-friendly-background;
+    border: 1px solid $color-friendly-outline;
+    .hp-bar-progress {
+        border-color: $color-friendly-outline;
+    }
 
     .unit-info--portrait-container {
         img {
@@ -38,7 +42,6 @@
 
         .hp-bar-progress {
             margin-bottom: 3px;
-            border-color: lighten($color-secondary-v1, 8%);
             .cast-bar-label {
                 color: $color-primary;
             }
@@ -54,7 +57,17 @@
 }
 
 .enemy .unit-info {
+    background-color: $color-enemy-background;
+    border: 1px solid $color-enemy-outline;
+    .hp-bar-progress {
+        border-color: $color-enemy-outline;
+    }
 }
 
 .friendly .unit-info {
+    background-color: $color-friendly-background;
+    border: 1px solid $color-friendly-outline;
+    .hp-bar-progress {
+        border-color: $color-friendly-outline;
+    }
 }
