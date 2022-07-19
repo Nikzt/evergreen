@@ -2,6 +2,7 @@ import { RootState, store } from '../../store';
 import { CombatUnit, CombatState } from '../combat/state/combatModels';
 import { selectUnit } from '../combat/state/combatSelectors';
 import { getEntityList } from '../../common/entityUtils';
+import { CombatAbilityType } from '../combat/abilities/combatAbilities';
 
 export enum RewardType {
     POWER,
@@ -13,6 +14,7 @@ export enum PowerType {
     STRENGTH,
     ARMOR,
     MAX_MANA,
+    QUICK_ATTACK
 }
 
 export enum ConsumableType {
@@ -90,6 +92,16 @@ const powers: { [key: number]: Power } = {
         },
         maxAmountPerUnit: 5,
     },
+    [PowerType.QUICK_ATTACK]: {
+        availableUnitIds: [],
+        id: PowerType.QUICK_ATTACK,
+        label: 'Quick Attack',
+        description: '[UNIT_NAME] gains the ability "Quick Attack"',
+        changes: {
+            abilityIds: [0],
+        },
+        maxAmountPerUnit: 1,
+    },
 };
 
 const consumables: { [key: number]: Consumable } = {
@@ -118,11 +130,18 @@ const filterByAvailableUnitIds = (unitId: string, rewardList: (Power | Consumabl
     });
 };
 
+const canUnitUsePower = (state: RootState, power: Power): boolean => {
+    return false;
+}
+
 export const getRandomPowerReward = (state: CombatState): Reward => {
     const powersListCopy = [...Object.values(powers)];
     const randomFriendlyUnitId = getRandomFriendlyUnitId(state);
     const filteredPowers = filterByAvailableUnitIds(randomFriendlyUnitId, powersListCopy);
     const randomPower = filteredPowers[Math.floor(Math.random() * powersListCopy.length)];
+    //const randomPower = filteredPowers.find(p => p.id === PowerType.QUICK_ATTACK);
+    if (!randomPower) throw new Error('No random power found');
+
 
     return {
         type: RewardType.POWER,

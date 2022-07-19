@@ -1,4 +1,16 @@
 .game-start-screen {
+    animation: fadeIn 1s;
+    .game-title {
+        font-family: "Cinzel";
+        color: #c9fae2;
+        font-size: 3rem;
+        letter-spacing: 5px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 1rem;
+        animation: pulsate 3s infinite alternate;
+    }
+
     .ability-description-row {
         margin-bottom: 10px;
         width: 300px;
@@ -12,5 +24,37 @@
             width: 50px;
             margin-right: 20px;
         }
+    }
+}
+
+@keyframes pulsate {
+    100% {
+      /* Larger blur radius */
+      text-shadow:
+        0 0 2px #93ddb8,
+        0 0 4px #79c69f,
+        0 0 11px #79c69f,
+        0 0 100px #0fa,
+        0 0 150px #0fa;
+    }
+    0% {
+      /* Smaller blur radius */
+      text-shadow:
+        0 0 2px #93ddb8,
+        0 0 3px #79c69f,
+        0 0 8px #79c69f,
+        0 0 70px #0fa,
+        0 0 100px #0fa;
+    }
+  }
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9)
+    }
+    to {
+        opacity: 1;
+        transform: scale(1)
     }
 }
