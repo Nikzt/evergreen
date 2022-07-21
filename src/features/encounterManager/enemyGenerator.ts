@@ -1,3 +1,4 @@
+import unitIcons from '../../assets/unitIcons/unitIcons';
 import { CombatAbilityType } from '../combat/abilities/combatAbilities';
 import { CombatUnit } from '../combat/state/combatModels';
 import { createEnemyUnit } from './combatUnitUtils';
@@ -19,6 +20,7 @@ export const enemyTemplates = {
         armor: 0,
         block: 0,
         maxMana: 1,
+        icon: unitIcons.wolfHead,
     }),
     [EnemyTemplateEnum.FOREST_FIEND]: createEnemyUnit({
         name: 'Forest Fiend',
@@ -29,6 +31,7 @@ export const enemyTemplates = {
         armor: 0,
         block: 2,
         maxMana: 1,
+        icon: unitIcons.sharpSmile,
     }),
     [EnemyTemplateEnum.FOREST_PROTECTOR]: createEnemyUnit({
         name: 'Forest Protector',
@@ -40,6 +43,7 @@ export const enemyTemplates = {
         block: 3,
         isTaunting: true,
         maxMana: 1,
+        icon: unitIcons.rockGolem,
     }),
     [EnemyTemplateEnum.WOOD_GIANT]: createEnemyUnit({
         name: 'Wood Giant',
@@ -50,6 +54,7 @@ export const enemyTemplates = {
         armor: 0,
         block: 0,
         maxMana: 1,
+        icon: unitIcons.evilTree,
     }),
 };
 
