@@ -6,7 +6,7 @@
         width: 20px;
         height: 10px;
         margin-right: 5px;
-        rect {
+        rect.mana-available {
             fill: $color-mana;
             animation: glow 1.5s infinite;
         }

@@ -9,7 +9,7 @@
     &.blocking {
     }
 
-    &.selected-unit .unit-info{
+    &.selected-unit .unit-info {
         border: 1px solid $color-highlight;
     }
 
@@ -27,11 +27,17 @@
         left: 50%;
     }
 
-    &.friendly .anchor-point {
-        top: 0;
+    &.friendly {
+        box-shadow: 0 0 8px $color-friendly-glow;
+        .anchor-point {
+            top: 0;
+        }
     }
-    &.enemy .anchor-point {
-        bottom: -15px;
-        left: calc(50% - 5px);
+    &.enemy {
+        box-shadow: 0 0 8px $color-enemy-glow;
+        .anchor-point {
+            bottom: -15px;
+            left: calc(50% - 5px);
+        }
     }
 }
