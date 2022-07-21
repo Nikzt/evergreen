@@ -17,6 +17,11 @@ const GameStartScreen = () => {
             <button className="menu-button" onClick={onBeginCombatClick}>
                 Begin Combat
             </button>
+            <div className="about-section">
+                <p>A game by Bence Linder</p>
+                <p><a href="https://github.com/nikzt/evergreen">GitHub</a></p>
+
+            </div>
         </div>
     );
 };

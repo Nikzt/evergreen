@@ -21,6 +21,8 @@ const clearCombatState = (state: CombatState) => {
     state.isPlayerTurn = true;
     state.enemyAbilitiesQueue = [];
     state.displayedUnitActionBar = null;
+    state.numTurnsInCurrentCombat = 0;
+    state.showTurnIndicator = true;
 };
 
 const removeAbilitiesWithSourceUnitId = (state: CombatState, sourceUnitId: string) => {
