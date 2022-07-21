@@ -1,6 +1,7 @@
 import { wait } from '../../common/timeout';
 import { RootState, store } from '../../store';
 import { onBeginEnemyTurn } from './state/beginEnemyTurn';
+import { onBeginPlayerTurn } from './state/beginPlayerTurn';
 import { CombatOutcome, CombatState } from './state/combatModels';
 import { selectCanUseAnyAbilities, selectLivingUnits } from './state/combatSelectors';
 import { beginPlayerTurn, setDefeatState, setVictoryState } from './state/combatSlice';
@@ -30,7 +31,7 @@ export const checkEndTurn = async () => {
         if (isPlayerTurn) {
             onBeginEnemyTurn();
         } else {
-            store.dispatch(beginPlayerTurn());
+            onBeginPlayerTurn();
         }
     }
 };

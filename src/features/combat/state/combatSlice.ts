@@ -84,6 +84,8 @@ const initialState: CombatState = {
     scriptedText: '',
     enemyAbilitiesQueue: [],
     displayedUnitActionBar: null,
+    showTurnIndicator: true,
+    numTurnsInCurrentCombat: 0,
 };
 export const combatSlice = createSlice({
     name: 'combat',
@@ -284,6 +286,7 @@ export const combatSlice = createSlice({
         beginEnemyTurn: (state) => {
             state.isPlayerTurn = false;
             state.displayedUnitActionBar = null;
+            state.numTurnsInCurrentCombat++;
         },
         removeFromEnemyAbilityQueue: (state, action: PayloadAction<CombatAction>) => {
             const idx = state.enemyAbilitiesQueue.findIndex((c) => c.sourceUnitId === action.payload.sourceUnitId);
@@ -305,6 +308,9 @@ export const combatSlice = createSlice({
             // toggle on cases
             else state.displayedUnitActionBar = unit.id;
         },
+        setShowTurnIndicator: (state, action: PayloadAction<boolean>) => {
+            state.showTurnIndicator = action.payload;
+        }
     },
 });
 
@@ -321,7 +327,6 @@ const regenerateEnemyUnitsMana = (state: CombatState) => {
 };
 
 const regenerateUnitMana = (unit: CombatUnit) => {
-    console.log(unit.mana);
     if (unit.mana < unit.maxMana) unit.mana++;
 };
 
@@ -330,6 +335,7 @@ const onBeginPlayerTurn = (state: CombatState) => {
     state.isPlayerTurn = true;
     state.displayedUnitActionBar = null;
     regenerateFriendlyUnitsMana(state);
+    state.numTurnsInCurrentCombat++;
 };
 
 const populateEnemyAbilitiesQueue = (state: CombatState) => {
@@ -366,6 +372,7 @@ export const {
     toggleUnitActionBar,
     performBlock,
     performRevenge,
+    setShowTurnIndicator
 } = combatSlice.actions;
 
 export default combatSlice.reducer;

@@ -67,6 +67,8 @@ export type CombatState = {
     isPlayerTurn: boolean;
     displayedUnitActionBar: string | null;
     numEncounters: number;
+    showTurnIndicator: boolean;
+    numTurnsInCurrentCombat: number;
 
     /** Order of list is the order in which the enemies will perform their actions */
     enemyAbilitiesQueue: CombatAction[];
