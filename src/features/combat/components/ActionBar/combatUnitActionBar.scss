@@ -80,7 +80,18 @@
 
         .ability-label {
             color: $color-text;
-            margin-left: 20px;
+            width: 100%;
+            .mana-bar {
+                left: 42px;
+                position: absolute;
+            }
+            p {
+                font-size: 0.9em;
+                text-align: right;
+                display: inline;
+                float: right;
+                margin-right:5px;
+            }
         }
     }
 

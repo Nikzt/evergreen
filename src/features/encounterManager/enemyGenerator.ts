@@ -15,10 +15,8 @@ export const enemyTemplates = {
         name: 'Bark Dog',
         maxHp: 5,
         abilityIds: [CombatAbilityType.QUICK_ATTACK],
-        weaponDamage: 2,
         strength: 1,
         armor: 0,
-        block: 0,
         maxMana: 1,
         icon: unitIcons.wolfHead,
     }),
@@ -26,34 +24,28 @@ export const enemyTemplates = {
         name: 'Forest Fiend',
         maxHp: 10,
         abilityIds: [CombatAbilityType.QUICK_ATTACK, CombatAbilityType.STRONG_ATTACK],
-        weaponDamage: 2,
-        strength: 3,
+        strength: 1,
         armor: 0,
-        block: 2,
-        maxMana: 1,
+        maxMana: 3,
         icon: unitIcons.sharpSmile,
     }),
     [EnemyTemplateEnum.FOREST_PROTECTOR]: createEnemyUnit({
         name: 'Forest Protector',
         maxHp: 12,
         abilityIds: [CombatAbilityType.QUICK_ATTACK],
-        weaponDamage: 2,
-        strength: 3,
+        strength: 2,
         armor: 0,
-        block: 3,
         isTaunting: true,
-        maxMana: 1,
+        maxMana: 2,
         icon: unitIcons.rockGolem,
     }),
     [EnemyTemplateEnum.WOOD_GIANT]: createEnemyUnit({
         name: 'Wood Giant',
         maxHp: 18,
         abilityIds: [CombatAbilityType.STRONG_ATTACK],
-        weaponDamage: 4,
-        strength: 4,
+        strength: 3,
         armor: 0,
-        block: 0,
-        maxMana: 1,
+        maxMana: 3,
         icon: unitIcons.evilTree,
     }),
 };
@@ -64,10 +56,8 @@ export const getEnemy = (enemyType: EnemyTemplateEnum, unitId: string): CombatUn
 };
 
 const applyDifficultyScalingToEnemy = (enemy: CombatUnit, difficulty: number) => {
-    enemy.weaponDamage += Math.floor(difficulty / 4);
     enemy.maxHp += Math.floor(difficulty);
     enemy.hp = enemy.maxHp;
-    enemy.block += Math.floor(difficulty);
     enemy.strength += Math.floor(difficulty / 2);
 };
 

@@ -12,11 +12,8 @@ const calculateAbilityDamage = (combatAction: CombatAction, state?: CombatState)
     if (!sourceUnit || !targetUnit || !ability) return 0;
 
     const rawDamage = calculateRawDamage(sourceUnit, ability);
-    // TODO: No armor yet
-    const damageAfterArmor = rawDamage;
-    const damageAfterBlock = targetUnit.isBlocking ? damageAfterArmor - targetUnit.block : damageAfterArmor;
 
-    const damage = Math.floor(damageAfterBlock > 0 ? damageAfterBlock : 0);
+    const damage = Math.floor(rawDamage);
     return damage;
 };
 
@@ -24,7 +21,7 @@ export const calculateRawDamage = (sourceUnit: CombatUnit, ability: CombatAbilit
     if (ability.id === CombatAbilityType.REVENGE) return sourceUnit.blockedDamageThisCombat;
 
     const rawDamage =
-        ability.weaponDamageMultiplier * sourceUnit.weaponDamage + ability.strengthMultiplier * sourceUnit.strength;
+         ability.strengthMultiplier * sourceUnit.strength;
     return Math.floor(rawDamage);
 };
 
