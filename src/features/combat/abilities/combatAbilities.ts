@@ -1,6 +1,5 @@
 import abilityIcons from '../../../assets/abilityIcons/abilityIcons';
 import { CombatUnit } from '../state/combatModels';
-import { calculateRawDamage } from './calculateAbilityDamage';
 
 export enum CombatTargetType {
     ENEMY = 0,
@@ -22,7 +21,6 @@ export type CombatAbility = {
     name: string;
     label: string;
     targetType: CombatTargetType;
-    weaponDamageMultiplier: number;
     strengthMultiplier: number;
     blockValue?: number;
     description: string;
@@ -30,27 +28,12 @@ export type CombatAbility = {
     manaCost: number;
 };
 
-export const getAbility = (abilityType: CombatAbilityType | null): CombatAbility => {
-    if (abilityType != null && combatAbilities[abilityType] != null) return combatAbilities[abilityType];
-    else throw new Error();
-};
-
-export const getAbilityDescription = (unit: CombatUnit, ability: CombatAbility) => {
-    // Replace [DIRECT_DAMAGE] with calculated damage
-    const description = ability.description
-        .replace('[DIRECT_DAMAGE]', `${calculateRawDamage(unit, ability)}`)
-        .replace('[BLOCK_PERCENT]', `${unit.blockPercent}%`)
-        .replace('[SOURCE_UNIT_NAME]', `${unit.name}`);
-
-    return description;
-};
 
 const combatAbilities: { [abilityType: number]: CombatAbility } = {
     [CombatAbilityType.QUICK_ATTACK]: {
         id: CombatAbilityType.QUICK_ATTACK,
         icon: require('../../../assets/abilityIcons/scalpel-strike.svg'),
         name: 'Quick Attack',
-        weaponDamageMultiplier: 0.5,
         strengthMultiplier: 1,
         targetType: CombatTargetType.ENEMY,
         label: 'Quick Attack',
@@ -62,8 +45,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         id: CombatAbilityType.STRONG_ATTACK,
         icon: require('../../../assets/abilityIcons/blade-drag.svg'),
         name: 'Strong Attack',
-        weaponDamageMultiplier: 2,
-        strengthMultiplier: 3,
+        strengthMultiplier: 2.5,
         targetType: CombatTargetType.ENEMY,
         label: 'Strong Attack',
         description: 'Deal [DIRECT_DAMAGE] damage to target enemy unit',
@@ -74,7 +56,6 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         id: CombatAbilityType.BLOCK,
         icon: abilityIcons.block,
         name: 'Block',
-        weaponDamageMultiplier: 0.5,
         strengthMultiplier: 1,
         targetType: CombatTargetType.ENEMY,
         label: 'Block',
@@ -87,7 +68,6 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         id: CombatAbilityType.REVENGE,
         icon: abilityIcons.revenge,
         name: 'Revenge',
-        weaponDamageMultiplier: 1.5,
         strengthMultiplier: 2,
         targetType: CombatTargetType.ENEMY,
         label: 'Revenge',

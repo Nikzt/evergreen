@@ -1,6 +1,6 @@
 import { CombatUnit } from '../combat/state/combatModels';
 
-const getDefaultUnitProps = (maxHp: number) => {
+const getDefaultUnitProps = (maxHp: number, maxMana: number) => {
     return {
         isCasting: false,
         isFriendly: false,
@@ -13,9 +13,8 @@ const getDefaultUnitProps = (maxHp: number) => {
         blocking: null,
         isDead: false,
         castingAbility: null,
-        blockDuration: 1,
         isBlockSuccessful: false,
-        mana: 1,
+        mana: maxMana,
         blockedDamageThisCombat: 0,
         revengeCharges: 1,
         powers: [],
@@ -24,7 +23,7 @@ const getDefaultUnitProps = (maxHp: number) => {
 
 export const createEnemyUnit = (partialUnit: Partial<CombatUnit>): CombatUnit => {
     return {
-        ...getDefaultUnitProps(partialUnit.maxHp as number),
+        ...getDefaultUnitProps(partialUnit.maxHp as number, partialUnit.maxMana as number),
         ...(partialUnit as CombatUnit),
     };
 };

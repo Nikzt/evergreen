@@ -1,10 +1,11 @@
-import combatAbilities, { CombatAbilityType, getAbility, getAbilityDescription } from '../../abilities/combatAbilities';
+import combatAbilities, { CombatAbilityType } from '../../abilities/combatAbilities';
 import { useAppSelector, useSelectCombatUnit } from '../../../../hooks';
 import { abilityKeyBindings } from '../../keyHandler';
 import { selectCanUseSpecificAbility, selectFriendlyUnitIndexes } from '../../state/combatSelectors';
 import './combatUnitActionBar.scss';
 import { handleAbility } from '../../abilities/abilityHandler';
 import ManaBar from '../ManaBar/ManaBar';
+import { getAbility, getAbilityDescription, getAbilityLabel } from '../../abilities/abilityUtils';
 
 const CombatUnitActionBar = () => {
     const unitId = useAppSelector((state) => state.combat.displayedUnitActionBar);
@@ -63,7 +64,11 @@ const CombatUnitActionBar = () => {
                         onClick={() => onAbilityButtonClick(unit.id, ability.id)}
                     >
                         <img className="ability-icon" src={ability.icon} alt="missing ability icon" />
-                        <p className="ability-label">{ability.label}</p>
+                        {/*<p className="ability-label">{ability.label}</p>*/}
+                        <div className="ability-label">
+                            <ManaBar mana={unit.mana} maxMana={ability.manaCost} />
+                            <p>{getAbilityLabel(unit, ability.id)}</p>
+                        </div>
                     </button>
                 ))}
         </div>

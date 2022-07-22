@@ -1,5 +1,5 @@
 import { createEntityAdapter, EntityState } from '@reduxjs/toolkit';
-import { Power, Reward } from '../../encounterManager/rewards';
+import { Reward } from '../../encounterManager/rewards';
 import { CombatAbilityType } from '../abilities/combatAbilities';
 
 export type CombatAction = {
@@ -47,16 +47,11 @@ export type CombatUnit = {
     abilityIds: CombatAbilityType[];
     maxHp: number;
     maxMana: number;
-    weaponDamage: number;
     strength: number;
     armor: number;
-    powers: Power[];
-
-    // Depcrecated, use blockPercent instead
-    block: number;
+    powers: Reward[];
 
     blockPercent: number;
-    blockDuration: number;
 };
 
 export type CombatState = {

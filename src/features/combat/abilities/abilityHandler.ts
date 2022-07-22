@@ -1,4 +1,4 @@
-import { CombatAbilityType, getAbility } from './combatAbilities';
+import { CombatAbilityType } from './combatAbilities';
 import { RootState, store } from '../../../store';
 import { CombatAction } from '../state/combatModels';
 import { selectCanUseAnyAbilities } from '../state/combatSelectors';
@@ -10,6 +10,7 @@ import {
     performRevenge,
 } from '../state/combatSlice';
 import checkEndCombat, { checkEndTurn } from '../checkEndCombat';
+import { getAbility } from './abilityUtils';
 
 export const handleAbility = (combatAction: CombatAction) => {
     store.dispatch(beginTargetingAbility(combatAction));

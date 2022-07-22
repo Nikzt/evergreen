@@ -1,6 +1,7 @@
-import { CombatAbilityType, getAbility } from '../abilities/combatAbilities';
+import { CombatAbilityType } from '../abilities/combatAbilities';
 import { RootState } from '../../../store';
 import { unitsAdapter } from './combatModels';
+import { getAbility } from '../abilities/abilityUtils';
 
 export const unitsSelectors = unitsAdapter.getSelectors();
 

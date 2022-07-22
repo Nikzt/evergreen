@@ -10,12 +10,12 @@ type RewardOptionProps = {
 const RewardOption = ({ reward }: RewardOptionProps) => {
     const dispatch = useAppDispatch();
     const onRewardClick = () => {
-        if (reward.value.unitId != null) dispatch(updateUnitWithReward({ unitId: reward.value.unitId, reward }));
+        if (reward.unitId != null) dispatch(updateUnitWithReward({ unitId: reward.unitId, reward }));
     };
 
     return (
         <button className="reward-option" onClick={() => onRewardClick()}>
-            <h3>{reward.value.label}</h3>
+            <h3>{reward.label}</h3>
             <p>{getRewardDescription(reward)}</p>
         </button>
     );

@@ -31,7 +31,7 @@ const UnitManagerScreen = () => {
                         <UnitInfo unitId={u.id} />
                         <ul>
                             <li>Strength: {u.strength}</li>
-                            <li>Armor: {u.armor}</li>
+                            <li>Block: {u.blockPercent}%</li>
                         </ul>
                     </div>
                 ))}

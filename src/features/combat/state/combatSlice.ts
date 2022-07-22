@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction, Update } from '@reduxjs/toolkit';
-import combatAbilities, { getAbility } from '../abilities/combatAbilities';
+import combatAbilities  from '../abilities/combatAbilities';
 import { CombatEncounter } from '../../encounterManager/encounters';
 import { CombatAction, CombatState, CombatUnit, RewardUpdate, unitsAdapter } from './combatModels';
 import { unitsSelectors } from './combatSelectors';
 import calculateAbilityDamage, { calculateRawDamage } from '../abilities/calculateAbilityDamage';
-import { getRandomConsumableReward, getRandomPowerReward, Power, RewardType } from '../../encounterManager/rewards';
+import { getRewardsForEachUnit, RewardType } from '../../encounterManager/rewards';
+import { getAbility } from '../abilities/abilityUtils';
 
 /**
  * Clears everything that shouldn't carry over to next combat
@@ -51,7 +52,7 @@ const makeChangesAdditive = (changes: Partial<CombatUnit>, unit: CombatUnit) => 
         if ((unit as any)[key] !== undefined) {
             if ((unit as any)[key] instanceof Array) {
                 additiveChanges[key] = [...(unit as any)[key], ...(changes as any)[key]];
-            } else if (typeof((unit as any)[key]) === 'number') {
+            } else if (typeof ((unit as any)[key]) === 'number') {
                 additiveChanges[key] = (changes as any)[key] + (unit as any)[key];
             }
         }
@@ -98,7 +99,7 @@ export const combatSlice = createSlice({
             unitsAdapter.addMany(
                 state.units,
                 action.payload.units.map((u) => {
-                    return { ...u, revengeCharges: 1, blockedDamageThisCombat: 0 };
+                    return { ...u, revengeCharges: 1, blockedDamageThisCombat: 0, mana: u.maxMana };
                 }),
             );
             state.isCombatInProgress = true;
@@ -128,30 +129,25 @@ export const combatSlice = createSlice({
             });
 
             // Post combat rewards
-            state.availableRewards = [getRandomPowerReward(state), getRandomConsumableReward(state)];
+            state.availableRewards = getRewardsForEachUnit(state);
         },
         updateUnit: (state, action: PayloadAction<Update<CombatUnit>>) => {
             unitsAdapter.updateOne(state.units, action.payload);
         },
         updateUnitWithReward: (state, action: PayloadAction<RewardUpdate>) => {
             const unit = getUnit(state, action.payload.unitId);
-            let changes = action.payload.reward.value.changes;
+            let changes = action.payload.reward.changes;
             if (changes) changes = makeChangesAdditive(changes, unit);
 
+            // Non-consumable rewards must be kept track of
             if (action.payload.reward.type === RewardType.POWER) {
-                const power = action.payload.reward.value as Power;
+                const power = action.payload.reward;
                 unit.powers.push(power);
-
-                unitsAdapter.updateOne(state.units, {
-                    id: unit.id,
-                    changes,
-                });
-            } else if (action.payload.reward.type === RewardType.CONSUMABLE) {
-                unitsAdapter.updateOne(state.units, {
-                    id: unit.id,
-                    changes,
-                });
             }
+            unitsAdapter.updateOne(state.units, {
+                id: unit.id,
+                changes,
+            });
 
             state.availableRewards = [];
             // Going to need to update everything that reads stats from the unit to actually
@@ -255,10 +251,17 @@ export const combatSlice = createSlice({
             source.mana -= ability.manaCost;
 
             state.displayedUnitActionBar = null;
-            // Remove blocked ability from enemyAbilitiesQueue
-            state.enemyAbilitiesQueue = state.enemyAbilitiesQueue.filter(
-                (a) => a.sourceUnitId !== action.payload.targetUnitId,
+
+            const blockedAbilityIdx = state.enemyAbilitiesQueue.findIndex(
+                (a) => a.sourceUnitId === action.payload.targetUnitId,
             );
+            const blockedAbility = state.enemyAbilitiesQueue[blockedAbilityIdx];
+            if (blockedAbility) { 
+                // Remove blocked ability from enemyAbilitiesQueue
+                // Should be as if the enemy just used this ability
+                state.enemyAbilitiesQueue.splice(blockedAbilityIdx, 1);
+                target.mana -= getAbility(blockedAbility.abilityId)?.manaCost ?? 0;
+            }
 
             checkDeadUnits(state);
         },

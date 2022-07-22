@@ -14,7 +14,7 @@ const RewardSelector = () => {
                 <h3>Select your reward:</h3>
                 <div className="rewards-options-list">
                     {rewards.map((r) => (
-                        <RewardOption reward={r} key={r.value.id} />
+                        <RewardOption reward={r} key={r.id} />
                     ))}
                 </div>
             </div>
