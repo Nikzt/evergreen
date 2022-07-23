@@ -1,7 +1,6 @@
 @import "../../../../common/scss/colors.scss";
 
 .combat-numbers-container {
-    text-shadow: 0 0 1px rgba(0, 0, 0, 0.315);
     font-size: 2em;
     color: $color-damage-physical;
 
@@ -46,4 +45,10 @@
     100% {
         opacity: 0;
     }
+}
+
+.combat-number {
+    -webkit-text-stroke: 2px rgb(0, 0, 0);
+    font-weight: 700;
+    font-size: 2.5em;
 }

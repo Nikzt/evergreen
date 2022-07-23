@@ -30,7 +30,6 @@ const CombatContainer = () => {
 
     return (
         <div className="combat-container" id="combat-container">
-            <TurnIndicator />
             <div>
                 <svg className="svg-layer">
                     <defs>

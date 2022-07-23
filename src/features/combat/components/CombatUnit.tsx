@@ -37,6 +37,7 @@ const CombatUnit = ({ unitId }: CombatUnitProps) => {
 
             {/* Targeting overlay if enemy */}
             <TargetingBox unitId={unitId} />
+            <div className="taking-damage-overlay"></div>
 
             <UnitClickBox clickCallback={() => onClickFriendlyUnit(unitId)} />
 
