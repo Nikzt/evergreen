@@ -1,7 +1,7 @@
 import { CombatAbilityType } from './combatAbilities';
 import { RootState, store } from '../../../store';
 import { CombatAction } from '../state/combatModels';
-import { selectCanUseAnyAbilities } from '../state/combatSelectors';
+import { selectCanUseAnyAbilities, selectEnemyUnitIds, selectFriendlyUnitIds } from '../state/combatSelectors';
 import {
     beginTargetingAbility,
     endTargetingAbility,
@@ -40,18 +40,6 @@ export const targetAbility = (targetUnitId: string) => {
     });
 };
 
-const handleBlock = (combatAction: CombatAction) => {
-    const sourceUnitElement = document.getElementById(combatAction.sourceUnitId);
-    const targetUnitElement = document.getElementById(combatAction.targetUnitId);
-    if (sourceUnitElement != null && targetUnitElement != null) {
-        targetUnitElement.style.animation = "attack-from-enemy 0.4s";
-        setTimeout(() => {
-            targetUnitElement.style.animation = "";
-        }, 500);
-    }
-    store.dispatch(performBlock(combatAction));
-}
-
 const resetAnimations = (unitElements: HTMLElement[]) => {
     setTimeout(() => {
         unitElements.forEach(u => u.style.animation = "")
@@ -85,6 +73,31 @@ const handleSingleTargetAbilityAnimation = (combatAction: CombatAction, isBlocki
     }
 }
 
+const handleMultiTargetAbilityAnimation = (combatAction: CombatAction) => {
+    const state = store.getState();
+    const isFriendlySource = state.combat.units.entities[combatAction.sourceUnitId]?.isFriendly;
+    const targetIds = isFriendlySource ? selectEnemyUnitIds(state) : selectFriendlyUnitIds(state);
+    const sourceUnitElement = document.getElementById(combatAction.sourceUnitId);
+    const sourceUnitOverlayElement = sourceUnitElement?.getElementsByClassName("taking-damage-overlay")[0] as HTMLElement;
+
+    const elementsToReset = [];
+
+    if (sourceUnitElement != null) {
+        elementsToReset.push(sourceUnitElement, sourceUnitOverlayElement);
+        const attackAnimation = isFriendlySource ? "attack-from-friendly 0.4s" : "attack-from-enemy 0.4s";
+        sourceUnitElement.style.animation = attackAnimation;
+
+        targetIds.forEach(id => {
+            const targetUnitElement = document.getElementById(id);
+            const targetUnitOverlayElement = targetUnitElement?.getElementsByClassName("taking-damage-overlay")[0] as HTMLElement;
+            targetUnitOverlayElement.style.animation = "taking-damage 0.4s";
+            elementsToReset.push(targetUnitElement, targetUnitOverlayElement); 
+        })
+
+        resetAnimations(elementsToReset);
+    }
+}
+
 export const performAbility = (combatAction: CombatAction) => {
 
     // Handle non-targeted abilities (eg. revenge)
@@ -92,7 +105,7 @@ export const performAbility = (combatAction: CombatAction) => {
         handleSingleTargetAbilityAnimation(combatAction, true);
         store.dispatch(performBlock(combatAction));
     } else if (combatAction.abilityId === CombatAbilityType.REVENGE) {
-        handleSingleTargetAbilityAnimation(combatAction);
+        handleMultiTargetAbilityAnimation(combatAction);
         store.dispatch(performRevenge(combatAction));
     } else {
         handleSingleTargetAbilityAnimation(combatAction);
