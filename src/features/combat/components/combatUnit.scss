@@ -41,3 +41,51 @@
         }
     }
 }
+
+@keyframes attack-from-friendly {
+    0% {
+        transform: translateY(0);
+    }
+    10% {
+        transform: translateY(-15px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+@keyframes attack-from-enemy {
+    0% {
+        transform: translateY(0);
+    }
+    10% {
+        transform: translateY(15px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.taking-damage-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+}
+
+@keyframes taking-damage {
+    0% {
+        background-color: rgba(228, 34, 34, 0.288);
+    }
+    100% {
+        background-color: transparent;
+    }
+}
+
+@keyframes blocking-damage {
+    0% {
+        background-color: rgba(21, 126, 224, 0.514);
+    }
+    100% {
+        background-color: transparent;
+    }
+}

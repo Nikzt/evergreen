@@ -14,9 +14,11 @@ const TargetingBox = ({ unitId }: TargetingBoxProps) => {
         targetAbility(targetUnitId);
     };
 
-    if (!unit || unit.isFriendly || unit.isDead || !isTargeting) return <></>;
+    if (!unit || unit.isFriendly) return <></>;
 
-    return <button className="targeting-box" onClick={() => onTargetAbility(unit.id)}></button>;
+    const showTargetingEffect = isTargeting && !unit.isDead;
+
+    return <button className={'targeting-box ' + (showTargetingEffect ? 'is-targeting' : '')} onClick={() => onTargetAbility(unit.id)}></button>;
 };
 
 export default TargetingBox;
