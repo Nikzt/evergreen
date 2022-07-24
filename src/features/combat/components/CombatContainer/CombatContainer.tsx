@@ -6,7 +6,6 @@ import { toggleUnitActionBar } from '../../state/combatSlice';
 import CombatUnitActionBar from '../ActionBar/CombatUnitActionBar';
 import CombatUnit from '../CombatUnit';
 import TargetLine from '../TargetLine';
-import TurnIndicator from '../TurnIndicator/TurnIndicator';
 
 import './combatContainer.scss';
 

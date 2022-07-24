@@ -31,7 +31,7 @@ export type Reward = {
     /**The IDs for which this power is available */
     availableUnitIds: string[];
 
-    unitId?: string;
+    unitIds?: string[];
     label: string;
     description: string;
     changes: Partial<CombatUnit>;
@@ -50,7 +50,7 @@ const powers: { [key: number]: Reward } = {
             strength: 1,
         },
         maxAmountPerUnit: null,
-        probabilityWeight: 4,
+        probabilityWeight: 6,
     },
     [RewardId.BLOCK_PERCENT]: {
         availableUnitIds: [],
@@ -69,10 +69,10 @@ const powers: { [key: number]: Reward } = {
         id: RewardId.MAX_HP,
         type: RewardType.POWER,
         label: 'Invigorate',
-        description: '[UNIT_NAME] gains +5 Max HP',
+        description: '[UNIT_NAME] gains +10 Max HP',
         changes: {
-            maxHp: 5,
-            hp: 5,
+            maxHp: 10,
+            hp: 10,
         },
         maxAmountPerUnit: null,
         probabilityWeight: 2,
@@ -150,7 +150,7 @@ const consumables: { [key: number]: Reward } = {
             id: RewardId.HEALTH,
             type: RewardType.CONSUMABLE,
             label: 'Absorb Vitality',
-            description: '[UNIT_NAME] heals +10 HP',
+            description: '[UNIT_NAME] heal +10 HP',
             changes: {
                 hp: 10,
             },
@@ -184,10 +184,10 @@ const canUnitUseReward = (state: CombatState, reward: Reward, unitId: string): b
 }
 
 const generateRewardForUnit = (state: CombatState, unitId: string): Reward => {
-    const rewardsListCopy = [...Object.values(powers), ...Object.values(consumables), ...Object.values(abilities)];
+    const rewardsListCopy = [...Object.values(powers), ...Object.values(abilities)];
     const filteredRewards = _.filter(rewardsListCopy, r => canUnitUseReward(state, r, unitId));
     if (filteredRewards.length < 1) throw new Error('No rewards available for unit');
-    //const reward = _.sample(filteredRewards) as Reward;
+
     // get random reward with probablity weight
     const randomizedRewards = _.shuffle(filteredRewards);
     const random = Math.random();
@@ -195,20 +195,25 @@ const generateRewardForUnit = (state: CombatState, unitId: string): Reward => {
     const probability = random * (probabilitySum / randomizedRewards.length);
     const rewardIndex = randomizedRewards.findIndex((r) => r.probabilityWeight >= probability);
     const reward = randomizedRewards[rewardIndex];
-    console.log(probability)
 
-    return { ...reward, unitId };
+    return { ...reward, unitIds: [unitId] };
 }
 
 export const getRewardsForEachUnit = (state: CombatState): Reward[] => {
-    return getEntityList(state.units.entities)
+    const friendlyUnitIds = getEntityList(state.units.entities).filter((unit) => unit.isFriendly).map((unit) => unit.id);
+    const guaranteedReward = {...consumables[RewardId.HEALTH], unitIds: friendlyUnitIds };
+    const rewards = getEntityList(state.units.entities)
         .filter((unit) => unit.isFriendly)
         .map((unit) => generateRewardForUnit(state, unit.id));
+    return [...rewards, guaranteedReward];
 }
 
 export const getRewardDescription = (reward: Reward): string => {
-    if (!reward.unitId) return reward.description;
-    const unit = selectUnit(reward.unitId)(store.getState() as RootState);
+    if (!reward.unitIds) return reward.description;
+    if (reward.unitIds.length > 1)
+        return reward.description.replace('[UNIT_NAME]', 'All party members');
+    
+    const unit = selectUnit(reward.unitIds[0])(store.getState() as RootState);
     if (!unit) throw new Error('Unit not found');
     return reward.description.replace('[UNIT_NAME]', unit.name);
 };

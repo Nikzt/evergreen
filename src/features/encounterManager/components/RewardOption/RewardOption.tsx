@@ -1,6 +1,7 @@
-import { useAppDispatch } from '../../../../hooks';
+import { useAppDispatch, useAppSelector } from '../../../../hooks';
+import { selectAllFriendlyUnitsMaxHp } from '../../../combat/state/combatSelectors';
 import { updateUnitWithReward } from '../../../combat/state/combatSlice';
-import { Reward, getRewardDescription } from '../../rewards';
+import { Reward, getRewardDescription, RewardId } from '../../rewards';
 import './rewardOption.scss';
 
 type RewardOptionProps = {
@@ -9,12 +10,19 @@ type RewardOptionProps = {
 
 const RewardOption = ({ reward }: RewardOptionProps) => {
     const dispatch = useAppDispatch();
+    const allMaxHp = useAppSelector(selectAllFriendlyUnitsMaxHp);
+    const disableReward = reward.id === RewardId.HEALTH && allMaxHp;
     const onRewardClick = () => {
-        if (reward.unitId != null) dispatch(updateUnitWithReward({ unitId: reward.unitId, reward }));
+        if (disableReward)
+            return;
+        if (reward.unitIds != null)
+        reward.unitIds.forEach((id) => {
+            dispatch(updateUnitWithReward({ unitId: id, reward }));
+        })
     };
 
     return (
-        <button className="reward-option" onClick={() => onRewardClick()}>
+        <button className={`reward-option`} disabled={disableReward} onClick={() => onRewardClick()}>
             <h3>{reward.label}</h3>
             <p>{getRewardDescription(reward)}</p>
         </button>

@@ -96,3 +96,7 @@ export const selectEnemyAbilitiesQueue = (state: RootState) => {
 
 export const selectNextEnemyAbility = (unitId: string) => (state: RootState) =>
     state.combat.enemyAbilitiesQueue.find((a) => a.sourceUnitId === unitId);
+
+export const selectAllFriendlyUnitsMaxHp = (state: RootState) => {
+    return selectFriendlyUnits(state).every((u) => u.hp >= u.maxHp);
+}

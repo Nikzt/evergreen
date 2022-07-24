@@ -21,7 +21,7 @@ const UnitInfo = ({ unitId }: UnitInfoProps) => {
         <div className="unit-info">
             <div className="unit-info--portrait-container">
                 <img src={icon} alt="" />
-                <h3 className="unit-info--name">{unit.name}</h3>
+                <p className="unit-info--name">{unit.name}</p>
             </div>
             <div className="unit-info--details">
                 <HpBar hp={unit.hp} maxHp={unit.maxHp} isFriendly={unit.isFriendly} />

@@ -13,7 +13,6 @@ export const getStarterEncounter = (): CombatEncounter => {
         units: [
             initGreg(),
             initMira(),
-            getEnemy(EnemyTemplateEnum.BARK_DOG, 'enemy-1'),
             getEnemy(EnemyTemplateEnum.FOREST_PROTECTOR, 'enemy-2'),
         ],
     };
@@ -32,3 +31,21 @@ export const randomEncounterGenerator = (difficulty: number, friendlyUnits: Comb
         units: [...enemies, ...friendlyUnits],
     };
 };
+
+export const getNextEncounter = (difficulty: number, friendlyUnits?: CombatUnit[]): CombatEncounter => {
+    if (difficulty === 1)
+        return getStarterEncounter();
+    if (!friendlyUnits)
+        return getStarterEncounter();
+    if (difficulty === 2)
+        return {
+            name: 'Second Combat',
+            units: [
+                ...friendlyUnits,
+                getEnemy(EnemyTemplateEnum.BARK_DOG, 'enemy-1'),
+                getEnemy(EnemyTemplateEnum.BARK_DOG, 'enemy-2'),
+                getEnemy(EnemyTemplateEnum.BARK_DOG, 'enemy-3'),
+            ],
+        };
+    return randomEncounterGenerator(difficulty, friendlyUnits);
+}
