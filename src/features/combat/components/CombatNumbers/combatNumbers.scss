@@ -1,6 +1,7 @@
 @import "../../../../common/scss/colors.scss";
 
 .combat-numbers-container {
+    z-index: 1;
     font-size: 2em;
     color: $color-damage-physical;
 

@@ -50,7 +50,7 @@ const powers: { [key: number]: Reward } = {
             strength: 1,
         },
         maxAmountPerUnit: null,
-        probabilityWeight: 6,
+        probabilityWeight: 30,
     },
     [RewardId.BLOCK_PERCENT]: {
         availableUnitIds: [],
