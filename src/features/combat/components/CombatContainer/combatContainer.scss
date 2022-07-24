@@ -1,13 +1,25 @@
+@media (max-height: 900px) {
+    .combat-container {
+        height: 100vh;
+        .enemy-units-row {
+            margin-top: 50px;
+        }
+        .friendly-units-row {
+            min-height: 220px;
+        }
+    }
+}
+
 .combat-container {
     margin-left: auto;
     margin-top: auto;
     margin-right: auto;
-    max-height: 1000px;
+    max-height: 750px;
     max-width: 500px;
     h3 {
         font-weight: 400;
     }
-    height: 90vh;
+    height: 85vh;
     position: relative;
 
     .svg-layer {

@@ -60,6 +60,11 @@ const makeChangesAdditive = (changes: Partial<CombatUnit>, unit: CombatUnit) => 
     return additiveChanges;
 };
 
+const resetUnitOverflowedValues = (unit: CombatUnit) => {
+    if (unit.mana > unit.maxMana) unit.mana = unit.maxMana;
+    if (unit.hp > unit.maxHp) unit.hp = unit.maxHp;
+}
+
 /**
  * Handle state changes for units that have died (ie. HP <= 0)
  */
@@ -80,7 +85,7 @@ const initialState: CombatState = {
     isCombatInProgress: false,
     isCombatFailed: true,
     isCombatVictorious: false,
-    difficulty: 4,
+    difficulty: 1,
     numEncounters: 0,
     rewardCurrency: 0,
     availableRewards: [],
@@ -112,7 +117,7 @@ export const combatSlice = createSlice({
             state.isCombatVictorious = false;
             state.isCombatFailed = true;
             state.isCombatInProgress = false;
-            state.difficulty = 4;
+            state.difficulty = 1;
             state.rewardCurrency = 0;
         },
 
@@ -148,6 +153,7 @@ export const combatSlice = createSlice({
                 id: unit.id,
                 changes,
             });
+            resetUnitOverflowedValues(getUnit(state, unit.id));
 
             state.availableRewards = [];
             // Going to need to update everything that reads stats from the unit to actually

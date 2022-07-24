@@ -1,9 +1,18 @@
 @import "../../../common/scss/colors.scss";
 
+// screen size less than 250px
+@media (max-width: 400px) {
+    .unit {
+        width: 90px;
+    }
+}   
+
 .unit {
     display: inline-block;
     position: relative;
     width: 140px;
+    margin-left: 5px;
+    margin-right: 5px;
     height: 162px;
 
     &.blocking {

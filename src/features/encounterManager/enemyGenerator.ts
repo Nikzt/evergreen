@@ -13,7 +13,7 @@ export enum EnemyTemplateEnum {
 export const enemyTemplates = {
     [EnemyTemplateEnum.BARK_DOG]: createEnemyUnit({
         name: 'Bark Dog',
-        maxHp: 5,
+        maxHp: 4,
         abilityIds: [CombatAbilityType.QUICK_ATTACK],
         strength: 1,
         armor: 0,
@@ -22,7 +22,7 @@ export const enemyTemplates = {
     }),
     [EnemyTemplateEnum.FOREST_FIEND]: createEnemyUnit({
         name: 'Forest Fiend',
-        maxHp: 10,
+        maxHp: 8,
         abilityIds: [CombatAbilityType.QUICK_ATTACK, CombatAbilityType.STRONG_ATTACK],
         strength: 1,
         armor: 0,
@@ -31,7 +31,7 @@ export const enemyTemplates = {
     }),
     [EnemyTemplateEnum.FOREST_PROTECTOR]: createEnemyUnit({
         name: 'Forest Protector',
-        maxHp: 12,
+        maxHp: 10,
         abilityIds: [CombatAbilityType.QUICK_ATTACK],
         strength: 2,
         armor: 0,
@@ -41,9 +41,9 @@ export const enemyTemplates = {
     }),
     [EnemyTemplateEnum.WOOD_GIANT]: createEnemyUnit({
         name: 'Wood Giant',
-        maxHp: 18,
+        maxHp: 12,
         abilityIds: [CombatAbilityType.STRONG_ATTACK],
-        strength: 3,
+        strength: 2,
         armor: 0,
         maxMana: 3,
         icon: unitIcons.evilTree,

@@ -1,9 +1,11 @@
 @import "../../../../common/scss/colors.scss";
 
 .mana-bar {
-    width: 130px;
+    display: flex;
+    height: 11px;
+    align-items: center;
     .mana-icon {
-        width: 20px;
+        max-width: 15px;
         height: 10px;
         margin-right: 5px;
         rect.mana-available {

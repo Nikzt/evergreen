@@ -40,6 +40,9 @@ a {
 
 button {
     font-family: 'Rajdhani', sans-serif;
+    &[disabled] {
+        opacity: 0.4;
+    }
 }
 
 .menu-button {
@@ -82,7 +85,9 @@ button[disabled] {
 
 .cast-bar-label {
     position: absolute;
-    margin-left: 10px;
+    margin-top: 1px;
+    font-weight: 400;
+    margin-left: 3px;
     color: black;
     font-size: 0.8em;
 }

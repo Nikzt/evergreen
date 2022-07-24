@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '../../../../hooks';
 import { store } from '../../../../store';
 import { initCombatEncounter } from '../../../combat/state/combatSlice';
-import { randomEncounterGenerator } from '../../encounters';
+import { getNextEncounter, randomEncounterGenerator } from '../../encounters';
 import { selectAvailableRewards, selectFriendlyUnits } from '../../../combat/state/combatSelectors';
 import UnitInfo from '../../../../common/components/UnitInfo/UnitInfo';
 import RewardSelector from '../RewardSelector/RewardSelector';
@@ -17,7 +17,7 @@ const UnitManagerScreen = () => {
         const difficulty = state.combat.difficulty;
         const friendlyUnits = selectFriendlyUnits(state);
 
-        dispatch(initCombatEncounter(randomEncounterGenerator(difficulty, friendlyUnits)));
+        dispatch(initCombatEncounter(getNextEncounter(difficulty, friendlyUnits)));
         onBeginPlayerTurn();
     };
 
