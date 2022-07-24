@@ -1,5 +1,6 @@
 import { useAppSelector, useSelectCombatUnit } from '../../../hooks';
 import { targetAbility } from '../abilities/abilityHandler';
+import { CombatAbilityType } from '../abilities/combatAbilities';
 import './targetingBox.scss';
 
 type TargetingBoxProps = {
@@ -9,10 +10,15 @@ type TargetingBoxProps = {
 const TargetingBox = ({ unitId }: TargetingBoxProps) => {
     const unit = useSelectCombatUnit(unitId);
     const isTargeting = useAppSelector((state) => state.combat.isTargeting);
+    const targetingAbilityId = useAppSelector((state) => state.combat.targetingAbilityId);
+    const isUnitGoingToAttack = useAppSelector((state) => !!state.combat.enemyAbilitiesQueue.find(a => a.sourceUnitId === unitId))
 
     const onTargetAbility = (targetUnitId: string) => {
         targetAbility(targetUnitId);
     };
+
+    if (targetingAbilityId === CombatAbilityType.BLOCK && !isUnitGoingToAttack)
+        return  <></>;
 
     if (!unit || unit.isFriendly) return <></>;
 

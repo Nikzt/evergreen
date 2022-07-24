@@ -75,6 +75,7 @@
 }
 
 .taking-damage-overlay {
+    z-index: 20;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -83,7 +84,7 @@
 
 @keyframes taking-damage {
     0% {
-        background-color: rgba(228, 34, 34, 0.288);
+        background-color: rgba(228, 34, 34, 0.952);
     }
     100% {
         background-color: transparent;
@@ -92,7 +93,7 @@
 
 @keyframes blocking-damage {
     0% {
-        background-color: rgba(21, 126, 224, 0.514);
+        background-color: rgba(21, 126, 224, 0.547);
     }
     100% {
         background-color: transparent;

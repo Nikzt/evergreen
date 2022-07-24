@@ -41,7 +41,7 @@ export type Reward = {
 
 const powers: { [key: number]: Reward } = {
     [RewardId.STRENGTH]: {
-        availableUnitIds: [PlayerCharacterMira.id],
+        availableUnitIds: [],
         id: RewardId.STRENGTH,
         type: RewardType.POWER,
         label: 'Manifest Strength',
