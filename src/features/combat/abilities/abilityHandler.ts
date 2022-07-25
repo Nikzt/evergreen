@@ -1,7 +1,7 @@
 import { CombatAbilityType } from './combatAbilities';
 import { RootState, store } from '../../../store';
 import { CombatAction } from '../state/combatModels';
-import { selectCanUseAnyAbilities, selectEnemyUnitIds, selectFriendlyUnitIds } from '../state/combatSelectors';
+import { selectCanUseAnyAbilities, selectEnemyUnitIds, selectFriendlyUnitIds, selectLivingEnemyUnitIds, selectLivingFriendlyUnitIds, selectUnitHasCleave } from '../state/combatSelectors';
 import {
     beginTargetingAbility,
     endTargetingAbility,
@@ -47,10 +47,17 @@ const resetAnimations = (unitElements: HTMLElement[]) => {
 }
 
 const handleSingleTargetAbilityAnimation = (combatAction: CombatAction, isBlocking: boolean = false) => {
+    const state = store.getState();
     const newCombatAction = { ...combatAction };
     if (isBlocking) {
         newCombatAction.sourceUnitId = combatAction.targetUnitId;
         newCombatAction.targetUnitId = combatAction.sourceUnitId;
+    } else {
+        const hasCleave = selectUnitHasCleave(newCombatAction.sourceUnitId)(state);
+        if (hasCleave) {
+            handleMultiTargetAbilityAnimation(newCombatAction);
+            return;
+        }
     }
     const isFriendlySource = store.getState().combat.units.entities[combatAction.sourceUnitId]?.isFriendly;
     const sourceUnitElement = document.getElementById(newCombatAction.sourceUnitId);
@@ -76,7 +83,7 @@ const handleSingleTargetAbilityAnimation = (combatAction: CombatAction, isBlocki
 const handleMultiTargetAbilityAnimation = (combatAction: CombatAction) => {
     const state = store.getState();
     const isFriendlySource = state.combat.units.entities[combatAction.sourceUnitId]?.isFriendly;
-    const targetIds = isFriendlySource ? selectEnemyUnitIds(state) : selectFriendlyUnitIds(state);
+    const targetIds = isFriendlySource ? selectLivingEnemyUnitIds(state) : selectLivingFriendlyUnitIds(state);
     const sourceUnitElement = document.getElementById(combatAction.sourceUnitId);
     const sourceUnitOverlayElement = sourceUnitElement?.getElementsByClassName("taking-damage-overlay")[0] as HTMLElement;
 
@@ -91,7 +98,7 @@ const handleMultiTargetAbilityAnimation = (combatAction: CombatAction) => {
             const targetUnitElement = document.getElementById(id);
             const targetUnitOverlayElement = targetUnitElement?.getElementsByClassName("taking-damage-overlay")[0] as HTMLElement;
             targetUnitOverlayElement.style.animation = "taking-damage 0.4s";
-            elementsToReset.push(targetUnitElement, targetUnitOverlayElement); 
+            elementsToReset.push(targetUnitElement, targetUnitOverlayElement);
         })
 
         resetAnimations(elementsToReset);

@@ -2,6 +2,7 @@ import unitIcons from '../../assets/unitIcons/unitIcons';
 import { CombatAbilityType } from '../combat/abilities/combatAbilities';
 import { CombatUnit } from '../combat/state/combatModels';
 import { createEnemyUnit } from './combatUnitUtils';
+import { RewardId } from './rewards';
 
 export enum EnemyTemplateEnum {
     BARK_DOG = 0, // quick attacks
@@ -46,6 +47,7 @@ export const enemyTemplates = {
         strength: 2,
         armor: 0,
         maxMana: 3,
+        powers: [RewardId.CLEAVE],
         icon: unitIcons.evilTree,
     }),
 };

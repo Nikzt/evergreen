@@ -1,7 +1,8 @@
 import { CombatAbilityType } from '../abilities/combatAbilities';
 import { RootState } from '../../../store';
-import { unitsAdapter } from './combatModels';
+import { CombatAction, unitsAdapter } from './combatModels';
 import { getAbility } from '../abilities/abilityUtils';
+import { RewardId } from '../../encounterManager/rewards';
 
 export const unitsSelectors = unitsAdapter.getSelectors();
 
@@ -41,7 +42,8 @@ export const selectCanUseAnyAbilities = (unitId: string) => (state: RootState) =
     if (!unit?.isFriendly && !state.combat.enemyAbilitiesQueue.some((a) => a.sourceUnitId === unitId)) {
         return false;
     }
-    return unit && !unit.isCasting && !unit.isRecovering && !unit.isBlocking && !unit.isDead && unit.mana > 0;
+    const minManaCost = unit?.abilityIds.reduce((min, a) => Math.min(min, getAbility(a)?.manaCost), Number.MAX_SAFE_INTEGER) ?? 0;
+    return unit && !unit.isCasting && !unit.isRecovering && !unit.isBlocking && !unit.isDead && unit.mana >= minManaCost;
 };
 
 export const selectCanUseSpecificAbility = (unitId: string, abilityType: CombatAbilityType) => (state: RootState) => {
@@ -71,7 +73,6 @@ export const selectTargetLines = (state: RootState) => {
     });
 };
 
-export const selectRewardCurrency = (state: RootState) => state.combat.rewardCurrency;
 export const selectAvailableRewards = (state: RootState) => state.combat.availableRewards;
 export const selectScriptedText = (state: RootState) => state.combat.scriptedText;
 
@@ -90,6 +91,14 @@ export const selectLivingUnits = (state: RootState) => {
     return unitsSelectors.selectAll(state.combat.units).filter((u) => !u.isDead);
 };
 
+export const selectLivingFriendlyUnitIds = (state: RootState) => {
+    return selectLivingUnits(state).filter((u) => u.isFriendly).map(u => u.id);
+}
+
+export const selectLivingEnemyUnitIds = (state: RootState) => {
+    return selectLivingUnits(state).filter((u) => !u.isFriendly).map(u => u.id);
+}
+
 export const selectEnemyAbilitiesQueue = (state: RootState) => {
     return state.combat.enemyAbilitiesQueue;
 };
@@ -99,4 +108,21 @@ export const selectNextEnemyAbility = (unitId: string) => (state: RootState) =>
 
 export const selectAllFriendlyUnitsMaxHp = (state: RootState) => {
     return selectFriendlyUnits(state).every((u) => u.hp >= u.maxHp);
+}
+
+export const selectFullCombatAction = (combatAction: CombatAction) => (state: RootState) => {
+    const sourceUnit = state.combat.units.entities[combatAction.sourceUnitId];
+    const targetUnit = state.combat.units.entities[combatAction.targetUnitId];
+    const ability = getAbility(combatAction.abilityId);
+    if (!sourceUnit || !targetUnit || !ability) return null;
+    return {
+        sourceUnit,
+        targetUnit,
+        ability
+    }
+}
+
+export const selectUnitHasCleave = (unitId: string) => (state: RootState) => {
+    const unit = selectUnit(unitId)(state);
+    return unit && unit.powers.includes(RewardId.CLEAVE);
 }
