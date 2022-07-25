@@ -1,12 +1,18 @@
 import { createEntityAdapter, EntityState } from '@reduxjs/toolkit';
-import { Reward } from '../../encounterManager/rewards';
-import { CombatAbilityType } from '../abilities/combatAbilities';
+import { Reward, RewardId } from '../../encounterManager/rewards';
+import { CombatAbility, CombatAbilityType } from '../abilities/combatAbilities';
 
 export type CombatAction = {
     sourceUnitId: string;
     targetUnitId: string;
     abilityId: CombatAbilityType;
 };
+
+export type CombatActionFull = {
+    sourceUnit: CombatUnit;
+    targetUnit: CombatUnit;
+    ability: CombatAbility;
+}
 
 export type CombatUnit = {
     // State
@@ -49,7 +55,7 @@ export type CombatUnit = {
     maxMana: number;
     strength: number;
     armor: number;
-    powers: Reward[];
+    powers: RewardId[];
 
     blockPercent: number;
 };
@@ -69,7 +75,6 @@ export type CombatState = {
     enemyAbilitiesQueue: CombatAction[];
 
     // Post-combat rewards
-    rewardCurrency: number;
     availableRewards: Reward[];
     scriptedText: string;
 

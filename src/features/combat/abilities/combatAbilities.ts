@@ -74,7 +74,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         description:
             'Deal damage to all targets equal to the amount of damage [SOURCE_UNIT_NAME] has blocked this combat ([DIRECT_DAMAGE])',
         isTargetRequired: false,
-        manaCost: 1,
+        manaCost: 0,
     },
 };
 

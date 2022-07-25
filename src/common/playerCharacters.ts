@@ -37,6 +37,6 @@ export const initMira = () =>
         abilityIds: [CombatAbilityType.QUICK_ATTACK],
         strength: 2,
         armor: 0,
-        maxMana: 3,
+        maxMana: 2,
         blockPercent: 50,
     });

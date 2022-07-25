@@ -16,7 +16,8 @@ export enum RewardId {
     MANA,
     REVENGE,
     BLOCK,
-    STRONG_ATTACK
+    STRONG_ATTACK,
+    CLEAVE
 }
 
 export enum RewardType {
@@ -51,6 +52,17 @@ const powers: { [key: number]: Reward } = {
         },
         maxAmountPerUnit: null,
         probabilityWeight: 30,
+    },
+    [RewardId.CLEAVE]: {
+        availableUnitIds: [PlayerCharacterMira.id],
+        id: RewardId.CLEAVE,
+        type: RewardType.POWER,
+        label: 'Wild Strikes',
+        description: '[UNIT_NAME] does 25% of single target damage to all other enemies',
+        changes: {
+        },
+        maxAmountPerUnit: 1,
+        probabilityWeight: 9999,
     },
     [RewardId.BLOCK_PERCENT]: {
         availableUnitIds: [],
@@ -107,7 +119,7 @@ const abilities: { [key: number]: Reward } = {
         probabilityWeight: 10,
     },
     [RewardId.REVENGE]: {
-        availableUnitIds: [],
+        availableUnitIds: [PlayerCharacterGreg.id],
         id: RewardId.REVENGE,
         type: RewardType.ABILITY,
         label: 'Revenge',
@@ -116,7 +128,7 @@ const abilities: { [key: number]: Reward } = {
             abilityIds: [CombatAbilityType.REVENGE],
         },
         maxAmountPerUnit: 1,
-        probabilityWeight: 10,
+        probabilityWeight: 9999,
     },
     [RewardId.BLOCK]: {
         availableUnitIds: [],
@@ -177,7 +189,7 @@ const canUnitObtainAbility = (reward: Reward, unit: CombatUnit): boolean => {
 const canUnitUseReward = (state: CombatState, reward: Reward, unitId: string): boolean => {
     const unit = state.units.entities[unitId];
     if (!unit) return false;
-    const numPowersOfType = unit.powers.filter((power) => power.id === power.id).length;
+    const numPowersOfType = unit.powers.filter((power) => power === reward.id).length;
     const isRewardAvailableForUnit = reward.availableUnitIds.length <= 0 || reward.availableUnitIds.includes(unitId);
     const isRewardMaxedOut = reward.maxAmountPerUnit != null && numPowersOfType >= reward.maxAmountPerUnit;
     return isRewardAvailableForUnit && !isRewardMaxedOut && canUnitObtainAbility(reward, unit);

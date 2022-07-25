@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction, Update } from '@reduxjs/toolkit';
 import combatAbilities  from '../abilities/combatAbilities';
 import { CombatEncounter } from '../../encounterManager/encounters';
-import { CombatAction, CombatState, CombatUnit, RewardUpdate, unitsAdapter } from './combatModels';
+import { CombatAction, CombatActionFull, CombatState, CombatUnit, RewardUpdate, unitsAdapter } from './combatModels';
 import { unitsSelectors } from './combatSelectors';
 import calculateAbilityDamage, { calculateRawDamage } from '../abilities/calculateAbilityDamage';
-import { getRewardsForEachUnit, RewardType } from '../../encounterManager/rewards';
+import { getRewardsForEachUnit, RewardId, RewardType } from '../../encounterManager/rewards';
 import { getAbility } from '../abilities/abilityUtils';
 
 /**
@@ -39,6 +39,40 @@ const onUnitKilled = (state: CombatState, unit: CombatUnit) => {
     unit.isCasting = false;
     removeAbilitiesWithSourceUnitId(state, unit.id);
 };
+
+const getFullCombatAction = (state: CombatState, combatAction: CombatAction): CombatActionFull => {
+    const sourceUnit = state.units.entities[combatAction.sourceUnitId];
+    const targetUnit = state.units.entities[combatAction.targetUnitId];
+    const ability = getAbility(combatAction.abilityId);
+    if (!sourceUnit || !targetUnit || !ability) throw new Error('Invalid combat action');
+    return {
+        sourceUnit,
+        targetUnit,
+        ability
+    }
+}
+
+const handleCleave = (state: CombatState, combatAction: CombatActionFull, damage: number) => {
+    if (combatAction.sourceUnit.powers.includes(RewardId.CLEAVE)) {
+        const cleaveDamage = Math.ceil(damage / 4);
+        const targetUnits = Object.values(state.units.entities)
+            .filter(u  => u?.isFriendly !== combatAction.sourceUnit.isFriendly)
+            .filter(u => u != null && u.id !== combatAction.targetUnit.id && !u.isDead);
+        targetUnits.forEach(u => {
+            if (!u) return;
+            u.hp -= cleaveDamage;
+            u.combatNumbers.push(cleaveDamage);
+        });
+    }
+}
+
+const onDealDamage = (state: CombatState, combatAction: CombatActionFull, damageOverride?: number) => {
+    const damage = damageOverride ?? calculateAbilityDamage(combatAction);
+    combatAction.targetUnit.hp -= damage;
+    combatAction.targetUnit.combatNumbers.push(damage);
+    combatAction.sourceUnit.mana -= combatAction.ability.manaCost;
+    handleCleave(state, combatAction, damage);
+}
 
 const getUnit = (state: CombatState, unitId: string) => {
     const unit = state.units.entities[unitId];
@@ -87,7 +121,6 @@ const initialState: CombatState = {
     isCombatVictorious: false,
     difficulty: 1,
     numEncounters: 0,
-    rewardCurrency: 0,
     availableRewards: [],
     scriptedText: '',
     enemyAbilitiesQueue: [],
@@ -110,15 +143,15 @@ export const combatSlice = createSlice({
             state.isCombatInProgress = true;
             onBeginPlayerTurn(state);
         },
-
+        setDifficulty: (state, action: PayloadAction<number>) => {
+            state.difficulty = action.payload;
+        },
         /**  Combat Defeat: Anything that needs to be hard reset, do it here */
         setDefeatState: (state) => {
             if (!state.isCombatInProgress) return;
             state.isCombatVictorious = false;
             state.isCombatFailed = true;
             state.isCombatInProgress = false;
-            state.difficulty = 1;
-            state.rewardCurrency = 0;
         },
 
         /**  Combat Victory: Reset combat for next encounter, but don't reset things that continue through run */
@@ -147,7 +180,7 @@ export const combatSlice = createSlice({
             // Non-consumable rewards must be kept track of
             if (action.payload.reward.type === RewardType.POWER) {
                 const power = action.payload.reward;
-                unit.powers.push(power);
+                unit.powers.push(power.id);
             }
             unitsAdapter.updateOne(state.units, {
                 id: unit.id,
@@ -169,24 +202,15 @@ export const combatSlice = createSlice({
             state.targetingAbilityId = null;
             state.targetingSourceUnitId = null;
         },
-        spendRewardCurrency: (state, action: PayloadAction<number>) => {
-            if (state.rewardCurrency >= action.payload) state.rewardCurrency -= action.payload;
-        },
         performCombatAction: (state, action: PayloadAction<CombatAction>) => {
             if (!action?.payload) return;
-            const source = state.units.entities[action.payload.sourceUnitId];
-            const target = state.units.entities[action.payload.targetUnitId];
-            const ability = combatAbilities[action.payload.abilityId];
-            // TODO: Turn this into helper function
-            if (!target || !ability || !source || source.isDead || source.mana < ability.manaCost) return;
+            const combatAction = getFullCombatAction(state, action.payload);
+            if (combatAction.sourceUnit.isDead || combatAction.sourceUnit.mana < combatAction.ability.manaCost) return;
 
-            source.targetUnitId = null;
+            combatAction.sourceUnit.targetUnitId = null;
 
             // Basic damaging ability
-            const damage = calculateAbilityDamage(action.payload, state);
-            target.hp -= damage;
-            target.combatNumbers.push(damage);
-            source.mana -= ability.manaCost;
+            onDealDamage(state, combatAction);
 
             state.displayedUnitActionBar = null;
             checkDeadUnits(state);
@@ -338,7 +362,7 @@ const regenerateEnemyUnitsMana = (state: CombatState) => {
 };
 
 const regenerateUnitMana = (unit: CombatUnit) => {
-    if (unit.mana < unit.maxMana) unit.mana++;
+    if (unit.mana < unit.maxMana) unit.mana = unit.maxMana;
 };
 
 const onBeginPlayerTurn = (state: CombatState) => {
@@ -383,7 +407,8 @@ export const {
     toggleUnitActionBar,
     performBlock,
     performRevenge,
-    setShowTurnIndicator
+    setShowTurnIndicator,
+    setDifficulty,
 } = combatSlice.actions;
 
 export default combatSlice.reducer;

@@ -14,6 +14,7 @@ const TargetingBox = ({ unitId }: TargetingBoxProps) => {
     const isUnitGoingToAttack = useAppSelector((state) => !!state.combat.enemyAbilitiesQueue.find(a => a.sourceUnitId === unitId))
 
     const onTargetAbility = (targetUnitId: string) => {
+        if (unit?.isDead) return;
         targetAbility(targetUnitId);
     };
 
