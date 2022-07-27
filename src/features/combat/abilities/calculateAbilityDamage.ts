@@ -11,8 +11,7 @@ const calculateAbilityDamage = (combatAction: CombatActionFull) => {
 export const calculateRawDamage = (sourceUnit: CombatUnit, ability: CombatAbility) => {
     if (ability.id === CombatAbilityType.REVENGE) return sourceUnit.blockedDamageThisCombat;
 
-    const rawDamage =
-         ability.strengthMultiplier * sourceUnit.strength;
+    const rawDamage = ability.strengthMultiplier * sourceUnit.strength;
     return Math.floor(rawDamage);
 };
 

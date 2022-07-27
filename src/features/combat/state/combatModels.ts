@@ -12,7 +12,7 @@ export type CombatActionFull = {
     sourceUnit: CombatUnit;
     targetUnit: CombatUnit;
     ability: CombatAbility;
-}
+};
 
 export type CombatUnit = {
     // State

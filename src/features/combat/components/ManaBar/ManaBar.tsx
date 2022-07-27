@@ -22,7 +22,7 @@ const ManaBar = ({ mana, maxMana }: ManaBarProps) => {
                         width="20"
                         height="10"
                         fill={i.isManaAvailable ? colors.mana : 'grey'}
-                        stroke={i.isManaAvailable ? colors.manaDarker: '#333'}
+                        stroke={i.isManaAvailable ? colors.manaDarker : '#333'}
                         className={i.isManaAvailable ? 'mana-available' : 'mana-unavailable'}
                     />
                 </svg>

@@ -6,7 +6,7 @@ export const onBeginEnemyTurn = () => {
     store.dispatch(beginEnemyTurn());
     store.dispatch(setShowTurnIndicator(true));
     setTimeout(() => {
-        store.dispatch(setShowTurnIndicator(false))
+        store.dispatch(setShowTurnIndicator(false));
         EnemyController.beginTurn();
     }, 1200);
 };

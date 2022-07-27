@@ -13,7 +13,7 @@ type EnemyActionPreviewProps = {
 const EnemyActionPreview = ({ unitId }: EnemyActionPreviewProps) => {
     const combatAction = useSelectNextEnemyAbility(unitId);
     const unit = useSelectCombatUnit(unitId);
-    const state = useAppSelector(state => state);
+    const state = useAppSelector((state) => state);
 
     const calculateDamage = (combatAction: CombatAction) => {
         if (!combatAction) return 0;

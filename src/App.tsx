@@ -16,12 +16,12 @@ const App = () => {
         <div className="app">
             {!isCombatInProgress && isCombatFailed && <GameStartScreen />}
             {!isCombatInProgress && isCombatVictorious && <UnitManagerScreen />}
-            {isCombatInProgress &&
+            {isCombatInProgress && (
                 <>
                     <TurnIndicator />
                     <CombatContainer />
                 </>
-            }
+            )}
         </div>
     );
 };

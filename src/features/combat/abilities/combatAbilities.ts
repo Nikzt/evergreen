@@ -28,7 +28,6 @@ export type CombatAbility = {
     manaCost: number;
 };
 
-
 const combatAbilities: { [abilityType: number]: CombatAbility } = {
     [CombatAbilityType.QUICK_ATTACK]: {
         id: CombatAbilityType.QUICK_ATTACK,

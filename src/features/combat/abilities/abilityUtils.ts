@@ -1,6 +1,6 @@
-import { CombatUnit } from "../state/combatModels";
-import { calculateRawDamage } from "./calculateAbilityDamage";
-import combatAbilities, { CombatAbility, CombatAbilityType } from "./combatAbilities";
+import { CombatUnit } from '../state/combatModels';
+import { calculateRawDamage } from './calculateAbilityDamage';
+import combatAbilities, { CombatAbility, CombatAbilityType } from './combatAbilities';
 
 export const getAbility = (abilityType: CombatAbilityType | null): CombatAbility => {
     if (abilityType != null && combatAbilities[abilityType] != null) return combatAbilities[abilityType];
@@ -13,7 +13,7 @@ export const getAbilityLabel = (unit: CombatUnit, abilityId: CombatAbilityType) 
         return `(${unit?.blockedDamageThisCombat} DMG) Revenge`;
     }
     return ability.label;
-}
+};
 
 export const getAbilityDescription = (unit: CombatUnit, ability: CombatAbility) => {
     // Replace [DIRECT_DAMAGE] with calculated damage
