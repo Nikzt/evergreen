@@ -4,7 +4,6 @@ import { CombatAction } from '../../state/combatModels';
 import calculateAbilityDamage from '../../abilities/calculateAbilityDamage';
 import './enemyActionPreview.scss';
 import { selectFullCombatAction } from '../../state/combatSelectors';
-import { useState } from 'react';
 
 type EnemyActionPreviewProps = {
     unitId: string;

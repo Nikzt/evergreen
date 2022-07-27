@@ -14,18 +14,20 @@ export type CombatActionFull = {
     ability: CombatAbility;
 };
 
+export type CombatUnitState = {
+    hp: number;
+};
+
 export type CombatUnit = {
     // State
     hp: number;
     isFriendly: boolean;
 
-    isRecovering: boolean;
     isCasting: boolean;
     castingAbility: CombatAbilityType | null;
     targetUnitId: string | null;
 
     castProgress: number;
-    recoveryProgress: number;
     combatNumbers: number[];
     isDead: boolean;
 

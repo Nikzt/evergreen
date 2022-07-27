@@ -1,6 +1,5 @@
-import { CombatAction, CombatActionFull, CombatState, CombatUnit } from '../state/combatModels';
-import { store } from '../../../store';
-import combatAbilities, { CombatAbility, CombatAbilityType } from './combatAbilities';
+import { CombatActionFull, CombatUnit } from '../state/combatModels';
+import { CombatAbility, CombatAbilityType } from './combatAbilities';
 
 const calculateAbilityDamage = (combatAction: CombatActionFull) => {
     const rawDamage = calculateRawDamage(combatAction.sourceUnit, combatAction.ability);

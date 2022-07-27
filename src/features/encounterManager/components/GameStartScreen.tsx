@@ -1,6 +1,5 @@
-import combatAbilities from '../../combat/abilities/combatAbilities';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { beginPlayerTurn, initCombatEncounter, setDifficulty } from '../../combat/state/combatSlice';
+import { initCombatEncounter, setDifficulty } from '../../combat/state/combatSlice';
 import { getStarterEncounter } from '../encounters';
 import './gameStartScreen.scss';
 import { onBeginPlayerTurn } from '../../combat/state/beginPlayerTurn';

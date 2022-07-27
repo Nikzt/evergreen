@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '../../../../hooks';
 import { store } from '../../../../store';
 import { initCombatEncounter } from '../../../combat/state/combatSlice';
-import { getNextEncounter, randomEncounterGenerator } from '../../encounters';
+import { getNextEncounter } from '../../encounters';
 import { selectAvailableRewards, selectFriendlyUnits } from '../../../combat/state/combatSelectors';
 import UnitInfo from '../../../../common/components/UnitInfo/UnitInfo';
 import RewardSelector from '../RewardSelector/RewardSelector';

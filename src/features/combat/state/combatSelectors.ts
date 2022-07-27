@@ -44,9 +44,7 @@ export const selectCanUseAnyAbilities = (unitId: string) => (state: RootState) =
     }
     const minManaCost =
         unit?.abilityIds.reduce((min, a) => Math.min(min, getAbility(a)?.manaCost), Number.MAX_SAFE_INTEGER) ?? 0;
-    return (
-        unit && !unit.isCasting && !unit.isRecovering && !unit.isBlocking && !unit.isDead && unit.mana >= minManaCost
-    );
+    return unit && !unit.isCasting && !unit.isBlocking && !unit.isDead && unit.mana >= minManaCost;
 };
 
 export const selectCanUseSpecificAbility = (unitId: string, abilityType: CombatAbilityType) => (state: RootState) => {

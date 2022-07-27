@@ -1,5 +1,4 @@
 import abilityIcons from '../../../assets/abilityIcons/abilityIcons';
-import { CombatUnit } from '../state/combatModels';
 
 export enum CombatTargetType {
     ENEMY = 0,

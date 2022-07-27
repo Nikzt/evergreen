@@ -3,8 +3,6 @@ import { RootState, store } from '../../../store';
 import { CombatAction } from '../state/combatModels';
 import {
     selectCanUseAnyAbilities,
-    selectEnemyUnitIds,
-    selectFriendlyUnitIds,
     selectLivingEnemyUnitIds,
     selectLivingFriendlyUnitIds,
     selectUnitHasCleave,

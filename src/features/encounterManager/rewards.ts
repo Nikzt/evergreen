@@ -169,12 +169,12 @@ const consumables: { [key: number]: Reward } = {
     },
 };
 
-const getRandomFriendlyUnitId = (state: CombatState): string => {
-    const friendlyUnitIds = getEntityList(state.units.entities)
-        .filter((unit) => unit.isFriendly)
-        .map((unit) => unit.id);
-    return _.sample(friendlyUnitIds) as string;
-};
+//const getRandomFriendlyUnitId = (state: CombatState): string => {
+//    const friendlyUnitIds = getEntityList(state.units.entities)
+//        .filter((unit) => unit.isFriendly)
+//        .map((unit) => unit.id);
+//    return _.sample(friendlyUnitIds) as string;
+//};
 
 const canUnitObtainAbility = (reward: Reward, unit: CombatUnit): boolean => {
     if (reward.type !== RewardType.ABILITY) return true;
