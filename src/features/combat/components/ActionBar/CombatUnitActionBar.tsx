@@ -44,7 +44,9 @@ const CombatUnitActionBar = () => {
             {isTargeting && targetingAbility != null && (
                 <div className="ability-details">
                     <div className="ability-header">
-                        <img className="ability-icon" src={targetingAbility.icon} alt="missing ability icon" />
+                        <img className="ability-icon"
+                            src={targetingAbility.icon}
+                            alt="missing ability icon" />
                         <span className="ability-label">{targetingAbility.label}</span>
                     </div>
                     <div className="ability-description">
