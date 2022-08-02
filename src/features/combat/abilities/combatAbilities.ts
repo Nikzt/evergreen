@@ -12,6 +12,7 @@ export enum CombatAbilityType {
     STRONG_ATTACK,
     BLOCK,
     REVENGE,
+    ARMOR
 }
 
 export type CombatAbility = {
@@ -71,6 +72,18 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         label: 'Revenge',
         description:
             'Deal damage to all targets equal to the amount of damage [SOURCE_UNIT_NAME] has blocked this combat ([DIRECT_DAMAGE])',
+        isTargetRequired: false,
+        manaCost: 0,
+    },
+    [CombatAbilityType.ARMOR]: {
+        id: CombatAbilityType.ARMOR,
+        icon: abilityIcons.block,
+        name: 'Revenge',
+        strengthMultiplier: 2,
+        targetType: CombatTargetType.NONE,
+        label: 'Revenge',
+        description:
+            '[SOURCE_UNIT_NAME] gains +[ABILITY_VALUE] [ARMOR]',
         isTargetRequired: false,
         manaCost: 0,
     },

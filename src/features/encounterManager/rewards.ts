@@ -98,14 +98,14 @@ const powers: { [key: number]: Reward } = {
             maxMana: 1,
             mana: 1,
         },
-        maxAmountPerUnit: 5,
+        maxAmountPerUnit: 2,
         probabilityWeight: 3,
     },
 };
 
 const abilities: { [key: number]: Reward } = {
     [RewardId.QUICK_ATTACK]: {
-        availableUnitIds: [],
+        availableUnitIds: [PlayerCharacterMira.id],
         id: RewardId.QUICK_ATTACK,
         type: RewardType.ABILITY,
         label: 'Quick Attack',
@@ -129,7 +129,7 @@ const abilities: { [key: number]: Reward } = {
         probabilityWeight: 9999,
     },
     [RewardId.BLOCK]: {
-        availableUnitIds: [],
+        availableUnitIds: [PlayerCharacterGreg.id],
         id: RewardId.BLOCK,
         type: RewardType.ABILITY,
         label: 'Block',
@@ -141,7 +141,7 @@ const abilities: { [key: number]: Reward } = {
         probabilityWeight: 15,
     },
     [RewardId.STRONG_ATTACK]: {
-        availableUnitIds: [],
+        availableUnitIds: [PlayerCharacterGreg.id],
         id: RewardId.STRONG_ATTACK,
         type: RewardType.ABILITY,
         label: 'Strong Attack',

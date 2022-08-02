@@ -13,7 +13,6 @@ export const selectFriendlyUnits = (state: RootState) =>
 
 export const selectRandomFriendlyUnit = (state: RootState) => {
     let friendlyUnits = selectFriendlyUnits(state).filter((u) => !u.isDead);
-    if (friendlyUnits.some((u) => u.isTaunting)) friendlyUnits = friendlyUnits.filter((u) => u.isTaunting);
     return friendlyUnits[Math.floor(Math.random() * friendlyUnits.length)];
 };
 
@@ -35,7 +34,6 @@ export const selectEnemyUnitIds = (state: RootState) =>
 export const selectUnit = (unitId: string) => (state: RootState) =>
     unitsSelectors.selectById(state.combat.units, unitId);
 
-export const selectUnitCastProgress = (unitId: string) => (state: RootState) => selectUnit(unitId)(state)?.castProgress;
 export const selectCanUseAnyAbilities = (unitId: string) => (state: RootState) => {
     const unit = selectUnit(unitId)(state);
     // Enemies can only use abilities in their queue
@@ -44,7 +42,7 @@ export const selectCanUseAnyAbilities = (unitId: string) => (state: RootState) =
     }
     const minManaCost =
         unit?.abilityIds.reduce((min, a) => Math.min(min, getAbility(a)?.manaCost), Number.MAX_SAFE_INTEGER) ?? 0;
-    return unit && !unit.isCasting && !unit.isBlocking && !unit.isDead && unit.mana >= minManaCost;
+    return unit && !unit.isDead && unit.mana >= minManaCost;
 };
 
 export const selectCanUseSpecificAbility = (unitId: string, abilityType: CombatAbilityType) => (state: RootState) => {
@@ -57,21 +55,6 @@ export const selectCanUseSpecificAbility = (unitId: string, abilityType: CombatA
     }
 
     return selectCanUseAnyAbilities(unitId)(state);
-};
-
-export const selectTargetLines = (state: RootState) => {
-    const units = unitsSelectors.selectAll(state.combat.units);
-    const castingUnits = units.filter((u) => u.isCasting || u.isBlocking);
-    return castingUnits.map((u) => {
-        const target = u.blockedBy ?? u.targetUnitId;
-        return {
-            sourceUnitId: u.id,
-            targetUnitId: target,
-            abilityId: u.castingAbility,
-            isFriendlySource: u.isFriendly,
-            isBlocking: u.isBlocking,
-        };
-    });
 };
 
 export const selectAvailableRewards = (state: RootState) => state.combat.availableRewards;
