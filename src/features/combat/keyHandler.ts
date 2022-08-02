@@ -1,6 +1,9 @@
-import { PlayerCharacterGreg } from '../../common/playerCharacters';
-import { store } from '../../store';
-import { selectCanUseSpecificAbility, selectFriendlyUnitByIdx } from './state/combatSelectors';
+import { PlayerCharacterGreg, PlayerCharacterMira } from '../../common/playerCharacters';
+import { RootState, store } from '../../store';
+import { handleAbility, targetAbility } from './abilities/abilityHandler';
+import { getAbility } from './abilities/abilityUtils';
+import { CombatAction } from './state/combatModels';
+import { selectCanUseSpecificAbility, selectEnemyUnitByIdx, selectFriendlyUnitByIdx } from './state/combatSelectors';
 import { setVictoryState, toggleUnitActionBar } from './state/combatSlice';
 
 export type AbilityKeyBinding = {
@@ -9,23 +12,20 @@ export type AbilityKeyBinding = {
     key: string;
 };
 
-export const abilityKeyBindings = [];
-
-const handleKeyPress = (key: string) => {
-    // if pressed space, end combat
-    if (key === ' ') {
-        store.dispatch(setVictoryState());
-    }
-
-    const state = store.getState();
-    if (key === '1') {
-        store.dispatch(toggleUnitActionBar(PlayerCharacterGreg.id));
-    }
-};
-
 class KeyHandler {
     private static isInitialized = false;
-    private static abilityKeyBindings = {};
+    public static abilityKeyBindings: {[key: string]: number} = {
+        "q": 0,
+        "w": 1,
+        "e": 2,
+        "r": 3,
+    };
+    public static targetKeyBindings: {[key: string]: number} = {
+        "1": 0,
+        "2": 1,
+        "3": 2,
+        "4": 3,
+    }
 
     public static init(): void {
         if (KeyHandler.isInitialized) {
@@ -35,7 +35,7 @@ class KeyHandler {
         document.addEventListener(
             'keydown',
             (event) => {
-                handleKeyPress(event.key);
+                this.handleKeyPress(event.key);
             },
             false,
         );
@@ -43,7 +43,61 @@ class KeyHandler {
         KeyHandler.isInitialized = true;
     }
 
-    private updateKeyBindings(): void {
+    private static handleActionBarToggle(key: string) {
+        if (key === '1') {
+            store.dispatch(toggleUnitActionBar(PlayerCharacterGreg.id));
+        }
+        if (key === '2') {
+            store.dispatch(toggleUnitActionBar(PlayerCharacterMira.id));
+        }
+    }
+
+    private static handleAbilitySelect(key: string, state: RootState) {
+        const abilityIdx = this.abilityKeyBindings[key];
+        if (abilityIdx == null) return;
+
+        const sourceUnit = state.combat.units.entities[state.combat.displayedUnitActionBar as string];
+        if (!sourceUnit) return;
+
+        const abilityId = sourceUnit.abilityIds[abilityIdx];
+        const combatAction: CombatAction = {
+            sourceUnitId: sourceUnit.id,
+            targetUnitId: '',
+            abilityId 
+        }
+        handleAbility(combatAction);
+    }
+
+    private static handleAbilityTarget(key: string) {
+        const targetUnitIdx = this.keyToTargetUnitIdx(key);
+        if (targetUnitIdx == null) return;
+        const targetUnit = selectEnemyUnitByIdx(targetUnitIdx)(store.getState());
+        if (targetUnit == null) return;
+        targetAbility(targetUnit.id);
+    }
+
+    private static handleKeyPress(key: string) {
+        // if pressed space, end combat. Used for debugging
+        if (key === ' ') {
+            store.dispatch(setVictoryState());
+        }
+
+        if (key === 'Escape') {
+            store.dispatch(toggleUnitActionBar(null));
+        }
+
+        const state = store.getState();
+        if (!state.combat.isTargeting) {
+            this.handleActionBarToggle(key);
+            this.handleAbilitySelect(key, state);
+        } else {
+            this.handleAbilityTarget(key);
+        }
+    };
+
+    private static keyToTargetUnitIdx(key: string): number {
+        const targetUnitIdx = this.targetKeyBindings[key];
+        return targetUnitIdx;
     }
 }
 

@@ -81,6 +81,10 @@ export const selectFriendlyUnitByIdx = (idx: number) => (state: RootState) => {
     const friendlyUnits = selectFriendlyUnits(state);
     if (friendlyUnits.length > idx) return friendlyUnits[idx];
 };
+export const selectEnemyUnitByIdx = (idx: number) => (state: RootState) => {
+    const enemyUnits = selectEnemyUnits(state);
+    if (enemyUnits.length > idx) return enemyUnits[idx];
+};
 
 export const selectFriendlyUnitIndexes = (state: RootState) => {
     return selectFriendlyUnitIds(state).map((uid, idx) => {
