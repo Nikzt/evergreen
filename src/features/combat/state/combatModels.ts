@@ -31,7 +31,6 @@ export type CombatUnit = {
 
     combatNumbers: number[];
 
-
     // Block state
     blockedDamageThisCombat: number;
     revengeCharges: number;
@@ -49,7 +48,6 @@ export type CombatUnit = {
     strength: number;
     powers: RewardId[];
     blockPercent: number;
-
 };
 
 export type CombatState = {

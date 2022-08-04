@@ -36,7 +36,6 @@ const removeAbilitiesWithSourceUnitId = (state: CombatState, sourceUnitId: strin
 const onUnitKilled = (state: CombatState, unit: CombatUnit) => {
     unit.hp = 0;
     unit.isDead = true;
-    unit.isCasting = false;
     removeAbilitiesWithSourceUnitId(state, unit.id);
 };
 
@@ -295,18 +294,6 @@ export const combatSlice = createSlice({
 
             checkDeadUnits(state);
         },
-        toggleTaunt: (state, action: PayloadAction<string>) => {
-            const unit = state.units.entities[action.payload];
-            if (!unit) return;
-
-            unit.isTaunting = !unit.isTaunting;
-            if (unit.isTaunting) {
-                const otherUnits = Object.values(state.units.entities).filter((u) => u?.isFriendly !== unit.isFriendly);
-                otherUnits.forEach((u) => {
-                    if (u) u.targetUnitId = unit.id;
-                });
-            }
-        },
         clearOldestCombatNumber: (state, action: PayloadAction<string>) => {
             const unitId = action.payload;
             const unit = state.units.entities[unitId];
@@ -400,7 +387,6 @@ export const {
     setDefeatState,
     setVictoryState,
     updateUnitWithReward,
-    toggleTaunt,
     beginPlayerTurn,
     beginEnemyTurn,
     removeFromEnemyAbilityQueue,

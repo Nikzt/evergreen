@@ -15,11 +15,11 @@ const CombatUnitActionBar = () => {
 
     const unitAbilities = useAppSelector((state) => {
         if (!unit?.abilityIds || unitIndex == null) return [];
-        return unit.abilityIds.map(id => {
+        return unit.abilityIds.map((id) => {
             return {
                 ...combatAbilities[id],
                 abilityDisabled: !selectCanUseSpecificAbility(unit.id, id)(state),
-                key: ''
+                key: '',
             };
         });
     });
@@ -42,9 +42,7 @@ const CombatUnitActionBar = () => {
             {isTargeting && targetingAbility != null && (
                 <div className="ability-details">
                     <div className="ability-header">
-                        <img className="ability-icon"
-                            src={targetingAbility.icon}
-                            alt="missing ability icon" />
+                        <img className="ability-icon" src={targetingAbility.icon} alt="missing ability icon" />
                         <span className="ability-label">{targetingAbility.label}</span>
                     </div>
                     <div className="ability-description">

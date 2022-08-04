@@ -12,7 +12,7 @@ export const selectFriendlyUnits = (state: RootState) =>
     unitsSelectors.selectAll(state.combat.units).filter((u) => u.isFriendly);
 
 export const selectRandomFriendlyUnit = (state: RootState) => {
-    let friendlyUnits = selectFriendlyUnits(state).filter((u) => !u.isDead);
+    const friendlyUnits = selectFriendlyUnits(state).filter((u) => !u.isDead);
     return friendlyUnits[Math.floor(Math.random() * friendlyUnits.length)];
 };
 

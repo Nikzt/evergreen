@@ -1,9 +1,8 @@
 import { PlayerCharacterGreg, PlayerCharacterMira } from '../../common/playerCharacters';
 import { RootState, store } from '../../store';
 import { handleAbility, targetAbility } from './abilities/abilityHandler';
-import { getAbility } from './abilities/abilityUtils';
 import { CombatAction } from './state/combatModels';
-import { selectCanUseSpecificAbility, selectEnemyUnitByIdx, selectFriendlyUnitByIdx } from './state/combatSelectors';
+import { selectEnemyUnitByIdx } from './state/combatSelectors';
 import { setVictoryState, toggleUnitActionBar } from './state/combatSlice';
 
 export type AbilityKeyBinding = {
@@ -14,18 +13,18 @@ export type AbilityKeyBinding = {
 
 class KeyHandler {
     private static isInitialized = false;
-    public static abilityKeyBindings: {[key: string]: number} = {
-        "q": 0,
-        "w": 1,
-        "e": 2,
-        "r": 3,
+    public static abilityKeyBindings: { [key: string]: number } = {
+        q: 0,
+        w: 1,
+        e: 2,
+        r: 3,
     };
-    public static targetKeyBindings: {[key: string]: number} = {
-        "1": 0,
-        "2": 1,
-        "3": 2,
-        "4": 3,
-    }
+    public static targetKeyBindings: { [key: string]: number } = {
+        '1': 0,
+        '2': 1,
+        '3': 2,
+        '4': 3,
+    };
 
     public static init(): void {
         if (KeyHandler.isInitialized) {
@@ -63,8 +62,8 @@ class KeyHandler {
         const combatAction: CombatAction = {
             sourceUnitId: sourceUnit.id,
             targetUnitId: '',
-            abilityId 
-        }
+            abilityId,
+        };
         handleAbility(combatAction);
     }
 
@@ -93,7 +92,7 @@ class KeyHandler {
         } else {
             this.handleAbilityTarget(key);
         }
-    };
+    }
 
     private static keyToTargetUnitIdx(key: string): number {
         const targetUnitIdx = this.targetKeyBindings[key];

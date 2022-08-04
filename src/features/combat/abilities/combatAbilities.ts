@@ -12,7 +12,7 @@ export enum CombatAbilityType {
     STRONG_ATTACK,
     BLOCK,
     REVENGE,
-    ARMOR
+    ARMOR,
 }
 
 export type CombatAbility = {
@@ -82,8 +82,7 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         strengthMultiplier: 2,
         targetType: CombatTargetType.NONE,
         label: 'Revenge',
-        description:
-            '[SOURCE_UNIT_NAME] gains +[ABILITY_VALUE] [ARMOR]',
+        description: '[SOURCE_UNIT_NAME] gains +[ABILITY_VALUE] [ARMOR]',
         isTargetRequired: false,
         manaCost: 0,
     },

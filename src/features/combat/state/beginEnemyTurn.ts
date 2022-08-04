@@ -3,7 +3,7 @@ import EnemyController from '../../encounterManager/enemyController';
 import { beginEnemyTurn, setShowTurnIndicator } from './combatSlice';
 
 export const onBeginEnemyTurn = () => {
-    // State updates 
+    // State updates
     store.dispatch(beginEnemyTurn());
     store.dispatch(setShowTurnIndicator(true));
     setTimeout(() => {
