@@ -4,6 +4,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: absolute;
+    width: 100%;
+    bottom: -45px;
     img {
         width: 25px;
         height: 25px;

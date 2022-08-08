@@ -1,0 +1,46 @@
+@import "common/scss/colors.scss";
+
+.unit-menu-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 5px;
+    gap: 5px;
+    border: 1px solid #243531;
+
+    .unit-info {
+        display: grid;
+        gap: 5px;
+        grid-template-rows: 90px 20px 10px;
+    }
+}
+
+.unit-menu-item__stats-section {
+    border: 1px solid $color-friendly-outline;
+    padding: 5px;
+}
+
+.unit-menu-item__stats-table {
+    td,
+    th {
+        padding-right: 15px;
+        padding-left: 3px;
+    }
+
+    th {
+        color: $color-greentext;
+    }
+}
+
+.unit-menu-item__buttons-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    button {
+        width: 100%;
+    }
+}
+
+.unit-menu-item__info-section {
+    padding: 5px;
+    border: 1px solid $color-friendly-outline;
+}

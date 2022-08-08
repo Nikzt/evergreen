@@ -1,75 +1,102 @@
 @import "common/scss/colors.scss";
 
+//.unit-info {
+//    line-height: 1;
+//    border-radius: 0;
+//    color: $color-text;
+//    display: grid;
+//    grid-template-rows: 110px 40px;
+//    padding: 5px;
+//
+//    background-color: $color-friendly-background;
+//    border: 1px solid $color-friendly-outline;
+//    .hp-bar-progress {
+//        border-color: $color-friendly-outline;
+//    }
+//
+//    .unit-info--portrait-container {
+//        position: relative;
+//        z-index: 0;
+//        img {
+//            margin-right: 1px;
+//            width: 100%;
+//            height: 100%;
+//            object-fit: cover;
+//            -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+//            -moz-box-sizing: border-box; /* Firefox, other Gecko */
+//            box-sizing: border-box; /* Opera/IE 8+ */
+//        }
+//        .unit-info--name {
+//            position: absolute;
+//            padding-left: 2px;
+//            text-shadow: 1px 1px 2px black;
+//            bottom: 0;
+//            margin: 0;
+//            font-size: 1em;
+//        }
+//    }
+//
+//    .unit-info--details {
+//        .hp-bar {
+//            text-align: left;
+//            margin-top: 5px;
+//        }
+//
+//        .hp-bar-progress {
+//            margin-bottom: 3px;
+//            .cast-bar-label {
+//                color: $color-primary;
+//            }
+//            .hp-bar-progress {
+//                background-color: $color-friendly;
+//            }
+//        }
+//    }
+//}
+//
+//.blocking .unit-info {
+//    border: 1px solid $color-blocking;
+//}
+//
+//.enemy .unit-info {
+//    background-color: $color-enemy-background;
+//    border: 1px solid $color-enemy-outline;
+//    .hp-bar-progress {
+//        border-color: $color-enemy-outline;
+//    }
+//}
+
+//.friendly .unit-info {
+//    background-color: $color-friendly-background;
+//    border: 1px solid $color-friendly-outline;
+//    .hp-bar-progress {
+//        border-color: $color-friendly-outline;
+//    }
+//}
+
+
 .unit-info {
-    line-height: 1;
-    border-radius: 0;
-    color: $color-text;
     display: grid;
-    grid-template-rows: 110px 40px;
-    padding: 5px;
-
-    background-color: $color-friendly-background;
-    border: 1px solid $color-friendly-outline;
-    .hp-bar-progress {
-        border-color: $color-friendly-outline;
-    }
-
-    .unit-info--portrait-container {
-        position: relative;
-        z-index: 0;
-        img {
-            margin-right: 1px;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-            -moz-box-sizing: border-box; /* Firefox, other Gecko */
-            box-sizing: border-box; /* Opera/IE 8+ */
-        }
-        .unit-info--name {
-            position: absolute;
-            padding-left: 2px;
-            text-shadow: 1px 1px 2px black;
-            bottom: 0;
-            margin: 0;
-            font-size: 1em;
-        }
-    }
-
-    .unit-info--details {
-        .hp-bar {
-            text-align: left;
-            margin-top: 5px;
-        }
-
-        .hp-bar-progress {
-            margin-bottom: 3px;
-            .cast-bar-label {
-                color: $color-primary;
-            }
-            .hp-bar-progress {
-                background-color: $color-friendly;
-            }
-        }
-    }
+    gap: 5px;
+    grid-template-rows: 120px 20px 10px;
 }
 
-.blocking .unit-info {
-    border: 1px solid $color-blocking;
+.unit-info__portrait-image {
+    width: 100%;
+    height: 100%;
 }
 
-.enemy .unit-info {
-    background-color: $color-enemy-background;
-    border: 1px solid $color-enemy-outline;
-    .hp-bar-progress {
-        border-color: $color-enemy-outline;
-    }
+.unit-info__portrait-name {
+    position: relative;
+    left: 5px;
+    bottom: 20px;
+    text-shadow: 1px 1px 2px black;
 }
 
-.friendly .unit-info {
-    background-color: $color-friendly-background;
-    border: 1px solid $color-friendly-outline;
-    .hp-bar-progress {
-        border-color: $color-friendly-outline;
-    }
+.friendly .cast-bar-label {
+    color: $color-friendly-background;
+}
+
+.enemy .cast-bar-label {
+    color: $color-enemy-background;
 }

@@ -5,7 +5,7 @@ type UnitClickBoxProps = {
 };
 
 const UnitClickBox = ({ clickCallback }: UnitClickBoxProps) => {
-    return <button className="unit-click-box" onClick={() => clickCallback()}></button>;
+    return <button className="unit-click-box unit-overlay" onClick={() => clickCallback()}></button>;
 };
 
 export default UnitClickBox;

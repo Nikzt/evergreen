@@ -27,7 +27,6 @@ const CombatUnit = ({ unitId }: CombatUnitProps) => {
             id={unit.id}
             className={
                 'unit' +
-                (unit.isBlocking ? ' blocking' : '') +
                 (unit.isDead ? ' dead' : '') +
                 (unit.isFriendly ? ' friendly' : ' enemy') +
                 (displayedUnitActionBar === unit.id ? ' selected-unit' : '')
@@ -37,7 +36,7 @@ const CombatUnit = ({ unitId }: CombatUnitProps) => {
 
             {/* Targeting overlay if enemy */}
             <TargetingBox unitId={unitId} />
-            <div className="taking-damage-overlay"></div>
+            <div className="taking-damage-overlay unit-overlay"></div>
 
             <UnitClickBox clickCallback={() => onClickFriendlyUnit(unitId)} />
 

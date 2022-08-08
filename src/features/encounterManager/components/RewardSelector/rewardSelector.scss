@@ -30,6 +30,10 @@
         }
         background-color: $color-primary;
         .rewards-options-list {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            gap: 10px;
         }
     }
 }

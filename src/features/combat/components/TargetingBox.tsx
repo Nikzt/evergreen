@@ -28,7 +28,7 @@ const TargetingBox = ({ unitId }: TargetingBoxProps) => {
 
     return (
         <button
-            className={'targeting-box ' + (showTargetingEffect ? 'is-targeting' : '')}
+            className={'targeting-box unit-overlay ' + (showTargetingEffect ? 'is-targeting' : '')}
             onClick={() => onTargetAbility(unit.id)}
         ></button>
     );

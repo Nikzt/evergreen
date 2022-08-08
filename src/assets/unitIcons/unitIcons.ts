@@ -1,6 +1,6 @@
 const unitIcons = {
     fallback: require('./character.svg'),
-    greg: require('./Greg.png'),
+    greg: require('./Greg.jpeg'),
     mira: require('./Mira.jpeg'),
     evilMinion: require('./evil-minion.svg'),
     sharpSmile: require('./sharp-smile.svg'),

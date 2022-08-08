@@ -9,7 +9,7 @@ const CombatNumbers = ({ unitId }: CombatNumbersProps) => {
     const unit = useSelectCombatUnit(unitId);
 
     return (
-        <div className="combat-numbers-container">
+        <div className="combat-numbers-container unit-overlay">
             <div className="combat-numbers">
                 {unit?.combatNumbers.map((c, idx) => (
                     <div key={idx} className="combat-number">

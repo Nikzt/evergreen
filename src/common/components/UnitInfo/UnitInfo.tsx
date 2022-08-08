@@ -19,14 +19,12 @@ const UnitInfo = ({ unitId }: UnitInfoProps) => {
 
     return (
         <div className="unit-info">
-            <div className="unit-info--portrait-container">
-                <img src={icon} alt="" />
-                <p className="unit-info--name">{unit.name}</p>
+            <div className="unit-info__portrait-section">
+                <img src={icon} alt="" className="unit-info__portrait-image"/>
+                <p className="unit-info__portrait-name">{unit.name}</p>
             </div>
-            <div className="unit-info--details">
-                <HpBar hp={unit.hp} maxHp={unit.maxHp} isFriendly={unit.isFriendly} />
-                <ManaBar mana={unit.mana} maxMana={unit.maxMana} />
-            </div>
+            <HpBar unitId={unitId} />
+            <ManaBar mana={unit.mana} maxMana={unit.maxMana} />
         </div>
     );
 };
