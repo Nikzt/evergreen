@@ -13,12 +13,11 @@ const RewardOption = ({ reward }: RewardOptionProps) => {
     const allMaxHp = useAppSelector(selectAllFriendlyUnitsMaxHp);
     const disableReward = reward.id === RewardId.HEALTH && allMaxHp;
     const onRewardClick = () => {
-        if (disableReward)
-            return;
+        if (disableReward) return;
         if (reward.unitIds != null)
-        reward.unitIds.forEach((id) => {
-            dispatch(updateUnitWithReward({ unitId: id, reward }));
-        })
+            reward.unitIds.forEach((id) => {
+                dispatch(updateUnitWithReward({ unitId: id, reward }));
+            });
     };
 
     return (

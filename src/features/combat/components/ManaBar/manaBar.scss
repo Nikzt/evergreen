@@ -1,4 +1,4 @@
-@import "../../../../common/scss/colors.scss";
+@import "common/scss/colors.scss";
 
 .mana-bar {
     display: flex;
@@ -6,7 +6,7 @@
     align-items: center;
     .mana-icon {
         max-width: 15px;
-        height: 10px;
+        height: 100%;
         margin-right: 5px;
         rect.mana-available {
             fill: $color-mana;
@@ -17,15 +17,12 @@
 
 @keyframes glow {
     0% {
-        fill: $color-mana;
-        box-shadow: 0px 0px 4px $color-mana;
+        opacity: 1;
     }
     50% {
-        fill: lighten($color-mana, 10%);
-        box-shadow: 0px 0px 8px white;
+        opacity: 0.8;
     }
     100% {
-        fill: $color-mana;
-        box-shadow: 0px 0px 4px $color-mana;
+        opacity: 1;
     }
 }

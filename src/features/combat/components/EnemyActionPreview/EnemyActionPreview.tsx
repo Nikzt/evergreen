@@ -4,7 +4,6 @@ import { CombatAction } from '../../state/combatModels';
 import calculateAbilityDamage from '../../abilities/calculateAbilityDamage';
 import './enemyActionPreview.scss';
 import { selectFullCombatAction } from '../../state/combatSelectors';
-import { useState } from 'react';
 
 type EnemyActionPreviewProps = {
     unitId: string;
@@ -13,7 +12,7 @@ type EnemyActionPreviewProps = {
 const EnemyActionPreview = ({ unitId }: EnemyActionPreviewProps) => {
     const combatAction = useSelectNextEnemyAbility(unitId);
     const unit = useSelectCombatUnit(unitId);
-    const state = useAppSelector(state => state);
+    const state = useAppSelector((state) => state);
 
     const calculateDamage = (combatAction: CombatAction) => {
         if (!combatAction) return 0;

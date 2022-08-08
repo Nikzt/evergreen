@@ -12,37 +12,29 @@ export type CombatActionFull = {
     sourceUnit: CombatUnit;
     targetUnit: CombatUnit;
     ability: CombatAbility;
-}
+};
+
+export type CombatUnitState = {
+    hp: number;
+};
 
 export type CombatUnit = {
-    // State
+    // Resources/Stats State
     hp: number;
-    isFriendly: boolean;
-
-    isRecovering: boolean;
-    isCasting: boolean;
-    castingAbility: CombatAbilityType | null;
-    targetUnitId: string | null;
-
-    castProgress: number;
-    recoveryProgress: number;
-    combatNumbers: number[];
+    mana: number;
+    armor: number;
     isDead: boolean;
 
-    // Turn state
-    mana: number;
+    isFriendly: boolean;
+
+    targetUnitId: string | null;
+
+    combatNumbers: number[];
 
     // Block state
     blockedDamageThisCombat: number;
     revengeCharges: number;
-    blockedBy: string | null;
-    isBlocking: boolean;
-    blockingProgress: number;
-    isBlockSuccessful: boolean;
     isRevengeEnabled: boolean;
-    lastBlockedUnitId: string | null;
-
-    isTaunting: boolean;
 
     // Config
     id: string;
@@ -54,9 +46,7 @@ export type CombatUnit = {
     maxHp: number;
     maxMana: number;
     strength: number;
-    armor: number;
     powers: RewardId[];
-
     blockPercent: number;
 };
 

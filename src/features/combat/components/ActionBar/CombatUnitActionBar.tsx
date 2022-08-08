@@ -1,6 +1,5 @@
 import combatAbilities, { CombatAbilityType } from '../../abilities/combatAbilities';
 import { useAppSelector, useSelectCombatUnit } from '../../../../hooks';
-import { abilityKeyBindings } from '../../keyHandler';
 import { selectCanUseSpecificAbility, selectFriendlyUnitIndexes } from '../../state/combatSelectors';
 import './combatUnitActionBar.scss';
 import { handleAbility } from '../../abilities/abilityHandler';
@@ -16,12 +15,11 @@ const CombatUnitActionBar = () => {
 
     const unitAbilities = useAppSelector((state) => {
         if (!unit?.abilityIds || unitIndex == null) return [];
-        return unit.abilityIds.map((id, idx) => {
-            const keyBinding = abilityKeyBindings.find((k) => k.abilityIdx === idx && k.unitIdx === unitIndex);
+        return unit.abilityIds.map((id) => {
             return {
                 ...combatAbilities[id],
                 abilityDisabled: !selectCanUseSpecificAbility(unit.id, id)(state),
-                key: keyBinding?.key ?? '',
+                key: '',
             };
         });
     });

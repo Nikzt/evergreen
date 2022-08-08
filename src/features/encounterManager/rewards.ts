@@ -4,7 +4,7 @@ import { CombatUnit, CombatState } from '../combat/state/combatModels';
 import { selectUnit } from '../combat/state/combatSelectors';
 import { getEntityList } from '../../common/entityUtils';
 import { PlayerCharacterGreg, PlayerCharacterMira } from '../../common/playerCharacters';
-import _ from "lodash";
+import _ from 'lodash';
 
 export enum RewardId {
     MAX_HP,
@@ -17,13 +17,13 @@ export enum RewardId {
     REVENGE,
     BLOCK,
     STRONG_ATTACK,
-    CLEAVE
+    CLEAVE,
 }
 
 export enum RewardType {
     CONSUMABLE,
     POWER,
-    ABILITY
+    ABILITY,
 }
 
 export type Reward = {
@@ -59,8 +59,7 @@ const powers: { [key: number]: Reward } = {
         type: RewardType.POWER,
         label: 'Wild Strikes',
         description: '[UNIT_NAME] does 25% of single target damage to all other enemies',
-        changes: {
-        },
+        changes: {},
         maxAmountPerUnit: 1,
         probabilityWeight: 9999,
     },
@@ -88,7 +87,6 @@ const powers: { [key: number]: Reward } = {
         },
         maxAmountPerUnit: null,
         probabilityWeight: 2,
-
     },
     [RewardId.MAX_MANA]: {
         availableUnitIds: [],
@@ -100,14 +98,14 @@ const powers: { [key: number]: Reward } = {
             maxMana: 1,
             mana: 1,
         },
-        maxAmountPerUnit: 5,
+        maxAmountPerUnit: 2,
         probabilityWeight: 3,
     },
 };
 
 const abilities: { [key: number]: Reward } = {
     [RewardId.QUICK_ATTACK]: {
-        availableUnitIds: [],
+        availableUnitIds: [PlayerCharacterMira.id],
         id: RewardId.QUICK_ATTACK,
         type: RewardType.ABILITY,
         label: 'Quick Attack',
@@ -131,7 +129,7 @@ const abilities: { [key: number]: Reward } = {
         probabilityWeight: 9999,
     },
     [RewardId.BLOCK]: {
-        availableUnitIds: [],
+        availableUnitIds: [PlayerCharacterGreg.id],
         id: RewardId.BLOCK,
         type: RewardType.ABILITY,
         label: 'Block',
@@ -141,8 +139,9 @@ const abilities: { [key: number]: Reward } = {
         },
         maxAmountPerUnit: 1,
         probabilityWeight: 15,
-    }, [RewardId.STRONG_ATTACK]: {
-        availableUnitIds: [],
+    },
+    [RewardId.STRONG_ATTACK]: {
+        availableUnitIds: [PlayerCharacterGreg.id],
         id: RewardId.STRONG_ATTACK,
         type: RewardType.ABILITY,
         label: 'Strong Attack',
@@ -152,31 +151,30 @@ const abilities: { [key: number]: Reward } = {
         },
         maxAmountPerUnit: 1,
         probabilityWeight: 10,
-
-    }
-}
+    },
+};
 
 const consumables: { [key: number]: Reward } = {
-        [RewardId.HEALTH]: {
-            availableUnitIds: [],
-            id: RewardId.HEALTH,
-            type: RewardType.CONSUMABLE,
-            label: 'Absorb Vitality',
-            description: '[UNIT_NAME] heal +10 HP',
-            changes: {
-                hp: 10,
-            },
-            maxAmountPerUnit: null,
-            probabilityWeight: 7
+    [RewardId.HEALTH]: {
+        availableUnitIds: [],
+        id: RewardId.HEALTH,
+        type: RewardType.CONSUMABLE,
+        label: 'Absorb Vitality',
+        description: '[UNIT_NAME] heal +10 HP',
+        changes: {
+            hp: 10,
         },
-    };
-
-const getRandomFriendlyUnitId = (state: CombatState): string => {
-    const friendlyUnitIds = getEntityList(state.units.entities)
-        .filter((unit) => unit.isFriendly)
-        .map((unit) => unit.id);
-    return _.sample(friendlyUnitIds) as string;
+        maxAmountPerUnit: null,
+        probabilityWeight: 7,
+    },
 };
+
+//const getRandomFriendlyUnitId = (state: CombatState): string => {
+//    const friendlyUnitIds = getEntityList(state.units.entities)
+//        .filter((unit) => unit.isFriendly)
+//        .map((unit) => unit.id);
+//    return _.sample(friendlyUnitIds) as string;
+//};
 
 const canUnitObtainAbility = (reward: Reward, unit: CombatUnit): boolean => {
     if (reward.type !== RewardType.ABILITY) return true;
@@ -184,7 +182,7 @@ const canUnitObtainAbility = (reward: Reward, unit: CombatUnit): boolean => {
     const abilityInReward = reward.changes.abilityIds[0];
     const doesUnitHaveAbility = unit.abilityIds.includes(abilityInReward);
     return !doesUnitHaveAbility;
-}
+};
 
 const canUnitUseReward = (state: CombatState, reward: Reward, unitId: string): boolean => {
     const unit = state.units.entities[unitId];
@@ -193,11 +191,11 @@ const canUnitUseReward = (state: CombatState, reward: Reward, unitId: string): b
     const isRewardAvailableForUnit = reward.availableUnitIds.length <= 0 || reward.availableUnitIds.includes(unitId);
     const isRewardMaxedOut = reward.maxAmountPerUnit != null && numPowersOfType >= reward.maxAmountPerUnit;
     return isRewardAvailableForUnit && !isRewardMaxedOut && canUnitObtainAbility(reward, unit);
-}
+};
 
 const generateRewardForUnit = (state: CombatState, unitId: string): Reward => {
     const rewardsListCopy = [...Object.values(powers), ...Object.values(abilities)];
-    const filteredRewards = _.filter(rewardsListCopy, r => canUnitUseReward(state, r, unitId));
+    const filteredRewards = _.filter(rewardsListCopy, (r) => canUnitUseReward(state, r, unitId));
     if (filteredRewards.length < 1) throw new Error('No rewards available for unit');
 
     // get random reward with probablity weight
@@ -209,22 +207,23 @@ const generateRewardForUnit = (state: CombatState, unitId: string): Reward => {
     const reward = randomizedRewards[rewardIndex];
 
     return { ...reward, unitIds: [unitId] };
-}
+};
 
 export const getRewardsForEachUnit = (state: CombatState): Reward[] => {
-    const friendlyUnitIds = getEntityList(state.units.entities).filter((unit) => unit.isFriendly).map((unit) => unit.id);
-    const guaranteedReward = {...consumables[RewardId.HEALTH], unitIds: friendlyUnitIds };
+    const friendlyUnitIds = getEntityList(state.units.entities)
+        .filter((unit) => unit.isFriendly)
+        .map((unit) => unit.id);
+    const guaranteedReward = { ...consumables[RewardId.HEALTH], unitIds: friendlyUnitIds };
     const rewards = getEntityList(state.units.entities)
         .filter((unit) => unit.isFriendly)
         .map((unit) => generateRewardForUnit(state, unit.id));
     return [...rewards, guaranteedReward];
-}
+};
 
 export const getRewardDescription = (reward: Reward): string => {
     if (!reward.unitIds) return reward.description;
-    if (reward.unitIds.length > 1)
-        return reward.description.replace('[UNIT_NAME]', 'All party members');
-    
+    if (reward.unitIds.length > 1) return reward.description.replace('[UNIT_NAME]', 'All party members');
+
     const unit = selectUnit(reward.unitIds[0])(store.getState() as RootState);
     if (!unit) throw new Error('Unit not found');
     return reward.description.replace('[UNIT_NAME]', unit.name);

@@ -1,18 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@300;400&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Tinos&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Tinos&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;700&display=swap');
-@import "./common/scss/colors.scss";
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;700&display=swap");
+@import "common/scss/colors.scss";
 
 html {
     color: $color-text;
     background-color: $color-primary;
     user-select: none;
     touch-action: manipulation;
-    font-family: 'Rajdhani', sans-serif;
+    font-family: "Rajdhani", sans-serif;
 }
 
 .app {
@@ -39,10 +39,11 @@ a {
 }
 
 button {
-    font-family: 'Rajdhani', sans-serif;
+    font-family: "Rajdhani", sans-serif;
     &[disabled] {
         opacity: 0.4;
     }
+    -webkit-tap-highlight-color: transparent;
 }
 
 .menu-button {
@@ -52,7 +53,6 @@ button {
     color: $color-greentext;
     background-color: transparent;
     border-radius: 0;
-    margin: 6px 3px 3px 3px;
     font-size: 1em;
 }
 
@@ -85,11 +85,8 @@ button[disabled] {
 
 .cast-bar-label {
     position: absolute;
-    margin-top: 1px;
-    font-weight: 400;
-    margin-left: 3px;
-    color: black;
-    font-size: 0.8em;
+    left: 30px;
+    font-size: 1.1em;
 }
 
 h1 {
@@ -113,28 +110,11 @@ ul {
     margin-bottom: 10px;
 }
 
-.character-info-container {
-    max-width: 600px;
-    display: flex;
-    justify-content: center;
-    padding: 10px;
-    text-align: left;
-    margin-left: auto;
-    margin-right: auto;
-
-    .character-info {
-        flex: 1;
-    }
-
-    .unit-info {
-        grid-template-rows: 300px 40px;
-        margin: 10px;
-    }
-}
-
-
-.unit-manager-screen {
-    text-align: center;
+img {
+    object-fit: cover;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box; /* Firefox, other Gecko */
+    box-sizing: border-box; /* Opera/IE 8+ */
 }
 
 .game-start-screen {
@@ -155,4 +135,22 @@ ul {
     backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(3px);
     z-index: 15;
+}
+
+.progress-bar {
+    height: 100%;
+}
+
+.friendly-unit-ui-element {
+    background-color: $color-friendly-background;
+    border: 1px solid $color-friendly-outline;
+    .progress-bar {
+        border-color: $color-friendly-outline;
+    }
+}
+
+.important-button {
+    border: 1px solid $color-important;
+    box-shadow: 0 0 3px $color-important;
+    color: $color-important;
 }

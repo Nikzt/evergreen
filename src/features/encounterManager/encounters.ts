@@ -10,11 +10,7 @@ export type CombatEncounter = {
 export const getStarterEncounter = (): CombatEncounter => {
     return {
         name: 'First Combat',
-        units: [
-            initGreg(),
-            initMira(),
-            getEnemy(EnemyTemplateEnum.FOREST_PROTECTOR, 'enemy-2'),
-        ],
+        units: [initGreg(), initMira(), getEnemy(EnemyTemplateEnum.FOREST_PROTECTOR, 'enemy-2')],
     };
 };
 
@@ -33,10 +29,8 @@ export const randomEncounterGenerator = (difficulty: number, friendlyUnits: Comb
 };
 
 export const getNextEncounter = (difficulty: number, friendlyUnits?: CombatUnit[]): CombatEncounter => {
-    if (difficulty === 1)
-        return getStarterEncounter();
-    if (!friendlyUnits)
-        return getStarterEncounter();
+    if (difficulty === 1) return getStarterEncounter();
+    if (!friendlyUnits) return getStarterEncounter();
     if (difficulty === 2)
         return {
             name: 'Second Combat',
@@ -48,4 +42,4 @@ export const getNextEncounter = (difficulty: number, friendlyUnits?: CombatUnit[
             ],
         };
     return randomEncounterGenerator(difficulty, friendlyUnits);
-}
+};

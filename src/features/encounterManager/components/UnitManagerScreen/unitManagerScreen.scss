@@ -1,0 +1,21 @@
+.unit-manager-screen {
+    text-align: center;
+    .character-info-container {
+        max-width: 600px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        gap: 10px;
+
+        text-align: left;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 10px;
+
+        .character-info {
+            flex-basis: 140px;
+            flex-grow: 0;
+            flex-shrink: 0;
+        }
+    }
+}

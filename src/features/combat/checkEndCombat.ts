@@ -4,7 +4,7 @@ import { onBeginEnemyTurn } from './state/beginEnemyTurn';
 import { onBeginPlayerTurn } from './state/beginPlayerTurn';
 import { CombatOutcome, CombatState } from './state/combatModels';
 import { selectCanUseAnyAbilities, selectLivingUnits } from './state/combatSelectors';
-import { beginPlayerTurn, setDefeatState, setVictoryState } from './state/combatSlice';
+import { setDefeatState, setVictoryState } from './state/combatSlice';
 
 /**
  * End the game if all player characters are dead or all enemies are dead

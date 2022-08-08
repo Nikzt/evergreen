@@ -1,5 +1,4 @@
 import abilityIcons from '../../../assets/abilityIcons/abilityIcons';
-import { CombatUnit } from '../state/combatModels';
 
 export enum CombatTargetType {
     ENEMY = 0,
@@ -13,6 +12,7 @@ export enum CombatAbilityType {
     STRONG_ATTACK,
     BLOCK,
     REVENGE,
+    ARMOR,
 }
 
 export type CombatAbility = {
@@ -27,7 +27,6 @@ export type CombatAbility = {
     isTargetRequired: boolean;
     manaCost: number;
 };
-
 
 const combatAbilities: { [abilityType: number]: CombatAbility } = {
     [CombatAbilityType.QUICK_ATTACK]: {
@@ -73,6 +72,17 @@ const combatAbilities: { [abilityType: number]: CombatAbility } = {
         label: 'Revenge',
         description:
             'Deal damage to all targets equal to the amount of damage [SOURCE_UNIT_NAME] has blocked this combat ([DIRECT_DAMAGE])',
+        isTargetRequired: false,
+        manaCost: 0,
+    },
+    [CombatAbilityType.ARMOR]: {
+        id: CombatAbilityType.ARMOR,
+        icon: abilityIcons.block,
+        name: 'Revenge',
+        strengthMultiplier: 2,
+        targetType: CombatTargetType.NONE,
+        label: 'Revenge',
+        description: '[SOURCE_UNIT_NAME] gains +[ABILITY_VALUE] [ARMOR]',
         isTargetRequired: false,
         manaCost: 0,
     },

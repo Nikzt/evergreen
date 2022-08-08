@@ -36,7 +36,6 @@ export const enemyTemplates = {
         abilityIds: [CombatAbilityType.QUICK_ATTACK],
         strength: 2,
         armor: 0,
-        isTaunting: true,
         maxMana: 2,
         icon: unitIcons.rockGolem,
     }),

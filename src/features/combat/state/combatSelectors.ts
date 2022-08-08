@@ -12,8 +12,7 @@ export const selectFriendlyUnits = (state: RootState) =>
     unitsSelectors.selectAll(state.combat.units).filter((u) => u.isFriendly);
 
 export const selectRandomFriendlyUnit = (state: RootState) => {
-    let friendlyUnits = selectFriendlyUnits(state).filter((u) => !u.isDead);
-    if (friendlyUnits.some((u) => u.isTaunting)) friendlyUnits = friendlyUnits.filter((u) => u.isTaunting);
+    const friendlyUnits = selectFriendlyUnits(state).filter((u) => !u.isDead);
     return friendlyUnits[Math.floor(Math.random() * friendlyUnits.length)];
 };
 
@@ -35,15 +34,15 @@ export const selectEnemyUnitIds = (state: RootState) =>
 export const selectUnit = (unitId: string) => (state: RootState) =>
     unitsSelectors.selectById(state.combat.units, unitId);
 
-export const selectUnitCastProgress = (unitId: string) => (state: RootState) => selectUnit(unitId)(state)?.castProgress;
 export const selectCanUseAnyAbilities = (unitId: string) => (state: RootState) => {
     const unit = selectUnit(unitId)(state);
     // Enemies can only use abilities in their queue
     if (!unit?.isFriendly && !state.combat.enemyAbilitiesQueue.some((a) => a.sourceUnitId === unitId)) {
         return false;
     }
-    const minManaCost = unit?.abilityIds.reduce((min, a) => Math.min(min, getAbility(a)?.manaCost), Number.MAX_SAFE_INTEGER) ?? 0;
-    return unit && !unit.isCasting && !unit.isRecovering && !unit.isBlocking && !unit.isDead && unit.mana >= minManaCost;
+    const minManaCost =
+        unit?.abilityIds.reduce((min, a) => Math.min(min, getAbility(a)?.manaCost), Number.MAX_SAFE_INTEGER) ?? 0;
+    return unit && !unit.isDead && unit.mana >= minManaCost;
 };
 
 export const selectCanUseSpecificAbility = (unitId: string, abilityType: CombatAbilityType) => (state: RootState) => {
@@ -58,27 +57,16 @@ export const selectCanUseSpecificAbility = (unitId: string, abilityType: CombatA
     return selectCanUseAnyAbilities(unitId)(state);
 };
 
-export const selectTargetLines = (state: RootState) => {
-    const units = unitsSelectors.selectAll(state.combat.units);
-    const castingUnits = units.filter((u) => u.isCasting || u.isBlocking);
-    return castingUnits.map((u) => {
-        const target = u.blockedBy ?? u.targetUnitId;
-        return {
-            sourceUnitId: u.id,
-            targetUnitId: target,
-            abilityId: u.castingAbility,
-            isFriendlySource: u.isFriendly,
-            isBlocking: u.isBlocking,
-        };
-    });
-};
-
 export const selectAvailableRewards = (state: RootState) => state.combat.availableRewards;
 export const selectScriptedText = (state: RootState) => state.combat.scriptedText;
 
 export const selectFriendlyUnitByIdx = (idx: number) => (state: RootState) => {
     const friendlyUnits = selectFriendlyUnits(state);
     if (friendlyUnits.length > idx) return friendlyUnits[idx];
+};
+export const selectEnemyUnitByIdx = (idx: number) => (state: RootState) => {
+    const enemyUnits = selectEnemyUnits(state);
+    if (enemyUnits.length > idx) return enemyUnits[idx];
 };
 
 export const selectFriendlyUnitIndexes = (state: RootState) => {
@@ -92,12 +80,16 @@ export const selectLivingUnits = (state: RootState) => {
 };
 
 export const selectLivingFriendlyUnitIds = (state: RootState) => {
-    return selectLivingUnits(state).filter((u) => u.isFriendly).map(u => u.id);
-}
+    return selectLivingUnits(state)
+        .filter((u) => u.isFriendly)
+        .map((u) => u.id);
+};
 
 export const selectLivingEnemyUnitIds = (state: RootState) => {
-    return selectLivingUnits(state).filter((u) => !u.isFriendly).map(u => u.id);
-}
+    return selectLivingUnits(state)
+        .filter((u) => !u.isFriendly)
+        .map((u) => u.id);
+};
 
 export const selectEnemyAbilitiesQueue = (state: RootState) => {
     return state.combat.enemyAbilitiesQueue;
@@ -108,7 +100,7 @@ export const selectNextEnemyAbility = (unitId: string) => (state: RootState) =>
 
 export const selectAllFriendlyUnitsMaxHp = (state: RootState) => {
     return selectFriendlyUnits(state).every((u) => u.hp >= u.maxHp);
-}
+};
 
 export const selectFullCombatAction = (combatAction: CombatAction) => (state: RootState) => {
     const sourceUnit = state.combat.units.entities[combatAction.sourceUnitId];
@@ -118,11 +110,11 @@ export const selectFullCombatAction = (combatAction: CombatAction) => (state: Ro
     return {
         sourceUnit,
         targetUnit,
-        ability
-    }
-}
+        ability,
+    };
+};
 
 export const selectUnitHasCleave = (unitId: string) => (state: RootState) => {
     const unit = selectUnit(unitId)(state);
     return unit && unit.powers.includes(RewardId.CLEAVE);
-}
+};

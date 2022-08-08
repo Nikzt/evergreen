@@ -1,13 +1,12 @@
-import combatAbilities from '../../combat/abilities/combatAbilities';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { beginPlayerTurn, initCombatEncounter, setDifficulty } from '../../combat/state/combatSlice';
+import { initCombatEncounter, setDifficulty } from '../../combat/state/combatSlice';
 import { getStarterEncounter } from '../encounters';
 import './gameStartScreen.scss';
 import { onBeginPlayerTurn } from '../../combat/state/beginPlayerTurn';
 
 const GameStartScreen = () => {
     const dispatch = useAppDispatch();
-    const difficulty = useAppSelector(state => state.combat.difficulty);
+    const difficulty = useAppSelector((state) => state.combat.difficulty);
     const onBeginCombatClick = () => {
         dispatch(setDifficulty(1));
         dispatch(initCombatEncounter(getStarterEncounter()));
@@ -22,8 +21,9 @@ const GameStartScreen = () => {
             </button>
             <div className="about-section">
                 <p>A game by Bence Linder</p>
-                <p><a href="https://github.com/nikzt/evergreen">GitHub</a></p>
-
+                <p>
+                    <a href="https://github.com/nikzt/evergreen">GitHub</a>
+                </p>
             </div>
         </div>
     );

@@ -4,10 +4,8 @@ const getDefaultUnitProps = (maxHp: number, maxMana: number) => {
     return {
         isCasting: false,
         isFriendly: false,
-        isRecovering: false,
         hp: maxHp,
         castProgress: 0,
-        recoveryProgress: 0,
         combatNumbers: [],
         blockedBy: null,
         blocking: null,

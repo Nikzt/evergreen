@@ -1,12 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import resourcesReducer from './features/idleGame/resources/resourcesSlice';
-import charactersReducer from './features/idleGame/characters/charactersSlice';
 import combatReducer from './features/combat/state/combatSlice';
 
 export const store = configureStore({
     reducer: {
-        resources: resourcesReducer,
-        characters: charactersReducer,
         combat: combatReducer,
     },
 });

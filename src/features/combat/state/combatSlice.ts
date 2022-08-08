@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, Update } from '@reduxjs/toolkit';
-import combatAbilities  from '../abilities/combatAbilities';
+import combatAbilities from '../abilities/combatAbilities';
 import { CombatEncounter } from '../../encounterManager/encounters';
 import { CombatAction, CombatActionFull, CombatState, CombatUnit, RewardUpdate, unitsAdapter } from './combatModels';
 import { unitsSelectors } from './combatSelectors';
@@ -36,7 +36,6 @@ const removeAbilitiesWithSourceUnitId = (state: CombatState, sourceUnitId: strin
 const onUnitKilled = (state: CombatState, unit: CombatUnit) => {
     unit.hp = 0;
     unit.isDead = true;
-    unit.isCasting = false;
     removeAbilitiesWithSourceUnitId(state, unit.id);
 };
 
@@ -48,23 +47,23 @@ const getFullCombatAction = (state: CombatState, combatAction: CombatAction): Co
     return {
         sourceUnit,
         targetUnit,
-        ability
-    }
-}
+        ability,
+    };
+};
 
 const handleCleave = (state: CombatState, combatAction: CombatActionFull, damage: number) => {
     if (combatAction.sourceUnit.powers.includes(RewardId.CLEAVE)) {
         const cleaveDamage = Math.ceil(damage / 4);
         const targetUnits = Object.values(state.units.entities)
-            .filter(u  => u?.isFriendly !== combatAction.sourceUnit.isFriendly)
-            .filter(u => u != null && u.id !== combatAction.targetUnit.id && !u.isDead);
-        targetUnits.forEach(u => {
+            .filter((u) => u?.isFriendly !== combatAction.sourceUnit.isFriendly)
+            .filter((u) => u != null && u.id !== combatAction.targetUnit.id && !u.isDead);
+        targetUnits.forEach((u) => {
             if (!u) return;
             u.hp -= cleaveDamage;
             u.combatNumbers.push(cleaveDamage);
         });
     }
-}
+};
 
 const onDealDamage = (state: CombatState, combatAction: CombatActionFull, damageOverride?: number) => {
     const damage = damageOverride ?? calculateAbilityDamage(combatAction);
@@ -72,7 +71,7 @@ const onDealDamage = (state: CombatState, combatAction: CombatActionFull, damage
     combatAction.targetUnit.combatNumbers.push(damage);
     combatAction.sourceUnit.mana -= combatAction.ability.manaCost;
     handleCleave(state, combatAction, damage);
-}
+};
 
 const getUnit = (state: CombatState, unitId: string) => {
     const unit = state.units.entities[unitId];
@@ -86,7 +85,7 @@ const makeChangesAdditive = (changes: Partial<CombatUnit>, unit: CombatUnit) => 
         if ((unit as any)[key] !== undefined) {
             if ((unit as any)[key] instanceof Array) {
                 additiveChanges[key] = [...(unit as any)[key], ...(changes as any)[key]];
-            } else if (typeof ((unit as any)[key]) === 'number') {
+            } else if (typeof (unit as any)[key] === 'number') {
                 additiveChanges[key] = (changes as any)[key] + (unit as any)[key];
             }
         }
@@ -97,7 +96,7 @@ const makeChangesAdditive = (changes: Partial<CombatUnit>, unit: CombatUnit) => 
 const resetUnitOverflowedValues = (unit: CombatUnit) => {
     if (unit.mana > unit.maxMana) unit.mana = unit.maxMana;
     if (unit.hp > unit.maxHp) unit.hp = unit.maxHp;
-}
+};
 
 /**
  * Handle state changes for units that have died (ie. HP <= 0)
@@ -286,7 +285,7 @@ export const combatSlice = createSlice({
                 (a) => a.sourceUnitId === action.payload.targetUnitId,
             );
             const blockedAbility = state.enemyAbilitiesQueue[blockedAbilityIdx];
-            if (blockedAbility) { 
+            if (blockedAbility) {
                 // Remove blocked ability from enemyAbilitiesQueue
                 // Should be as if the enemy just used this ability
                 state.enemyAbilitiesQueue.splice(blockedAbilityIdx, 1);
@@ -294,18 +293,6 @@ export const combatSlice = createSlice({
             }
 
             checkDeadUnits(state);
-        },
-        toggleTaunt: (state, action: PayloadAction<string>) => {
-            const unit = state.units.entities[action.payload];
-            if (!unit) return;
-
-            unit.isTaunting = !unit.isTaunting;
-            if (unit.isTaunting) {
-                const otherUnits = Object.values(state.units.entities).filter((u) => u?.isFriendly !== unit.isFriendly);
-                otherUnits.forEach((u) => {
-                    if (u) u.targetUnitId = unit.id;
-                });
-            }
         },
         clearOldestCombatNumber: (state, action: PayloadAction<string>) => {
             const unitId = action.payload;
@@ -345,7 +332,7 @@ export const combatSlice = createSlice({
         },
         setShowTurnIndicator: (state, action: PayloadAction<boolean>) => {
             state.showTurnIndicator = action.payload;
-        }
+        },
     },
 });
 
@@ -400,7 +387,6 @@ export const {
     setDefeatState,
     setVictoryState,
     updateUnitWithReward,
-    toggleTaunt,
     beginPlayerTurn,
     beginEnemyTurn,
     removeFromEnemyAbilityQueue,
