@@ -1,4 +1,4 @@
-import { PlayerCharacterGreg, PlayerCharacterMira } from '../../common/playerCharacters';
+import { PlayerConfigIds } from '../../common/unitConfigs';
 import { RootState, store } from '../../store';
 import { handleAbility, targetAbility } from './abilities/abilityHandler';
 import { CombatAction } from './state/combatModels';
@@ -44,10 +44,10 @@ class KeyHandler {
 
     private static handleActionBarToggle(key: string) {
         if (key === '1') {
-            store.dispatch(toggleUnitActionBar(PlayerCharacterGreg.id));
+            store.dispatch(toggleUnitActionBar(PlayerConfigIds.GREG));
         }
         if (key === '2') {
-            store.dispatch(toggleUnitActionBar(PlayerCharacterMira.id));
+            store.dispatch(toggleUnitActionBar(PlayerConfigIds.MIRA));
         }
     }
 

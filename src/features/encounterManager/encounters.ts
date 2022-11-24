@@ -1,6 +1,7 @@
 import { initGreg, initMira } from '../../common/playerCharacters';
+import { EnemyConfigIds } from '../../common/unitConfigs';
 import { CombatUnit } from '../combat/state/combatModels';
-import { EnemyTemplateEnum, generateRandomEnemy, getEnemy } from './enemyGenerator';
+import { generateRandomEnemy, getEnemy } from './enemyGenerator';
 
 export type CombatEncounter = {
     name: string;
@@ -10,7 +11,7 @@ export type CombatEncounter = {
 export const getStarterEncounter = (): CombatEncounter => {
     return {
         name: 'First Combat',
-        units: [initGreg(), initMira(), getEnemy(EnemyTemplateEnum.FOREST_PROTECTOR, 'enemy-2')],
+        units: [initGreg(), initMira(), getEnemy(EnemyConfigIds.FOREST_PROTECTOR, 'enemy-2')],
     };
 };
 
@@ -36,9 +37,9 @@ export const getNextEncounter = (difficulty: number, friendlyUnits?: CombatUnit[
             name: 'Second Combat',
             units: [
                 ...friendlyUnits,
-                getEnemy(EnemyTemplateEnum.BARK_DOG, 'enemy-1'),
-                getEnemy(EnemyTemplateEnum.BARK_DOG, 'enemy-2'),
-                getEnemy(EnemyTemplateEnum.BARK_DOG, 'enemy-3'),
+                getEnemy(EnemyConfigIds.BARK_DOG, 'enemy-1'),
+                getEnemy(EnemyConfigIds.BARK_DOG, 'enemy-2'),
+                getEnemy(EnemyConfigIds.BARK_DOG, 'enemy-3'),
             ],
         };
     return randomEncounterGenerator(difficulty, friendlyUnits);

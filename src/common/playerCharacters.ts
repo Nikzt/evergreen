@@ -1,38 +1,27 @@
-import unitIcons from '../assets/unitIcons/unitIcons';
 import { CombatAbilityType } from '../features/combat/abilities/combatAbilities';
 import { createFriendlyUnit } from '../features/encounterManager/combatUnitUtils';
+import { PlayerConfigIds } from './unitConfigs';
 
 export type PlayerCharacter = {
     id: string;
 };
 
-export const PlayerCharacterGreg: PlayerCharacter = {
-    id: 'greg',
-};
-
-export const PlayerCharacterMira: PlayerCharacter = {
-    id: 'mira',
-};
-
 export const initGreg = () =>
     createFriendlyUnit({
-        id: 'greg',
-        name: 'Greg',
-        icon: unitIcons.greg,
+        configId: PlayerConfigIds.GREG,
+        id: PlayerConfigIds.GREG,
         maxHp: 30,
         abilityIds: [CombatAbilityType.BLOCK, CombatAbilityType.STRONG_ATTACK],
         strength: 3,
         armor: 1,
-        isTaunting: true,
         maxMana: 2,
         blockPercent: 50,
     });
 
 export const initMira = () =>
     createFriendlyUnit({
-        id: 'mira',
-        name: 'Mira',
-        icon: unitIcons.mira,
+        configId: PlayerConfigIds.MIRA,
+        id: PlayerConfigIds.MIRA,
         maxHp: 30,
         abilityIds: [CombatAbilityType.QUICK_ATTACK],
         strength: 2,

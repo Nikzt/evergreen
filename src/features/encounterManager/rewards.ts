@@ -3,8 +3,8 @@ import { RootState, store } from '../../store';
 import { CombatUnit, CombatState } from '../combat/state/combatModels';
 import { selectUnit } from '../combat/state/combatSelectors';
 import { getEntityList } from '../../common/entityUtils';
-import { PlayerCharacterGreg, PlayerCharacterMira } from '../../common/playerCharacters';
 import _ from 'lodash';
+import { PlayerConfigIds } from '../../common/unitConfigs';
 
 export enum RewardId {
     MAX_HP,
@@ -54,7 +54,7 @@ const powers: { [key: number]: Reward } = {
         probabilityWeight: 30,
     },
     [RewardId.CLEAVE]: {
-        availableUnitIds: [PlayerCharacterMira.id],
+        availableUnitIds: [PlayerConfigIds.MIRA],
         id: RewardId.CLEAVE,
         type: RewardType.POWER,
         label: 'Wild Strikes',
@@ -105,7 +105,7 @@ const powers: { [key: number]: Reward } = {
 
 const abilities: { [key: number]: Reward } = {
     [RewardId.QUICK_ATTACK]: {
-        availableUnitIds: [PlayerCharacterMira.id],
+        availableUnitIds: [PlayerConfigIds.MIRA],
         id: RewardId.QUICK_ATTACK,
         type: RewardType.ABILITY,
         label: 'Quick Attack',
@@ -117,7 +117,7 @@ const abilities: { [key: number]: Reward } = {
         probabilityWeight: 10,
     },
     [RewardId.REVENGE]: {
-        availableUnitIds: [PlayerCharacterGreg.id],
+        availableUnitIds: [PlayerConfigIds.GREG],
         id: RewardId.REVENGE,
         type: RewardType.ABILITY,
         label: 'Revenge',
@@ -129,7 +129,7 @@ const abilities: { [key: number]: Reward } = {
         probabilityWeight: 9999,
     },
     [RewardId.BLOCK]: {
-        availableUnitIds: [PlayerCharacterGreg.id],
+        availableUnitIds: [PlayerConfigIds.GREG],
         id: RewardId.BLOCK,
         type: RewardType.ABILITY,
         label: 'Block',
@@ -141,7 +141,7 @@ const abilities: { [key: number]: Reward } = {
         probabilityWeight: 15,
     },
     [RewardId.STRONG_ATTACK]: {
-        availableUnitIds: [PlayerCharacterGreg.id],
+        availableUnitIds: [PlayerConfigIds.GREG],
         id: RewardId.STRONG_ATTACK,
         type: RewardType.ABILITY,
         label: 'Strong Attack',
