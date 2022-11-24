@@ -1,0 +1,7 @@
+@import "./colors.scss";
+
+@mixin friendlyPanel {
+    box-shadow: 0 0 8px $color-friendly-glow;
+    background-color: $color-friendly-background;
+    border: 1px solid $color-friendly-outline;
+}

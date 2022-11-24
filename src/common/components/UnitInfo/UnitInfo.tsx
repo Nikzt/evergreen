@@ -10,7 +10,6 @@ type UnitInfoProps = {
 
 const UnitInfo = ({ unitId }: UnitInfoProps) => {
     const unit = useSelectCombatUnit(unitId);
-
     if (!unit) return <div>Unit info not found</div>;
 
     return (

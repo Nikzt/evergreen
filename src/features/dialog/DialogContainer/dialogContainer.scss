@@ -1,0 +1,14 @@
+@import "common/scss/mixins.scss";
+
+.dialog-container {
+    max-width: 800px;
+    @include friendlyPanel;
+    padding: 5px;
+    display: grid;
+    .dialog-container__body {
+        display: grid;
+        grid-template-columns: 150px auto;
+        grid-template-rows: 150px;
+        grid-gap: 10px;
+    }
+}
