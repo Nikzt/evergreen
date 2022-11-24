@@ -1,8 +1,8 @@
-import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { initCombatEncounter, setDifficulty } from '../../combat/state/combatSlice';
-import { getStarterEncounter } from '../encounters';
+import { useAppDispatch, useAppSelector } from '../../../../hooks';
+import { initCombatEncounter, setDifficulty } from '../../../combat/state/combatSlice';
+import { getStarterEncounter } from '../../encounters';
+import { onBeginPlayerTurn } from '../../../combat/state/beginPlayerTurn';
 import './gameStartScreen.scss';
-import { onBeginPlayerTurn } from '../../combat/state/beginPlayerTurn';
 
 const GameStartScreen = () => {
     const dispatch = useAppDispatch();
