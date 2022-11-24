@@ -6,6 +6,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;700&display=swap");
 @import "common/scss/colors.scss";
+@import "common/scss/mixins.scss";
 
 html {
     color: $color-text;
@@ -117,6 +118,10 @@ img {
 .game-start-screen {
     padding-top: 50px;
     text-align: center;
+}
+
+.dialog-layer {
+    @include fadedOverlay;
 }
 
 .overlay {

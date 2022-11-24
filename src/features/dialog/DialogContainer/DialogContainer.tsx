@@ -13,17 +13,17 @@ const DialogContainer = () => {
     const dialogData = [
         {
             unitConfigId: PlayerConfigIds.GREG,
-            dialog: "Hey Mira, wanna hear a joke? It\'ll be really funny, I swear.",
+            dialog: "Hmm, here we go again.",
             portraitPosition: PortraitPosition.RIGHT,
         },
         {
             unitConfigId: PlayerConfigIds.MIRA,
-            dialog: "Fuck off, I don\'t want to hear any more of your jokes.",
+            dialog: "Are those wolves? Wait, it looks like they're made out of... wood?",
             portraitPosition: PortraitPosition.LEFT,
         },
         {
             unitConfigId: PlayerConfigIds.GREG,
-            dialog: "How 'bout I tell you one anyway! I'm afraid for the calendar. Its days are numbered.",
+            dialog: "Yeah, I call them Bark Dogs!",
             portraitPosition: PortraitPosition.RIGHT,
         },
         {

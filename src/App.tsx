@@ -6,6 +6,7 @@ import { useAppSelector } from './hooks';
 import GameStartScreen from './features/encounterManager/components/GameStartScreen/GameStartScreen';
 import UnitManagerScreen from './features/encounterManager/components/UnitManagerScreen/UnitManagerScreen';
 import TurnIndicator from './features/combat/components/TurnIndicator/TurnIndicator';
+import DialogContainer from './features/dialog/DialogContainer/DialogContainer';
 
 const App = () => {
     const isCombatInProgress = useAppSelector((state: RootState) => state.combat.isCombatInProgress);
@@ -20,6 +21,9 @@ const App = () => {
                 <>
                     <TurnIndicator />
                     <CombatContainer />
+                    <div className="dialog-layer">
+                        <DialogContainer />
+                    </div>
                 </>
             )}
         </div>
