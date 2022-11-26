@@ -1,39 +1,60 @@
 import { PlayerConfigIds } from "../../../common/unitConfigs"
 
-export enum PortraitPosition {
-    LEFT = 0,
-    RIGHT = 1,
+export enum DialogScriptId {
+    BARK_DOG_ENCOUNTER = "barkDogEncounter",
+    FOREST_PROTECTOR_ENCOUNTER = "forestProtectorEncounter",
 }
 
 type DialogEntry = {
     unitConfigId: PlayerConfigIds,
     dialog: string,
-    portraitPosition: PortraitPosition,
 }
 
 const dialogDB: { [key: string]: DialogEntry[] } = {
-    ["barkDogEncounter"]: [
+    [DialogScriptId.BARK_DOG_ENCOUNTER]: [
         {
             unitConfigId: PlayerConfigIds.GREG,
             dialog: "Hmm, here we go again.",
-            portraitPosition: PortraitPosition.RIGHT,
         },
         {
             unitConfigId: PlayerConfigIds.MIRA,
             dialog: "Are those wolves? Wait, it looks like they're made out of... wood?",
-            portraitPosition: PortraitPosition.LEFT,
         },
         {
             unitConfigId: PlayerConfigIds.GREG,
             dialog: "Yeah, I call them Bark Dogs!",
-            portraitPosition: PortraitPosition.RIGHT,
         },
         {
             unitConfigId: PlayerConfigIds.MIRA,
             dialog: "...",
-            portraitPosition: PortraitPosition.LEFT,
+        },
+    ],
+    [DialogScriptId.FOREST_PROTECTOR_ENCOUNTER]: [
+        {
+            unitConfigId: PlayerConfigIds.GREG,
+            dialog: "Behold, a creature of the Evergreen! Bet you thought it was just a folktale.",
+        },
+        {
+            unitConfigId: PlayerConfigIds.MIRA,
+            dialog: "I thought it would be bigger.",
+        },
+        {
+            unitConfigId: PlayerConfigIds.GREG,
+            dialog: "How is this not blowing your mind right now? Look at those monstrous proportions, the evil emanating from its presence."
+        },
+        {
+            unitConfigId: PlayerConfigIds.GREG,
+            dialog: "I can see hatred in its eyes!",
+        },
+        {
+            unitConfigId: PlayerConfigIds.MIRA,
+            dialog: "It does seem angry, I'll give you that.",
+        },
+        {
+            unitConfigId: PlayerConfigIds.GREG,
+            dialog: "Ah yes, it appears to have spotted us."
         },
     ]
 }
 
-export const getDialog = (dialogKey: string) => dialogDB[dialogKey];
+export const getDialog = (dialogKey: DialogScriptId) => dialogDB[dialogKey];

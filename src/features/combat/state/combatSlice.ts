@@ -23,7 +23,7 @@ const clearCombatState = (state: CombatState) => {
     state.enemyAbilitiesQueue = [];
     state.displayedUnitActionBar = null;
     state.numTurnsInCurrentCombat = 0;
-    state.showTurnIndicator = true;
+    state.showTurnIndicator = false;
 };
 
 const removeAbilitiesWithSourceUnitId = (state: CombatState, sourceUnitId: string) => {
@@ -124,7 +124,7 @@ const initialState: CombatState = {
     scriptedText: '',
     enemyAbilitiesQueue: [],
     displayedUnitActionBar: null,
-    showTurnIndicator: true,
+    showTurnIndicator: false,
     numTurnsInCurrentCombat: 0,
 };
 export const combatSlice = createSlice({

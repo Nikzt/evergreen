@@ -1,5 +1,5 @@
 import combatAbilities, { CombatAbilityType } from '../../abilities/combatAbilities';
-import { useAppSelector, useSelectCombatUnit } from '../../../../hooks';
+import { useAppDispatch, useAppSelector, useSelectCombatUnit } from '../../../../hooks';
 import { selectCanUseSpecificAbility, selectFriendlyUnitIndexes } from '../../state/combatSelectors';
 import './combatUnitActionBar.scss';
 import { handleAbility } from '../../abilities/abilityHandler';

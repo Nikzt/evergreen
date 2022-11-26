@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import combatReducer from './features/combat/state/combatSlice';
+import dialogReducer from './features/dialog/state/dialogSlice';
 
 export const store = configureStore({
     reducer: {
         combat: combatReducer,
+        dialog: dialogReducer,
     },
 });
 

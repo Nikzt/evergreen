@@ -120,10 +120,6 @@ img {
     text-align: center;
 }
 
-.dialog-layer {
-    @include fadedOverlay;
-}
-
 .overlay {
     position: absolute;
     display: grid;

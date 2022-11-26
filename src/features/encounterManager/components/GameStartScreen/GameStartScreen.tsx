@@ -3,14 +3,21 @@ import { initCombatEncounter, setDifficulty } from '../../../combat/state/combat
 import { getStarterEncounter } from '../../encounters';
 import { onBeginPlayerTurn } from '../../../combat/state/beginPlayerTurn';
 import './gameStartScreen.scss';
+import { beginDialog } from '../../../dialog/state/dialogSlice';
 
 const GameStartScreen = () => {
     const dispatch = useAppDispatch();
     const difficulty = useAppSelector((state) => state.combat.difficulty);
     const onBeginCombatClick = () => {
         dispatch(setDifficulty(1));
-        dispatch(initCombatEncounter(getStarterEncounter()));
-        onBeginPlayerTurn();
+        const starterEncounter = getStarterEncounter();
+        dispatch(initCombatEncounter(starterEncounter));
+        if (starterEncounter.dialogId != null) {
+            dispatch(beginDialog(starterEncounter.dialogId));
+            onBeginPlayerTurn(true);
+        } else {
+            onBeginPlayerTurn();
+        }
     };
     return (
         <div className="game-start-screen">

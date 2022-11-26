@@ -21,9 +21,7 @@ const App = () => {
                 <>
                     <TurnIndicator />
                     <CombatContainer />
-                    <div className="dialog-layer">
-                        <DialogContainer />
-                    </div>
+                    <DialogContainer />
                 </>
             )}
         </div>
