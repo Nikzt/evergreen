@@ -2,37 +2,11 @@ import { useState } from "react";
 import UnitPortrait from "../../../common/components/UnitPortrait/UnitPortrait";
 import { wait } from "../../../common/timeout";
 import { PlayerConfigIds } from "../../../common/unitConfigs";
+import { getDialog, PortraitPosition } from "../state/dialogDB";
 import './dialogContainer.scss';
 
-enum PortraitPosition {
-    LEFT = 0,
-    RIGHT = 1,
-}
-
 const DialogContainer = () => {
-    const dialogData = [
-        {
-            unitConfigId: PlayerConfigIds.GREG,
-            dialog: "Hmm, here we go again.",
-            portraitPosition: PortraitPosition.RIGHT,
-        },
-        {
-            unitConfigId: PlayerConfigIds.MIRA,
-            dialog: "Are those wolves? Wait, it looks like they're made out of... wood?",
-            portraitPosition: PortraitPosition.LEFT,
-        },
-        {
-            unitConfigId: PlayerConfigIds.GREG,
-            dialog: "Yeah, I call them Bark Dogs!",
-            portraitPosition: PortraitPosition.RIGHT,
-        },
-        {
-            unitConfigId: PlayerConfigIds.MIRA,
-            dialog: "...",
-            portraitPosition: PortraitPosition.LEFT,
-        },
-    ]
-
+    const dialogData = getDialog("barkDogEncounter");
     const getCurrentUnitId = () => dialogData[currentDialogIdx].unitConfigId;
     const getCurrentDialog = () => dialogData[currentDialogIdx].dialog;
     const getCurrentPortraitPosition = () => dialogData[currentDialogIdx].portraitPosition;
@@ -40,7 +14,6 @@ const DialogContainer = () => {
     const [currentDialogIdx, setCurrentDialogIdx] = useState(0);
     const [currentDialogBuffer, setCurrentDialogBuffer] = useState("");
     const [isCharacterSpeaking, setIsCharacterSpeaking] = useState(true);
-    const [dialogInterval, setDialogInterval] = useState(setInterval(() => { }));
     const [isDialogStarted, setIsDialogStarted] = useState(false);
 
     const onNextButtonClick = async () => {
