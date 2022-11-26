@@ -19,6 +19,9 @@ export type CombatUnitState = {
 };
 
 export type CombatUnit = {
+    /** ID to reference unit in combat */
+    id: string,
+
     // Resources/Stats State
     hp: number;
     mana: number;
@@ -36,10 +39,8 @@ export type CombatUnit = {
     revengeCharges: number;
     isRevengeEnabled: boolean;
 
-    // Config
-    id: string;
-    name: string;
-    icon?: string;
+    /** Config ID to reference static unit info such as name and icon */ 
+    configId: string;
 
     //Stats / Loadout
     abilityIds: CombatAbilityType[];

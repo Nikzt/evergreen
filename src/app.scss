@@ -6,6 +6,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;700&display=swap");
 @import "common/scss/colors.scss";
+@import "common/scss/mixins.scss";
 
 html {
     color: $color-text;
@@ -13,9 +14,6 @@ html {
     user-select: none;
     touch-action: manipulation;
     font-family: "Rajdhani", sans-serif;
-}
-
-.app {
 }
 
 a {
@@ -66,7 +64,7 @@ button[disabled] {
     grid-template-columns: 35px auto;
 }
 .progress-bar {
-    //margin-top: 2px;
+    position: relative;
     border: 1px solid $color-secondary-v1;
     border-radius: 0;
 }
