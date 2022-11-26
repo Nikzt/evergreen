@@ -1,4 +1,3 @@
-import unitIcons from '../../../../assets/unitIcons/unitIcons';
 import { useSelectCombatUnit } from '../../../../hooks';
 import './unitMenuItem.scss';
 import UnitInfo from '../../../../common/components/UnitInfo/UnitInfo';
@@ -11,10 +10,6 @@ const UnitMenuItem = ({ unitId }: UnitMenuItemProps) => {
     const unit = useSelectCombatUnit(unitId);
 
     if (!unit) return <div>Unit info not found</div>;
-
-    let icon;
-    if (unit.icon) icon = unit.icon;
-    else icon = unitIcons.fallback;
 
     return (
         <div className="unit-menu-item friendly-unit-ui-element friendly">

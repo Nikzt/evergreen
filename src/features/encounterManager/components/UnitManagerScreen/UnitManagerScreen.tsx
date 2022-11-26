@@ -7,6 +7,7 @@ import RewardSelector from '../RewardSelector/RewardSelector';
 import { onBeginPlayerTurn } from '../../../combat/state/beginPlayerTurn';
 import './unitManagerScreen.scss';
 import UnitMenuItem from '../UnitMenuItem/UnitMenuItem';
+import { beginDialog } from '../../../dialog/state/dialogSlice';
 
 const UnitManagerScreen = () => {
     const dispatch = useAppDispatch();
@@ -18,8 +19,14 @@ const UnitManagerScreen = () => {
         const difficulty = state.combat.difficulty;
         const friendlyUnits = selectFriendlyUnits(state);
 
-        dispatch(initCombatEncounter(getNextEncounter(difficulty, friendlyUnits)));
-        onBeginPlayerTurn();
+        const nextEncounter = getNextEncounter(difficulty, friendlyUnits);
+        dispatch(initCombatEncounter(nextEncounter));
+        if (nextEncounter.dialogId != null) {
+            dispatch(beginDialog(nextEncounter.dialogId));
+            onBeginPlayerTurn(true);
+        } else {
+            onBeginPlayerTurn();
+        }
     };
 
     return (

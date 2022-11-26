@@ -1,0 +1,70 @@
+@import "common/scss/mixins.scss";
+
+.dialog-layer {
+    @include fadedOverlay;
+    z-index: 5000;
+}
+
+.dialog-wrapper {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+}
+
+.previous-dialog {
+    z-index: -1;
+    opacity: 0;
+    transform: translateY(-30px);
+}
+
+.dialog-container {
+    position: absolute;
+    width: inherit;
+    @include friendlyPanel;
+    padding: 5px;
+    display: grid;
+    opacity: 0;
+    .dialog-container__body {
+        display: grid;
+        grid-template-columns: 150px auto;
+        grid-template-rows: 150px;
+        grid-gap: 10px;
+    }
+}
+
+@media (max-width: 400px) {
+    .dialog-wrapper {
+        width: 300px;
+        .dialog-container .dialog-container__body {
+            grid-template-rows: 100px;
+            grid-template-columns: 100px auto;
+        }
+    }
+}   
+
+
+
+@keyframes slideIn {
+    0% {
+        transform: translateY(30px) scale(0.95);
+        opacity: 0.3;
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+        scale: 1;
+    }
+    100% {
+        transform: translateY(-30px);
+        opacity: 0;
+        scale: 0.95;
+    }
+}

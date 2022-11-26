@@ -1,18 +1,8 @@
 @import "common/scss/colors.scss";
+@import "common/scss/mixins.scss";
 
 .reward-selector-overlay {
-    position: absolute;
-    display: grid;
-    align-items: center;
-    align-content: center;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(20, 20, 20, 0.4);
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
-    z-index: 15;
+    @include fadedOverlay;
     .reward-selector {
         .reward-selector-flavor-text {
             margin-bottom: 20px;

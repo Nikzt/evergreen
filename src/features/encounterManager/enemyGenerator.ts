@@ -1,57 +1,46 @@
-import unitIcons from '../../assets/unitIcons/unitIcons';
+import { EnemyConfigIds } from '../../common/unitConfigs';
 import { CombatAbilityType } from '../combat/abilities/combatAbilities';
 import { CombatUnit } from '../combat/state/combatModels';
 import { createEnemyUnit } from './combatUnitUtils';
 import { RewardId } from './rewards';
 
-export enum EnemyTemplateEnum {
-    BARK_DOG = 0, // quick attacks
-    FOREST_FIEND, // balanced fighter
-    FOREST_PROTECTOR, // high armor blocker
-    WOOD_GIANT, // high hp, strong attacks
-}
-
 export const enemyTemplates = {
-    [EnemyTemplateEnum.BARK_DOG]: createEnemyUnit({
-        name: 'Bark Dog',
+    [EnemyConfigIds.BARK_DOG]: createEnemyUnit({
+        configId: EnemyConfigIds.BARK_DOG,
         maxHp: 4,
         abilityIds: [CombatAbilityType.QUICK_ATTACK],
         strength: 1,
         armor: 0,
         maxMana: 1,
-        icon: unitIcons.wolfHead,
     }),
-    [EnemyTemplateEnum.FOREST_FIEND]: createEnemyUnit({
-        name: 'Forest Fiend',
+    [EnemyConfigIds.FOREST_FIEND]: createEnemyUnit({
+        configId: EnemyConfigIds.FOREST_FIEND,
         maxHp: 8,
         abilityIds: [CombatAbilityType.QUICK_ATTACK, CombatAbilityType.STRONG_ATTACK],
         strength: 1,
         armor: 0,
         maxMana: 3,
-        icon: unitIcons.sharpSmile,
     }),
-    [EnemyTemplateEnum.FOREST_PROTECTOR]: createEnemyUnit({
-        name: 'Forest Protector',
+    [EnemyConfigIds.FOREST_PROTECTOR]: createEnemyUnit({
+        configId: EnemyConfigIds.FOREST_PROTECTOR,
         maxHp: 10,
         abilityIds: [CombatAbilityType.QUICK_ATTACK],
         strength: 2,
         armor: 0,
         maxMana: 2,
-        icon: unitIcons.rockGolem,
     }),
-    [EnemyTemplateEnum.WOOD_GIANT]: createEnemyUnit({
-        name: 'Wood Giant',
+    [EnemyConfigIds.WOOD_GIANT]: createEnemyUnit({
+        configId: EnemyConfigIds.WOOD_GIANT,
         maxHp: 12,
         abilityIds: [CombatAbilityType.STRONG_ATTACK],
         strength: 2,
         armor: 0,
         maxMana: 3,
         powers: [RewardId.CLEAVE],
-        icon: unitIcons.evilTree,
     }),
 };
 
-export const getEnemy = (enemyType: EnemyTemplateEnum, unitId: string): CombatUnit => {
+export const getEnemy = (enemyType: EnemyConfigIds, unitId: string): CombatUnit => {
     const enemy = { ...enemyTemplates[enemyType], id: unitId };
     return enemy;
 };
